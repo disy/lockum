@@ -4,10 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc &&  node out/Client.js",
+    "start": "tsc && webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
-
+  "license": "ISC",
+  "dependencies": {
+    "awesome-typescript-loader": "^5.0.0",
+    "ts-loader": "^4.3.0",
+    "webpack": "^4.8.3"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.1.5"
+  }
 }
