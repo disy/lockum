@@ -83,13 +83,9 @@ export class LocationHelper{
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
     public binaryLocationRepresentator(locationValues: Array<string>,toleranceDistance: number) {
-      /*  console.log(this.binaryLatitudeLongitudeSignCalculator(locationValues[0])+ this.toleraceDistanceCalculator(locationValues[0],true,5)+locationValues[0]
-        + this.toleraceDistanceCalculator(locationValues[0],false,5) + this.binaryLatitudeLongitudeSignCalculator(locationValues[1])); */
-
-
-        return this.binaryLatitudeLongitudeSignCalculator(locationValues[0])+ this.toleraceDistanceCalculator(locationValues[0],true,5)
-
-          + this.binaryLatitudeLongitudeSignCalculator(locationValues[1] + this.toleraceDistanceCalculator(locationValues[1],false,5));
+        
+        console.log(this.toleraceDistanceCalculator(locationValues[0],true,5));
+        console.log(this.toleraceDistanceCalculator(locationValues[1],false,5));
     }
 
     /**
@@ -101,18 +97,16 @@ export class LocationHelper{
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
     public toleraceDistanceCalculator(locationValue: string,latitudeValue: boolean,toleranceDistance) {
-        locationValue = locationValue.substring(1).slice(0,-1);
+        locationValue = locationValue.slice(1);
         let location = parseFloat(locationValue); 
-        location = location * 10000;
+        location = (location * 10000);
 
-        if (latitudeValue)
-            location = location / (toleranceDistance * 5.4);
-        else
-            location = location / (toleranceDistance*6);
+        if (latitudeValue == true) {
+            location = location / (toleranceDistance * 5.4);}
+        else if (latitudeValue == false) {
+            location = location / (toleranceDistance * 6); }
 
-            location = Math.floor(location);
- 
-        return locationValue;
+        return Math.floor(location);
     }
 
     public binaryLatitudeLongitudeSignCalculator (locationValue: string) {
@@ -132,5 +126,4 @@ export class LocationHelper{
             return 1;
         }
     }
-
 }
