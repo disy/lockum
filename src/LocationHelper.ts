@@ -76,16 +76,15 @@ export class LocationHelper{
     }
 
     /**
-     * this function gets the location information and produces the binary representation of location datas
-     * this binary representation will be used as an input for an expensive key derivation algorithm
+     * this function produces the input key for the key derivation Algorithm
+     * It takes the location information and turns it into an input for the key derivation algorithm
      * 
      * @param locationValues represents the array consisting of latitude and longitude information
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
-    public binaryLocationRepresentator(locationValues: Array<string>,toleranceDistance: number) {
-        
-        console.log(this.toleraceDistanceCalculator(locationValues[0],true,5));
-        console.log(this.toleraceDistanceCalculator(locationValues[1],false,5));
+    public finalLocationOutput(locationValues: Array<string>,toleranceDistance: number) {
+        console.log(this.toleraceDistanceCalculator(locationValues[0],true,5) + this.toleraceDistanceCalculator(locationValues[1],false,5)) ;
+        return this.toleraceDistanceCalculator(locationValues[0],true,5) + this.toleraceDistanceCalculator(locationValues[1],false,5) ; 
     }
 
     /**
@@ -97,33 +96,42 @@ export class LocationHelper{
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
     public toleraceDistanceCalculator(locationValue: string,latitudeValue: boolean,toleranceDistance) {
+        let locationSign = locationValue.charAt(0);
         locationValue = locationValue.slice(1);
         let location = parseFloat(locationValue); 
         location = (location * 10000);
 
         if (latitudeValue == true) {
-            location = location / (toleranceDistance * 5.4);}
+            location = Math.floor(location / (toleranceDistance * 5.4));
+            return this.binaryLatitudeLongitudeSignCalculator(location,locationSign); }
         else if (latitudeValue == false) {
-            location = location / (toleranceDistance * 6); }
-
-        return Math.floor(location);
+            location = Math.floor(location / (toleranceDistance * 6));
+            return this.binaryLatitudeLongitudeSignCalculator(location,locationSign); }
+      
     }
 
-    public binaryLatitudeLongitudeSignCalculator (locationValue: string) {
-        if (locationValue.substring(0,1) == "E") {
-            return 0;
+    public binaryLatitudeLongitudeSignCalculator (locationValue: number, locationSign: string) {
+        if (locationSign == "E") {
+            return locationValue;
         }
 
-        else if (locationValue.substring(0,1) == "W") {
-            return 1;
+        else if (locationSign == "W") {
+            return this.integerToBinaryCalculation(locationValue);
         }
 
-        else if (locationValue.substring(0,1) == "N") {
-            return 0;
+        else if (locationSign == "N") {
+            return locationValue;
         }
 
-        else if (locationValue.substring(0,1) == "S") {
-            return 1;
+        else if (locationSign == "S") {
+            return this.integerToBinaryCalculation(locationValue);
         }
+    }
+
+    public integerToBinaryCalculation(locationValue: number) {
+        let lengthOfLocation = locationValue.toString(2).length;
+        let signAddition = Math.pow(2,lengthOfLocation);
+
+        return locationValue + signAddition;
     }
 }

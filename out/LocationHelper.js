@@ -65,15 +65,15 @@ var LocationHelper = /** @class */ (function () {
         return degreesDecimalMinutes;
     };
     /**
-     * this function gets the location information and produces the binary representation of location datas
-     * this binary representation will be used as an input for an expensive key derivation algorithm
+     * this function produces the input key for the key derivation Algorithm
+     * It takes the location information and turns it into an input for the key derivation algorithm
      *
      * @param locationValues represents the array consisting of latitude and longitude information
      * @param toleranceDistance represents the desired encryption distance for the location information
      */
-    LocationHelper.prototype.binaryLocationRepresentator = function (locationValues, toleranceDistance) {
-        console.log(this.toleraceDistanceCalculator(locationValues[0], true, 5));
-        console.log(this.toleraceDistanceCalculator(locationValues[1], false, 5));
+    LocationHelper.prototype.finalLocationOutput = function (locationValues, toleranceDistance) {
+        console.log(this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5));
+        return this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5);
     };
     /**
      * This method takes the location, multiplies it by 10.000 and then divides it by toleranceDistance*CorrespondingValue
@@ -84,30 +84,37 @@ var LocationHelper = /** @class */ (function () {
      * @param toleranceDistance represents the desired encryption distance for the location information
      */
     LocationHelper.prototype.toleraceDistanceCalculator = function (locationValue, latitudeValue, toleranceDistance) {
+        var locationSign = locationValue.charAt(0);
         locationValue = locationValue.slice(1);
         var location = parseFloat(locationValue);
         location = (location * 10000);
         if (latitudeValue == true) {
-            location = location / (toleranceDistance * 5.4);
+            location = Math.floor(location / (toleranceDistance * 5.4));
+            return this.binaryLatitudeLongitudeSignCalculator(location, locationSign);
         }
         else if (latitudeValue == false) {
-            location = location / (toleranceDistance * 6);
+            location = Math.floor(location / (toleranceDistance * 6));
+            return this.binaryLatitudeLongitudeSignCalculator(location, locationSign);
         }
-        return Math.floor(location);
     };
-    LocationHelper.prototype.binaryLatitudeLongitudeSignCalculator = function (locationValue) {
-        if (locationValue.substring(0, 1) == "E") {
-            return 0;
+    LocationHelper.prototype.binaryLatitudeLongitudeSignCalculator = function (locationValue, locationSign) {
+        if (locationSign == "E") {
+            return locationValue;
         }
-        else if (locationValue.substring(0, 1) == "W") {
-            return 1;
+        else if (locationSign == "W") {
+            return this.integerToBinaryCalculation(locationValue);
         }
-        else if (locationValue.substring(0, 1) == "N") {
-            return 0;
+        else if (locationSign == "N") {
+            return locationValue;
         }
-        else if (locationValue.substring(0, 1) == "S") {
-            return 1;
+        else if (locationSign == "S") {
+            return this.integerToBinaryCalculation(locationValue);
         }
+    };
+    LocationHelper.prototype.integerToBinaryCalculation = function (locationValue) {
+        var lengthOfLocation = locationValue.toString(2).length;
+        var signAddition = Math.pow(2, lengthOfLocation);
+        return locationValue + signAddition;
     };
     return LocationHelper;
 }());
