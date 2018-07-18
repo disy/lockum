@@ -1,9 +1,10 @@
 const path = require('path');
+const textDecoder = require
 
 module.exports = {
   entry: './src/LocationEncryption.ts',
   module: {
-    rules: [
+    rules:  [
       {
         test: /\.tsx?$/,
         use: 'ts-loader',

@@ -1,9 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Location_1 = require("../src/Location");
+var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var locationButton = document.getElementById("button");
+var encryptionButton = document.getElementById("encryptbutton");
+var decryptionButton = document.getElementById("decryptbutton");
 locationButton.onclick = function (e) {
-    getCurentLocation();
+    //getCurentLocation(); 
+    EncryptionHelper_1.EncryptionHelper.deriveKey();
+};
+encryptionButton.onclick = function (e) {
+    EncryptionHelper_1.EncryptionHelper.encrypt();
+};
+decryptionButton.onclick = function (e) {
+    //   getCurentLocation(); 
+    EncryptionHelper_1.EncryptionHelper.decrypt();
 };
 function getCurentLocation() {
     var output = document.getElementById("out");

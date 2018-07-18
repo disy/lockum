@@ -1,9 +1,28 @@
 import {Location} from "../src/Location";
+import {EncryptionHelper} from "../src/EncryptionHelper";
+
 
   let locationButton = <HTMLButtonElement>document.getElementById("button"); 
+  let encryptionButton = <HTMLButtonElement>document.getElementById("encryptbutton"); 
+  let decryptionButton = <HTMLButtonElement>document.getElementById("decryptbutton"); 
+
   locationButton.onclick = (e: Event) => { 
-    getCurentLocation(); 
+    //getCurentLocation(); 
+    EncryptionHelper.deriveKey();
   };
+
+
+  encryptionButton.onclick = (e: Event) => { 
+    EncryptionHelper.encrypt();
+    
+  };
+
+
+  decryptionButton.onclick = (e: Event) => { 
+ //   getCurentLocation(); 
+    EncryptionHelper.decrypt();  
+  };
+
 
   function getCurentLocation(){
 
