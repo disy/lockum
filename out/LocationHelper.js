@@ -48,6 +48,9 @@ var LocationHelper = /** @class */ (function () {
         else if (latitudeInformation == false && locationvalue > 0) {
             locationSign = "E";
         }
+        if (locationvalue < 0) {
+            locationvalue = locationvalue * -1;
+        }
         integer = Math.floor(locationvalue);
         minutes = Math.floor((locationvalue - integer) * 60);
         seconds = (((locationvalue - integer) * 60 - minutes) * 60).toFixed(4);

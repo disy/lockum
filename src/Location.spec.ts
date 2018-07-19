@@ -1,64 +1,46 @@
-import { Location } from './Location'
+import { Location } from './Location';
+import { LocationHelper } from "./LocationHelper";
 import {expect} from 'chai';
-import {should} from 'mocha';
 
 
 
 
-//this test case is designed for the latitude 59.3293235(decimal degrees)
-//and longitude 18.0685808(decimal degrees) coordinates.
-//in return degrees decimal minutes should be as following
-//after mathematical calculations Latitude: 5919.7594 Longitude: 184.1148
+describe('Location fetching function in Degrees Decimal Minutes', ()=>{
 
-describe('Location fetching function in Decimal Degrees', ()=>{
+    it('given locations of  [47.6797383,9.1608049],should return an array with the following location values: N4740.7843, E99.6483  ', ()=> {
 
-    it('should return location information in the form of an array', ()=> {
-
-        let locationClass = new Location(59.3293235 ,18.0685808);
-        const locationInfo = locationClass.decimalDegreesToDMS(59.3293235, 18.0685808);
-        expect(locationInfo).to.be.an('Array');
-       
+        let LocationHelping = new LocationHelper();
+        const locationInfo = LocationHelping.decimalDegreesToDMS(47.6797383,9.1608049);
+        expect(locationInfo[0]).to.equal('N4740.7843');
+        expect(locationInfo[1]).to.equal('E99.6483');
     });
 
-   it('should return location in the form of an array with the size of 4', ()=> {
+    it('given locations of [-77.508333,164.754167],should return an array with the following location values: S7730.5, E16445.25 ', ()=> {
 
-        let locationClass = new Location(34.567,47.678);
-        const locationInfo = locationClass.decimalDegreesToDMS(59.3293235 ,18.0685808);
-        expect(locationInfo).have.lengthOf(4);
-       
-   });
+        let LocationHelping = new LocationHelper();
+        const locationInfo = LocationHelping.decimalDegreesToDMS(-77.508333,164.754167);
+        expect(locationInfo[0]).to.equal('S7730.5');
+        expect(locationInfo[1]).to.equal('E16445.25');
+    });
 
-   it('should return N as a first paramter based on given input', ()=> {
+    it('given locations of [12.324578,-34.354369],should return an array with the following location values: N1219.4747, W3421.2621 ', ()=> {
 
-    let locationClass = new Location(34.567,47.678);
-    const locationInfo = locationClass.decimalDegreesToDMS(59.3293235, 18.0685808);
-    expect(locationInfo[0]).to.equal('N');
-   
-   });
+        let LocationHelping = new LocationHelper();
+        const locationInfo = LocationHelping.decimalDegreesToDMS(12.324578,-34.354369);
+        expect(locationInfo[0]).to.equal('N1219.4747');
+        expect(locationInfo[1]).to.equal('W3421.2621');
+    });
 
-   it('should return 5919.7594 as a second parameter based on given input', ()=> {
+    it('given locations of [-15.123456,-75.987654],should return an array with the following location values: S157.4074,W7559.2592 ', ()=> {
 
-    let locationClass = new Location(59.3293235 ,18.0685808);
-    const locationInfo = locationClass.decimalDegreesToDMS(59.3293235 ,18.0685808);
-    expect(locationInfo[1]).to.equal('5919.7594');
-   
-   });
-
-   it('should return E as a third parameter based on given input', ()=> {
-
-    let locationClass = new Location(59.3293235, 18.0685808);
-    const locationInfo = locationClass.decimalDegreesToDMS(59.3293235, 18.0685808);
-    expect(locationInfo[2]).to.equal('E');
-   
-   });
-
-   it('should return 184.1148 as a fourth parameter based on given input', ()=> {
-
-    let locationClass = new Location(59.3293235, 18.0685808);
-    const locationInfo = locationClass.decimalDegreesToDMS(59.3293235, 18.0685808);
-    expect(locationInfo[3]).to.equal('184.1148');
-   
-   });
-
+        let LocationHelping = new LocationHelper();
+        const locationInfo = LocationHelping.decimalDegreesToDMS(-15.123456,-75.987654);
+        expect(locationInfo[0]).to.equal('S157.4074');
+        expect(locationInfo[1]).to.equal('W7559.2592');
+    });
+        
+        
+        
+        
 });
 

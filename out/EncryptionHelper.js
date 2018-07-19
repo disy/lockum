@@ -4,9 +4,7 @@ var DataConvertionCalculations_1 = require("../src/DataConvertionCalculations");
 var EncryptionHelper = /** @class */ (function () {
     function EncryptionHelper() {
     }
-    EncryptionHelper.prototype.EncryptionHelper = function () {
-    };
-    EncryptionHelper.deriveKey = function () {
+    EncryptionHelper.prototype.deriveKey = function () {
         window.crypto.subtle.generateKey({ name: "AES-CBC", length: 256 }, true, ["encrypt", "decrypt"]).then(function (key) {
             return window.crypto.subtle.exportKey("raw", key);
         }).then(function (buf) {
@@ -15,10 +13,9 @@ var EncryptionHelper = /** @class */ (function () {
             keyField.value = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToHexString(byteArray);
         });
     };
-    EncryptionHelper.encrypt = function () {
+    EncryptionHelper.prototype.encrypt = function () {
         var keyField = document.getElementById("keyinputarea");
         var hexString = keyField.value;
-        console.log("valuemiz: " + hexString);
         var keyBytes = DataConvertionCalculations_1.DataConvertionCalculations.hexStringToByteArray(hexString);
         var plainTextField = document.getElementById("messageToEncrypt");
         var plainText = plainTextField.value;
@@ -37,7 +34,7 @@ var EncryptionHelper = /** @class */ (function () {
             ciphertextField.value = base64Ciphertext;
         });
     };
-    EncryptionHelper.decrypt = function () {
+    EncryptionHelper.prototype.decrypt = function () {
         //we start by getting the key,ıv and cipher text into byte arrays
         var keyField = document.getElementById("keyinputarea");
         var keyHexString = keyField.value;

@@ -5,16 +5,17 @@ var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var locationButton = document.getElementById("button");
 var encryptionButton = document.getElementById("encryptbutton");
 var decryptionButton = document.getElementById("decryptbutton");
+var EncryptionHelping = new EncryptionHelper_1.EncryptionHelper();
 locationButton.onclick = function (e) {
-    //getCurentLocation(); 
-    EncryptionHelper_1.EncryptionHelper.deriveKey();
+    getCurentLocation();
+    EncryptionHelping.deriveKey();
 };
 encryptionButton.onclick = function (e) {
-    EncryptionHelper_1.EncryptionHelper.encrypt();
+    EncryptionHelping.encrypt();
 };
 decryptionButton.onclick = function (e) {
     //   getCurentLocation(); 
-    EncryptionHelper_1.EncryptionHelper.decrypt();
+    EncryptionHelping.decrypt();
 };
 function getCurentLocation() {
     var output = document.getElementById("out");
@@ -26,8 +27,8 @@ function getCurentLocation() {
     function success(position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-        var userLocation = new Location_1.Location(latitude, longitude);
-        console.log(userLocation.getCurrentLocation());
+        var UserLocation = new Location_1.Location(latitude, longitude);
+        console.log(UserLocation.getCurrentLocation());
     }
     function error() {
         output.innerHTML = "Unable to retrieve your location";

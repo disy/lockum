@@ -1,14 +1,9 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
 
 export class EncryptionHelper {
-    
 
+    public deriveKey () {
 
-    public EncryptionHelper () {
-
-    }
-
-    public static deriveKey () {
         window.crypto.subtle.generateKey (
             {name: "AES-CBC", length: 256},
             true,
@@ -25,10 +20,9 @@ export class EncryptionHelper {
         })
     }
 
-    public static encrypt() {
+    public encrypt() {
         let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
         let hexString = keyField.value;
-        console.log("valuemiz: " + hexString);
         let keyBytes = DataConvertionCalculations.hexStringToByteArray(hexString);
         let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
         let plainText = plainTextField.value;
@@ -58,7 +52,7 @@ export class EncryptionHelper {
         })
     }
 
-    public static decrypt() {
+    public decrypt() {
         //we start by getting the key,ıv and cipher text into byte arrays
 
         let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
