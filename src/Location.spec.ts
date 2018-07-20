@@ -38,9 +38,6 @@ describe('Location fetching function in Degrees Decimal Minutes', ()=>{
         expect(locationInfo[0]).to.equal('S157.4074');
         expect(locationInfo[1]).to.equal('W7559.2592');
     });
-        
-        
-        
-        
+           
 });
 

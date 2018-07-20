@@ -10,7 +10,7 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
   locationButton.onclick = (e: Event) => { 
     
     getCurentLocation(); 
-    EncryptionHelping.deriveKey();
+    EncryptionHelping.deriveKey(12345);
   };
 
 
