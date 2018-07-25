@@ -1,16 +1,22 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
 import {saltCreator} from "random-token"
+import { AsyncFunc } from "mocha";
 
 
 export class EncryptionHelper {
 
-    self = this;
     salt: string;
-    ivBytes = new Uint8Array(16);
+    ivBytes: Uint8Array = new Uint8Array(16);
+    
+    constructor (salt: string,iv: Uint8Array) {
+        this.salt = salt;
+        this.ivBytes = new Uint8Array(iv);
+    }
+    
+ 
 
     public deriveKey (locationInfo: number) {
         let numbefOfIterations = 1000000;
-        this.salt = "a";
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);
         let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo);
 
@@ -31,19 +37,19 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt() {        
+    public encrypt() {          
         let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
+        var context = this;
+
         this.deriveKey(locationText
         ).then(function(aesKey){
-            console.log("derive key: "+aesKey);
             let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
             let plainText = plainTextField.value;
-            let ivBytes =  window.crypto.getRandomValues(new Uint8Array(16));   
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(plainText);
-
+            
             window.crypto.subtle.encrypt(
-                {name: "AES-CBC", iv: ivBytes},
+                {name: "AES-CBC", iv: context.ivBytes},
                 aesKey,
                 plainTextBytes,               
             ).then(function(cipherTextBuffer){
@@ -52,13 +58,16 @@ export class EncryptionHelper {
                 let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
                 ciphertextField.value = base64Ciphertext;
             })
-        })
+
+        }) 
+        
+        
     }
 
     public decrypt() {
-        console.log("salt valuemiz: " + this.salt);
         let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
+        var context = this;
         
         this.deriveKey(locationText
         ).then(function(aesKey){
@@ -66,7 +75,7 @@ export class EncryptionHelper {
             let ciphertextBase64String = ciphertextField.value;
             let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(ciphertextBase64String);
             window.crypto.subtle.decrypt(
-                {name:"AES-CBC",iv: this.initializationVector},
+                {name:"AES-CBC",iv: context.ivBytes},
                 aesKey,
                 ciphertextBytes
             ).then(function(plainTextBuffer){
@@ -74,13 +83,8 @@ export class EncryptionHelper {
                 let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
                 let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
                 keyField.value = plaintextString;
+                console.log("sonuc" + plaintextString);
             })
         })
-    }
-    
-    public shareCommonInfo(salt: string, iv: Uint8Array) {
-        let commonInfo: [string,Uint8Array];
-        commonInfo = [salt,iv];
-        return commonInfo
     }
 }

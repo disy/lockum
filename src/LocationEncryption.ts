@@ -5,7 +5,7 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
   let locationButton = <HTMLButtonElement>document.getElementById("button"); 
   let encryptionButton = <HTMLButtonElement>document.getElementById("encryptbutton"); 
   let decryptionButton = <HTMLButtonElement>document.getElementById("decryptbutton"); 
-  let EncryptionHelping = new EncryptionHelper();
+
 
   locationButton.onclick = (e: Event) => { 
     
@@ -14,14 +14,14 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
 
 
   encryptionButton.onclick = (e: Event) => { 
-    EncryptionHelping.encrypt();
     
+      
   };
 
 
   decryptionButton.onclick = (e: Event) => { 
  //   getCurentLocation(); 
-    EncryptionHelping.decrypt();  
+     
   };
 
 
@@ -40,7 +40,7 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
         let latitude  = position.coords.latitude;
         let longitude = position.coords.longitude; 
         let SenderSide = new Sender(latitude,longitude);
-        
+        SenderSide.encryptTheMessage();
       }
     
       function error() {

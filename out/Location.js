@@ -13,7 +13,6 @@ var Location = /** @class */ (function () {
      */
     Location.prototype.getCurrentLocation = function (toleranceDistance) {
         this.degreesDecimalMinutes = this.LocationHelper.decimalDegreesToDMS(this.latitude, this.longitude);
-        console.log(this.degreesDecimalMinutes);
         this.LocationHelper.finalLocationOutput(this.degreesDecimalMinutes, toleranceDistance);
     };
     return Location;

@@ -17,7 +17,6 @@ export class Location{
     public getCurrentLocation(toleranceDistance: number) {
       
       this.degreesDecimalMinutes = this.LocationHelper.decimalDegreesToDMS(this.latitude,this.longitude);
-      console.log(this.degreesDecimalMinutes);
       this.LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance);     
     }
 }
