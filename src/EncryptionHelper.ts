@@ -1,89 +1,86 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
+import {saltCreator} from "random-token"
+
 
 export class EncryptionHelper {
 
-    public deriveKey () {
+    self = this;
+    salt: string;
+    ivBytes = new Uint8Array(16);
 
-        window.crypto.subtle.generateKey (
-            {name: "AES-CBC", length: 256},
-            true,
-            ["encrypt","decrypt"]
-        ).then (function (key) {
-            return window.crypto.subtle.exportKey (
-                "raw",
-                key
+    public deriveKey (locationInfo: number) {
+        let numbefOfIterations = 1000000;
+        this.salt = "a";
+        let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);
+        let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo);
+
+        return window.crypto.subtle.importKey(
+            "raw",
+            locationInfoBytes,
+            {name:"PBKDF2",  hash: "SHA-1", length: 256},
+            false,
+            ["deriveKey"]
+        ).then(function(baseKey){
+            return window.crypto.subtle.deriveKey(
+                {name:"PBKDF2",salt: saltBytes,iterations:numbefOfIterations,hash: "SHA-1"},
+                baseKey,
+                {name:"AES-CBC",length:256},
+                false,
+                ["encrypt","decrypt"]
             );
-        }). then (function (buf) {
-            let byteArray = new Uint8Array(buf);
-            let keyField = <HTMLTextAreaElement>document.getElementById("keyinputarea");
-            keyField.value = DataConvertionCalculations.byteArrayToHexString(byteArray);
         })
     }
 
-    public encrypt() {
-        let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
-        let hexString = keyField.value;
-        let keyBytes = DataConvertionCalculations.hexStringToByteArray(hexString);
-        let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
-        let plainText = plainTextField.value;
-        let plainTextBytes = DataConvertionCalculations.stringToByteArray(plainText);
-        
-        window.crypto.subtle.importKey(
-            "raw", keyBytes, {name: "AES-CBC", hash: "SHA-1", length: 256 }, true, ["encrypt"]
-        ).then (function (key){
-            let iv = window.crypto.getRandomValues(new Uint8Array(16));
-            let ivField =  <HTMLTextAreaElement>document.getElementById("iterationField");
-            let ivHexString = DataConvertionCalculations.byteArrayToHexString(iv);
-            ivField.value = ivHexString;
+    public encrypt() {        
+        let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
+        let locationText = parseInt(locationField.value);
+        this.deriveKey(locationText
+        ).then(function(aesKey){
+            console.log("derive key: "+aesKey);
+            let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
+            let plainText = plainTextField.value;
+            let ivBytes =  window.crypto.getRandomValues(new Uint8Array(16));   
+            let plainTextBytes = DataConvertionCalculations.stringToByteArray(plainText);
 
-            //we use cryptokey to encrypt the plaintext
-
-            return window.crypto.subtle.encrypt(
-                {name: "AES-CBC", iv: iv},
-                key,
-                plainTextBytes
-            );
-        }).then(function(ciphertextBuf){
-
-            let ciphertextBytes = new Uint8Array(ciphertextBuf);
-            let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes);
-            let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
-            ciphertextField.value = base64Ciphertext;
+            window.crypto.subtle.encrypt(
+                {name: "AES-CBC", iv: ivBytes},
+                aesKey,
+                plainTextBytes,               
+            ).then(function(cipherTextBuffer){
+                let ciphertextBytes = new Uint8Array(cipherTextBuffer);
+                let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes);
+                let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
+                ciphertextField.value = base64Ciphertext;
+            })
         })
     }
 
     public decrypt() {
-        //we start by getting the key,ıv and cipher text into byte arrays
-
-        let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
-        let keyHexString = keyField.value;
-        let keyBytes = DataConvertionCalculations.hexStringToByteArray(keyHexString);
-        let ivField =  <HTMLTextAreaElement>document.getElementById("iterationField");
-        let ivHexString = ivField.value;
-        let ivBytes = DataConvertionCalculations.hexStringToByteArray(ivHexString);
-
-        var ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
-        let ciphertextBase64String = ciphertextField.value;
-        let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(ciphertextBase64String);
-
-          // Make a CryptoKey from the Key string
-    window.crypto.subtle.importKey(
-        "raw",
-        keyBytes,
-        {name: "AES-CBC", hash: "SHA-1", length: 256},
-        false,
-        ["decrypt"]
-    ).then(function(key){
-        // Use the CryptoKey and IV to decrypt the plaintext
-        return window.crypto.subtle.decrypt(
-            {name: "AES-CBC", iv: ivBytes},
-            key,
-            ciphertextBytes
-        );
-    }).then(function(plaintextBuf){
-        let plainTextBytes = new Uint8Array(plaintextBuf);
-        let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
-        let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
-        keyField.value = plaintextString;
-    }) }
+        console.log("salt valuemiz: " + this.salt);
+        let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
+        let locationText = parseInt(locationField.value);
+        
+        this.deriveKey(locationText
+        ).then(function(aesKey){
+            let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
+            let ciphertextBase64String = ciphertextField.value;
+            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(ciphertextBase64String);
+            window.crypto.subtle.decrypt(
+                {name:"AES-CBC",iv: this.initializationVector},
+                aesKey,
+                ciphertextBytes
+            ).then(function(plainTextBuffer){
+                let plainTextBytes = new Uint8Array(plainTextBuffer);
+                let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
+                let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
+                keyField.value = plaintextString;
+            })
+        })
+    }
+    
+    public shareCommonInfo(salt: string, iv: Uint8Array) {
+        let commonInfo: [string,Uint8Array];
+        commonInfo = [salt,iv];
+        return commonInfo
+    }
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Location_1 = require("../src/Location");
+var Sender_1 = require("../src/Sender");
 var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var locationButton = document.getElementById("button");
 var encryptionButton = document.getElementById("encryptbutton");
@@ -8,7 +8,6 @@ var decryptionButton = document.getElementById("decryptbutton");
 var EncryptionHelping = new EncryptionHelper_1.EncryptionHelper();
 locationButton.onclick = function (e) {
     getCurentLocation();
-    EncryptionHelping.deriveKey();
 };
 encryptionButton.onclick = function (e) {
     EncryptionHelping.encrypt();
@@ -27,8 +26,7 @@ function getCurentLocation() {
     function success(position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-        var UserLocation = new Location_1.Location(latitude, longitude);
-        console.log(UserLocation.getCurrentLocation());
+        var SenderSide = new Sender_1.Sender(latitude, longitude);
     }
     function error() {
         output.innerHTML = "Unable to retrieve your location";

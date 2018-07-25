@@ -12,6 +12,8 @@
   "dependencies": {
     "@types/text-encoding": "0.0.33",
     "awesome-typescript-loader": "^5.0.0",
+    "random-token": "0.0.8",
+    "react-native-randombytes": "^3.4.0",
     "text-encoding": "^0.6.4",
     "ts-loader": "^4.3.0",
     "webpack": "^4.8.3"

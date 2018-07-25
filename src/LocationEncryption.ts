@@ -1,4 +1,4 @@
-import {Location} from "../src/Location";
+import {Sender} from "../src/Sender";
 import {EncryptionHelper} from "../src/EncryptionHelper";
 
 
@@ -10,7 +10,6 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
   locationButton.onclick = (e: Event) => { 
     
     getCurentLocation(); 
-    EncryptionHelping.deriveKey(12345);
   };
 
 
@@ -40,8 +39,8 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
       function success(position) {
         let latitude  = position.coords.latitude;
         let longitude = position.coords.longitude; 
-        let UserLocation = new Location(latitude,longitude);
-        console.log(UserLocation.getCurrentLocation());
+        let SenderSide = new Sender(latitude,longitude);
+        
       }
     
       function error() {

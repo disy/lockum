@@ -11,11 +11,10 @@ var Location = /** @class */ (function () {
     /**
      * this function is a temporary test function for now, only to get decimal degrees data and convert it into a Degrees Decimal Minutes Form
      */
-    Location.prototype.getCurrentLocation = function () {
+    Location.prototype.getCurrentLocation = function (toleranceDistance) {
         this.degreesDecimalMinutes = this.LocationHelper.decimalDegreesToDMS(this.latitude, this.longitude);
         console.log(this.degreesDecimalMinutes);
-        this.LocationHelper.finalLocationOutput(this.degreesDecimalMinutes, 5);
-        return this.latitude + " " + this.longitude;
+        this.LocationHelper.finalLocationOutput(this.degreesDecimalMinutes, toleranceDistance);
     };
     return Location;
 }());
