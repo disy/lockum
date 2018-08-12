@@ -5,7 +5,6 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
 export class Sender {
 
     private  locationOfTheSender;
-    private  messageToEncrypt;
     private  toleranceDistance = 5;
     private  latitude;
     private longitude; 
