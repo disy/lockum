@@ -5,31 +5,23 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
 export class Sender {
 
     private  locationOfTheSender;
-    private  messageToEncrypt;
     private  toleranceDistance = 5;
-    private  salt:string = "allo";
-    private  ivBytes;  
+    private  latitude;
+    private longitude; 
  
 
     private  EncryptionTool;
 
     constructor (latitude: number, longitude: number) {
-       this.locationOfTheSender = new Location(latitude,longitude).getCurrentLocation(this.toleranceDistance);
-    }
-
-    private getCurrentLocation() {
-        return this.locationOfTheSender;
+        this.latitude = latitude
+        this.longitude = longitude
     }
 
     public encryptTheMessage() {
-
-        this.ivBytes = window.crypto.getRandomValues(new Uint8Array(16)); 
-        this.EncryptionTool = new EncryptionHelper(this.salt,this.ivBytes);
+        this.locationOfTheSender = new Location(this.latitude,this.longitude).getCurrentLocation(this.toleranceDistance);
+        const ivBytes = window.crypto.getRandomValues(new Uint8Array(16));
+        const salt = window.crypto.getRandomValues(new Uint8Array(16)); 
+        this.EncryptionTool = new EncryptionHelper(salt,ivBytes)
         this.EncryptionTool.encrypt();
-       
-    }
-
-    public decryptMessage() {
-        
     }
 }

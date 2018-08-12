@@ -1,20 +1,18 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
-import {saltCreator} from "random-token"
-import { AsyncFunc } from "mocha";
-
 
 export class EncryptionHelper {
 
-    salt: string;
     ivBytes: Uint8Array = new Uint8Array(16);
+    salt: Uint8Array = new Uint8Array(16);
+
     
-    constructor (salt: string,iv: Uint8Array) {
-        this.salt = salt;
+    constructor (salt: Uint8Array ,iv: Uint8Array) {
+        this.salt = new Uint8Array(salt);
         this.ivBytes = new Uint8Array(iv);
+        console.log("ilki "+this.salt)
+        console.log(this.ivBytes)
     }
     
- 
-
     public deriveKey (locationInfo: number) {
         let numbefOfIterations = 1000000;
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);

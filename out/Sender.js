@@ -1,23 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Location_1 = require("./Location");
-var EncryptionHelper_1 = require("../src/EncryptionHelper");
-var Sender = /** @class */ (function () {
-    function Sender(latitude, longitude) {
+const Location_1 = require("./Location");
+const EncryptionHelper_1 = require("../src/EncryptionHelper");
+class Sender {
+    constructor(latitude, longitude) {
         this.toleranceDistance = 5;
-        this.salt = "allo";
-        this.locationOfTheSender = new Location_1.Location(latitude, longitude).getCurrentLocation(this.toleranceDistance);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
-    Sender.prototype.getCurrentLocation = function () {
-        return this.locationOfTheSender;
-    };
-    Sender.prototype.encryptTheMessage = function () {
-        this.ivBytes = window.crypto.getRandomValues(new Uint8Array(16));
-        this.EncryptionTool = new EncryptionHelper_1.EncryptionHelper(this.salt, this.ivBytes);
+    encryptTheMessage() {
+        this.locationOfTheSender = new Location_1.Location(this.latitude, this.longitude).getCurrentLocation(this.toleranceDistance);
+        const ivBytes = window.crypto.getRandomValues(new Uint8Array(16));
+        const salt = window.crypto.getRandomValues(new Uint8Array(16));
+        this.EncryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         this.EncryptionTool.encrypt();
-    };
-    Sender.prototype.decryptMessage = function () {
-    };
-    return Sender;
-}());
+    }
+}
 exports.Sender = Sender;
