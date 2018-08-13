@@ -7,8 +7,6 @@ class EncryptionHelper {
         this.salt = new Uint8Array(16);
         this.salt = new Uint8Array(salt);
         this.ivBytes = new Uint8Array(iv);
-        console.log("ilki " + this.salt);
-        console.log(this.ivBytes);
     }
     deriveKey(locationInfo) {
         let numbefOfIterations = 1000000;
@@ -18,14 +16,12 @@ class EncryptionHelper {
             return window.crypto.subtle.deriveKey({ name: "PBKDF2", salt: saltBytes, iterations: numbefOfIterations, hash: "SHA-1" }, baseKey, { name: "AES-CBC", length: 256 }, false, ["encrypt", "decrypt"]);
         });
     }
-    encrypt() {
+    encrypt(message) {
         let locationField = document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
         var context = this;
         this.deriveKey(locationText).then(function (aesKey) {
-            let plainTextField = document.getElementById("messageToEncrypt");
-            let plainText = plainTextField.value;
-            let plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(plainText);
+            let plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
             window.crypto.subtle.encrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, plainTextBytes).then(function (cipherTextBuffer) {
                 let ciphertextBytes = new Uint8Array(cipherTextBuffer);
                 let base64Ciphertext = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToBase64(ciphertextBytes);

@@ -9,8 +9,6 @@ export class EncryptionHelper {
     constructor (salt: Uint8Array ,iv: Uint8Array) {
         this.salt = new Uint8Array(salt);
         this.ivBytes = new Uint8Array(iv);
-        console.log("ilki "+this.salt)
-        console.log(this.ivBytes)
     }
     
     public deriveKey (locationInfo: number) {
@@ -35,16 +33,14 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt() {          
+    public encrypt(message: String) {          
         let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
         var context = this;
 
         this.deriveKey(locationText
         ).then(function(aesKey){
-            let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
-            let plainText = plainTextField.value;
-            let plainTextBytes = DataConvertionCalculations.stringToByteArray(plainText);
+            let plainTextBytes = DataConvertionCalculations.stringToByteArray(message);
             
             window.crypto.subtle.encrypt(
                 {name: "AES-CBC", iv: context.ivBytes},

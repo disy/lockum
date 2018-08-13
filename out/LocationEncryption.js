@@ -4,6 +4,7 @@ const Sender_1 = require("../src/Sender");
 let locationButton = document.getElementById("button");
 let encryptionButton = document.getElementById("encryptbutton");
 let decryptionButton = document.getElementById("decryptbutton");
+let plainTextField = document.getElementById("messageToEncrypt");
 locationButton.onclick = (e) => {
     getCurentLocation();
 };
@@ -22,7 +23,7 @@ function getCurentLocation() {
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        let SenderSide = new Sender_1.Sender(latitude, longitude);
+        let SenderSide = new Sender_1.Sender(latitude, longitude, plainTextField.value);
         SenderSide.encryptTheMessage();
     }
     function error() {
