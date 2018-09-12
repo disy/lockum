@@ -6,12 +6,12 @@ export class EncryptionHelper {
     salt: Uint8Array = new Uint8Array(16);
 
     
-    constructor (salt: Uint8Array ,iv: Uint8Array) {
+    constructor(salt: Uint8Array ,iv: Uint8Array) {
         this.salt = new Uint8Array(salt);
         this.ivBytes = new Uint8Array(iv);
     }
     
-    public deriveKey (locationInfo: number) {
+    public deriveKey(locationInfo: number) {
         let numbefOfIterations = 1000000;
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);
         let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo);
@@ -58,16 +58,14 @@ export class EncryptionHelper {
         
     }
 
-    public decrypt() {
+    public decrypt(cipherText: String) {
         let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
         var context = this;
         
         this.deriveKey(locationText
         ).then(function(aesKey){
-            let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
-            let ciphertextBase64String = ciphertextField.value;
-            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(ciphertextBase64String);
+            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText);
             window.crypto.subtle.decrypt(
                 {name:"AES-CBC",iv: context.ivBytes},
                 aesKey,
@@ -77,7 +75,6 @@ export class EncryptionHelper {
                 let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
                 let keyField =  <HTMLTextAreaElement>document.getElementById("keyinputarea");
                 keyField.value = plaintextString;
-                console.log("sonuc" + plaintextString);
             })
         })
     }

@@ -4,7 +4,6 @@ export class Location{
     private latitude;
     private longitude;
     private degreesDecimalMinutes: Array<string> = [];
-    private LocationHelper = new LocationHelper();
 
     constructor(latitude: number, longitude: number) {
        this.latitude = latitude.toFixed(7);
@@ -16,7 +15,8 @@ export class Location{
      */
     public getCurrentLocation(toleranceDistance: number) {
       
-      this.degreesDecimalMinutes = this.LocationHelper.decimalDegreesToDMS(this.latitude,this.longitude);
-      this.LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance);     
+      this.degreesDecimalMinutes = LocationHelper.decimalDegreesToDMS(this.latitude,this.longitude);
+      LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance);    
+      console.log("deneme322: "+ LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance));    
     }
 }

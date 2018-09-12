@@ -3,6 +3,7 @@ const textDecoder = require
 
 module.exports = {
   entry: './src/LocationEncryption.ts',
+  mode: 'production',
   module: {
     rules:  [
       {
@@ -12,6 +13,7 @@ module.exports = {
       }
     ]
   },
+  performance: { hints: false },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ]
   },

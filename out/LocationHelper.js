@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class LocationHelper {
     //this is the main function which gets the current latitude and longitude values in the form of decimal degrees 
     //and returns them as degrees decimal minutes form
-    decimalDegreesToDMS(latitude, longitude) {
+    static decimalDegreesToDMS(latitude, longitude) {
         let degreesDecimalMinutes = [];
         let dmsLatitude;
         let dmsLongitude;
@@ -18,7 +18,7 @@ class LocationHelper {
     }
     //this function gets the latitude and longitude values in the form of degrees minutes and seconds
     //then returns them as degrees decimal minutes.
-    dmsToDegreesDecimalMinutes(latitude, longitude) {
+    static dmsToDegreesDecimalMinutes(latitude, longitude) {
         let degreesDecimalMinutes = [];
         if (latitude == null || longitude == null) {
             throw new Error('Location information has not been fetched.');
@@ -27,7 +27,7 @@ class LocationHelper {
         degreesDecimalMinutes[1] = (this.dmsToDegreesDecimalMinutesCalculator(longitude));
         return degreesDecimalMinutes;
     }
-    decimalDegreesToDMSCalculator(locationvalue, isLatitude) {
+    static decimalDegreesToDMSCalculator(locationvalue, isLatitude) {
         let dmsInformation = [];
         let integer;
         let minutes;
@@ -58,7 +58,7 @@ class LocationHelper {
         dmsInformation[3] = seconds;
         return dmsInformation;
     }
-    dmsToDegreesDecimalMinutesCalculator(locationInfo) {
+    static dmsToDegreesDecimalMinutesCalculator(locationInfo) {
         let locationSign = locationInfo[0];
         let degrees = locationInfo[1];
         let decimalMinutes = +locationInfo[2] + +(+locationInfo[3] / 60).toFixed(4);
@@ -72,7 +72,7 @@ class LocationHelper {
      * @param locationValues represents the array consisting of latitude and longitude information
      * @param toleranceDistance represents the desired encryption distance for the location information
      */
-    finalLocationOutput(locationValues, toleranceDistance) {
+    static finalLocationOutput(locationValues, toleranceDistance) {
         console.log(this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5));
         return this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5);
     }
@@ -84,7 +84,7 @@ class LocationHelper {
      *  is used to check if its latitude or longitude
      * @param toleranceDistance represents the desired encryption distance for the location information
      */
-    toleraceDistanceCalculator(locationValue, latitudeValue, toleranceDistance) {
+    static toleraceDistanceCalculator(locationValue, latitudeValue, toleranceDistance) {
         let locationSign = locationValue.charAt(0);
         locationValue = locationValue.slice(1);
         let location = parseFloat(locationValue);
@@ -98,7 +98,7 @@ class LocationHelper {
             return this.binaryLatitudeLongitudeSignCalculator(location, locationSign);
         }
     }
-    binaryLatitudeLongitudeSignCalculator(locationValue, locationSign) {
+    static binaryLatitudeLongitudeSignCalculator(locationValue, locationSign) {
         if (locationSign == "E") {
             return locationValue;
         }
@@ -112,7 +112,7 @@ class LocationHelper {
             return this.integerToBinaryCalculation(locationValue);
         }
     }
-    integerToBinaryCalculation(locationValue) {
+    static integerToBinaryCalculation(locationValue) {
         let lengthOfLocation = locationValue.toString(2).length;
         let signAddition = Math.pow(2, lengthOfLocation);
         return locationValue + signAddition;

@@ -6,25 +6,29 @@ import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
 
 export class Receiver {
 
-    private  locationOfTheSender;
-    private  toleranceDistance = 5;
-    private salt = localStorage.getItem('salt');
+    private locationOfTheSender;
+    private toleranceDistance = 5;
+    private latitude;
+    private longitude; 
+    private cipherText;
 
-  //  EncryptionTool = new EncryptionHelper(this.salt,DataConvertionCalculations.stringToByteArray(localStorage.getItem('iv')));
+    private  EncryptionTool;
 
-    constructor (latitude: number, longitude: number) {
-       this.locationOfTheSender = new Location(latitude,longitude).getCurrentLocation(this.toleranceDistance);
+
+
+    constructor (latitude: number, longitude: number,cipherText: string) {
+        this.latitude = latitude
+        this.longitude = longitude
+        this.cipherText = cipherText;
     }
 
-    private getCurrentLocation() {
-        return this.locationOfTheSender;
-    }
-
-    public decryptMessage() {
-        
-
-    //   this.EncryptionTool.decrypt();   
-
-    }
-
+    public decrypt() {
+        let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
+        this.cipherText = ciphertextField.value
+        this.locationOfTheSender = new Location(this.latitude,this.longitude).getCurrentLocation(this.toleranceDistance);
+        var sharedPreferences = JSON.parse(localStorage.getItem('package')) 
+        console.log("ikinci taraf: "+sharedPreferences);
+        this.EncryptionTool = new EncryptionHelper(sharedPreferences[0],sharedPreferences[1])
+        this.EncryptionTool.decrypt(this.cipherText)    
+    }n
 }

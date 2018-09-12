@@ -2,7 +2,7 @@ export class LocationHelper{
 
    //this is the main function which gets the current latitude and longitude values in the form of decimal degrees 
     //and returns them as degrees decimal minutes form
-     public decimalDegreesToDMS(latitude: number, longitude: number) {
+     public static decimalDegreesToDMS(latitude: number, longitude: number) {
         let degreesDecimalMinutes: Array<string> = [];
         let dmsLatitude;
         let dmsLongitude; 
@@ -11,16 +11,17 @@ export class LocationHelper{
         }
      
         //Dms stands for degrees minutes seconds 
-        dmsLatitude =this.decimalDegreesToDMSCalculator(latitude,true)
-        dmsLongitude=this.decimalDegreesToDMSCalculator(longitude,false)
+        dmsLatitude = this.decimalDegreesToDMSCalculator(latitude,true)
+        dmsLongitude= this.decimalDegreesToDMSCalculator(longitude,false)
        
         degreesDecimalMinutes= this.dmsToDegreesDecimalMinutes(dmsLatitude,dmsLongitude);
+        
         return degreesDecimalMinutes;
     }
 
      //this function gets the latitude and longitude values in the form of degrees minutes and seconds
     //then returns them as degrees decimal minutes.
-     public dmsToDegreesDecimalMinutes (latitude: Array<string>, longitude: Array<string>) {
+     public static dmsToDegreesDecimalMinutes (latitude: Array<string>, longitude: Array<string>) {
         let degreesDecimalMinutes: Array<any> = [];
 
         if( latitude == null || longitude == null) {
@@ -33,7 +34,7 @@ export class LocationHelper{
         return degreesDecimalMinutes;
     }
 
-    public decimalDegreesToDMSCalculator (locationvalue: number,isLatitude: boolean) {
+    public static decimalDegreesToDMSCalculator (locationvalue: number,isLatitude: boolean) {
         let dmsInformation: Array<string> = [];
         let integer;
         let minutes;
@@ -71,7 +72,7 @@ export class LocationHelper{
         return dmsInformation;
     }
     
-    public dmsToDegreesDecimalMinutesCalculator(locationInfo: Array<string>){
+    public static dmsToDegreesDecimalMinutesCalculator(locationInfo: Array<string>){
         let locationSign = locationInfo[0];
         let degrees = locationInfo[1]
         let decimalMinutes = +locationInfo[2] +  +(+locationInfo[3] / 60).toFixed(4);
@@ -87,7 +88,7 @@ export class LocationHelper{
      * @param locationValues represents the array consisting of latitude and longitude information
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
-    public finalLocationOutput(locationValues: Array<string>,toleranceDistance: number) {
+    public static finalLocationOutput(locationValues: Array<string>,toleranceDistance: number) {
         console.log(this.toleraceDistanceCalculator(locationValues[0],true,5) + this.toleraceDistanceCalculator(locationValues[1],false,5)) ;
         return this.toleraceDistanceCalculator(locationValues[0],true,5) + this.toleraceDistanceCalculator(locationValues[1],false,5) ; 
     }
@@ -100,7 +101,7 @@ export class LocationHelper{
      *  is used to check if its latitude or longitude
      * @param toleranceDistance represents the desired encryption distance for the location information 
      */
-    public toleraceDistanceCalculator(locationValue: string,latitudeValue: boolean,toleranceDistance) {
+    public static toleraceDistanceCalculator(locationValue: string,latitudeValue: boolean,toleranceDistance) {
         let locationSign = locationValue.charAt(0);
         locationValue = locationValue.slice(1);
         let location = parseFloat(locationValue); 
@@ -115,7 +116,7 @@ export class LocationHelper{
       
     }
 
-    public binaryLatitudeLongitudeSignCalculator (locationValue: number, locationSign: string) {
+    public static binaryLatitudeLongitudeSignCalculator (locationValue: number, locationSign: string) {
         if (locationSign == "E") {
             return locationValue;
         }
@@ -133,7 +134,7 @@ export class LocationHelper{
         }
     }
 
-    public integerToBinaryCalculation(locationValue: number) {
+    public static integerToBinaryCalculation(locationValue: number) {
         let lengthOfLocation = locationValue.toString(2).length;
         let signAddition = Math.pow(2,lengthOfLocation);
 

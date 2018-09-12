@@ -30,20 +30,17 @@ class EncryptionHelper {
             });
         });
     }
-    decrypt() {
+    decrypt(cipherText) {
         let locationField = document.getElementById("locationField");
         let locationText = parseInt(locationField.value);
         var context = this;
         this.deriveKey(locationText).then(function (aesKey) {
-            let ciphertextField = document.getElementById("ciphertextArea");
-            let ciphertextBase64String = ciphertextField.value;
-            let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(ciphertextBase64String);
+            let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(cipherText);
             window.crypto.subtle.decrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, ciphertextBytes).then(function (plainTextBuffer) {
                 let plainTextBytes = new Uint8Array(plainTextBuffer);
                 let plaintextString = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToString(plainTextBytes);
                 let keyField = document.getElementById("keyinputarea");
                 keyField.value = plaintextString;
-                console.log("sonuc" + plaintextString);
             });
         });
     }
