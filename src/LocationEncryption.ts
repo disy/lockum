@@ -7,9 +7,9 @@ import { Receiver } from "./Receiver";
   let encryptionButton = <HTMLButtonElement>document.getElementById("encryptbutton"); 
   let decryptionButton = <HTMLButtonElement>document.getElementById("decryptbutton");
   let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
+  let toleranceDistanceField =  <HTMLTextAreaElement>document.getElementById("toleranceDistanceField");
   
-  locationButton.onclick = (e: Event) => { 
-    
+  locationButton.onclick = (e: Event) => {     
     getCurentLocation(); 
   };
 
@@ -39,10 +39,11 @@ import { Receiver } from "./Receiver";
       function success(position) {
         let latitude  = position.coords.latitude;
         let longitude = position.coords.longitude; 
+        let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
         console.log("Latitude:" + latitude);
         console.log("Longitude:" + longitude);
-        let SenderSide = new Sender(latitude,longitude,plainTextField.value);
-        SenderSide.encryptTheMessage();
+        let sender = new Sender(latitude,longitude,plainTextField.value,toleranceDistance);
+        sender.encryptMessage();
       }
     
       function error() {

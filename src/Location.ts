@@ -1,22 +1,16 @@
 import { LocationHelper } from "./LocationHelper";
 
-export class Location{
-    private latitude;
-    private longitude;
-    private degreesDecimalMinutes: Array<string> = [];
+export class Location {
+    private latitude: number;
+    private longitude: number;
 
     constructor(latitude: number, longitude: number) {
-       this.latitude = latitude.toFixed(7);
-        this.longitude = longitude.toFixed(7);
+       this.latitude = parseFloat(latitude.toFixed(7));
+       this.longitude = parseFloat(longitude.toFixed(7));
     }
    
-    /**
-     * this function is a temporary test function for now, only to get decimal degrees data and convert it into a Degrees Decimal Minutes Form
-     */
-    public getCurrentLocation(toleranceDistance: number) {
-      
-      this.degreesDecimalMinutes = LocationHelper.decimalDegreesToDMS(this.latitude,this.longitude);
-      LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance);    
-      console.log("deneme322: "+ LocationHelper.finalLocationOutput(this.degreesDecimalMinutes,toleranceDistance));    
+    public createLocationKeyMaterial(toleranceDistance: number) {     
+      let locationKeyMaterial = LocationHelper.calculateLocationKeyMaterial(this.latitude,this.longitude, toleranceDistance);
+      return locationKeyMaterial   
     }
 }

@@ -1,17 +1,15 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
 
 export class EncryptionHelper {
-
     ivBytes: Uint8Array = new Uint8Array(16);
     salt: Uint8Array = new Uint8Array(16);
 
-    
     constructor(salt: Uint8Array ,iv: Uint8Array) {
         this.salt = new Uint8Array(salt);
         this.ivBytes = new Uint8Array(iv);
     }
     
-    public deriveKey(locationInfo: number) {
+    public deriveKey(locationInfo: Number) {
         let numbefOfIterations = 1000000;
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);
         let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo);
@@ -33,12 +31,10 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt(message: String) {          
-        let locationField =  <HTMLTextAreaElement>document.getElementById("locationField");
-        let locationText = parseInt(locationField.value);
+    public encrypt(location: Number, message: String) {          
         var context = this;
 
-        this.deriveKey(locationText
+        this.deriveKey(location
         ).then(function(aesKey){
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message);
             
@@ -52,10 +48,7 @@ export class EncryptionHelper {
                 let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
                 ciphertextField.value = base64Ciphertext;
             })
-
-        }) 
-        
-        
+        })                
     }
 
     public decrypt(cipherText: String) {

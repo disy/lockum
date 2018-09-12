@@ -43,8 +43,6 @@ class DataConvertionCalculations {
     }
     static byteArrayToString(byteArray) {
         if ("TextDecoder" in window) {
-            // let decoder = new TextEncoding.TextDecoder();
-            // return decoder.decode(byteArray);
             return new text_encoding_1.TextDecoder().decode(byteArray);
         }
         // Otherwise, fall back to 7-bit ASCII only
@@ -56,8 +54,6 @@ class DataConvertionCalculations {
     }
     static stringToByteArray(s) {
         if ("TextEncoder" in window) {
-            //  let encoder = new TextEncoder;
-            //  return encoder.encode(s);
             return new text_encoding_1.TextEncoder().encode(s);
         }
         // Otherwise, fall back to 7-bit ASCII only

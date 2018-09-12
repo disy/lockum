@@ -25,7 +25,7 @@ export class Receiver {
     public decrypt() {
         let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
         this.cipherText = ciphertextField.value
-        this.locationOfTheSender = new Location(this.latitude,this.longitude).getCurrentLocation(this.toleranceDistance);
+        this.locationOfTheSender = new Location(this.latitude,this.longitude).createLocationKeyMaterial(this.toleranceDistance);
         var sharedPreferences = JSON.parse(localStorage.getItem('package')) 
         console.log("ikinci taraf: "+sharedPreferences);
         this.EncryptionTool = new EncryptionHelper(sharedPreferences[0],sharedPreferences[1])

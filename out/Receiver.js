@@ -12,7 +12,7 @@ class Receiver {
     decrypt() {
         let ciphertextField = document.getElementById("ciphertextArea");
         this.cipherText = ciphertextField.value;
-        this.locationOfTheSender = new Location_1.Location(this.latitude, this.longitude).getCurrentLocation(this.toleranceDistance);
+        this.locationOfTheSender = new Location_1.Location(this.latitude, this.longitude).createLocationKeyMaterial(this.toleranceDistance);
         var sharedPreferences = JSON.parse(localStorage.getItem('package'));
         console.log("ikinci taraf: " + sharedPreferences);
         this.EncryptionTool = new EncryptionHelper_1.EncryptionHelper(sharedPreferences[0], sharedPreferences[1]);

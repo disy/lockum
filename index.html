@@ -9,14 +9,22 @@
     <br>
     <textarea  id = "messageToEncrypt" type="text" size="90"></textarea>
     <br> 
+
+    <label id="toleranceDistancelabel" type="label">Tolerance Distance: </label>
+    <br>
+    <textarea  id = "toleranceDistanceField" type="text" size="90"></textarea>
+    <br> 
+
     <label id="messageLabel" type="label">Location:</label>
     <br>
     <textarea  id = "locationField" type="text" size="90"></textarea>
-    <br>   
+    <br> 
+
     <label id="decryptLabel" type="label">CipherText :</label>
     <br>
     <textarea id = "ciphertextArea" type = "text"  size="90"></textarea>
     <br>
+    
     <button id="button" type="button" onclick='getCurrentLocation()'>Click Me!</button>
     <button id="encryptbutton" type="button" onclick='EncryptionHelper.encrypt()'>Encrypt!</button>
     <button id="decryptbutton" type="button" onclick='EncryptionHelper.decrypt()'>Decrypt!</button>

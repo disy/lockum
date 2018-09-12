@@ -6,6 +6,7 @@ let locationButton = document.getElementById("button");
 let encryptionButton = document.getElementById("encryptbutton");
 let decryptionButton = document.getElementById("decryptbutton");
 let plainTextField = document.getElementById("messageToEncrypt");
+let toleranceDistanceField = document.getElementById("toleranceDistanceField");
 locationButton.onclick = (e) => {
     getCurentLocation();
 };
@@ -24,10 +25,11 @@ function getCurentLocation() {
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
+        let toleranceDistance = parseInt(toleranceDistanceField.value.toString());
         console.log("Latitude:" + latitude);
         console.log("Longitude:" + longitude);
-        let SenderSide = new Sender_1.Sender(latitude, longitude, plainTextField.value);
-        SenderSide.encryptTheMessage();
+        let sender = new Sender_1.Sender(latitude, longitude, plainTextField.value, toleranceDistance);
+        sender.encryptMessage();
     }
     function error() {
         output.innerHTML = "Unable to retrieve your location";

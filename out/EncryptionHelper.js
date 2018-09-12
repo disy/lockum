@@ -16,11 +16,9 @@ class EncryptionHelper {
             return window.crypto.subtle.deriveKey({ name: "PBKDF2", salt: saltBytes, iterations: numbefOfIterations, hash: "SHA-1" }, baseKey, { name: "AES-CBC", length: 256 }, false, ["encrypt", "decrypt"]);
         });
     }
-    encrypt(message) {
-        let locationField = document.getElementById("locationField");
-        let locationText = parseInt(locationField.value);
+    encrypt(location, message) {
         var context = this;
-        this.deriveKey(locationText).then(function (aesKey) {
+        this.deriveKey(location).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
             window.crypto.subtle.encrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, plainTextBytes).then(function (cipherTextBuffer) {
                 let ciphertextBytes = new Uint8Array(cipherTextBuffer);

@@ -1,121 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class LocationHelper {
-    //this is the main function which gets the current latitude and longitude values in the form of decimal degrees 
-    //and returns them as degrees decimal minutes form
-    static decimalDegreesToDMS(latitude, longitude) {
-        let degreesDecimalMinutes = [];
-        let dmsLatitude;
-        let dmsLongitude;
+    static calculateLocationKeyMaterial(latitude, longitude, toleranceDistance) {
         if (latitude == null || longitude == null) {
             throw new Error('Location information has not been fetched.');
         }
-        //Dms stands for degrees minutes seconds 
-        dmsLatitude = this.decimalDegreesToDMSCalculator(latitude, true);
-        dmsLongitude = this.decimalDegreesToDMSCalculator(longitude, false);
-        degreesDecimalMinutes = this.dmsToDegreesDecimalMinutes(dmsLatitude, dmsLongitude);
-        return degreesDecimalMinutes;
+        let keypartLatitude = this.includeToleranceDistance(latitude, "latitude", toleranceDistance);
+        let keypartLongitude = this.includeToleranceDistance(longitude, "longitude", toleranceDistance);
+        console.log("Degerler:" + parseInt(keypartLatitude.toString() + keypartLongitude.toString()));
+        return parseInt(keypartLatitude.toString() + keypartLongitude.toString());
     }
-    //this function gets the latitude and longitude values in the form of degrees minutes and seconds
-    //then returns them as degrees decimal minutes.
-    static dmsToDegreesDecimalMinutes(latitude, longitude) {
-        let degreesDecimalMinutes = [];
-        if (latitude == null || longitude == null) {
-            throw new Error('Location information has not been fetched.');
+    static includeToleranceDistance(locationValue, locationType, toleranceDistance) {
+        let shouldSetBit = false;
+        if (locationValue < 0) {
+            shouldSetBit = true;
+            locationValue *= -1;
         }
-        degreesDecimalMinutes[0] = (this.dmsToDegreesDecimalMinutesCalculator(latitude));
-        degreesDecimalMinutes[1] = (this.dmsToDegreesDecimalMinutesCalculator(longitude));
-        return degreesDecimalMinutes;
+        locationValue = this.convertToDegreesDecimalMinutes(locationValue);
+        if (locationType == "latitude") {
+            if (shouldSetBit) {
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4));
+                locationValue = this.setBit(locationValue) + locationValue;
+            }
+            else if (!shouldSetBit) {
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4));
+            }
+        }
+        else if (locationType == "longitude") {
+            if (shouldSetBit) {
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6));
+                locationValue = this.setBit(locationValue) + locationValue;
+            }
+            else if (!shouldSetBit) {
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6));
+            }
+        }
+        return locationValue;
     }
-    static decimalDegreesToDMSCalculator(locationvalue, isLatitude) {
-        let dmsInformation = [];
-        let integer;
-        let minutes;
-        let seconds;
-        let locationSign;
-        let latitudeInformation = isLatitude;
-        if (latitudeInformation && locationvalue < 0) {
-            locationSign = "S";
-        }
-        else if (latitudeInformation && locationvalue > 0) {
-            locationSign = "N";
-        }
-        else if (latitudeInformation == false && locationvalue < 0) {
-            locationSign = "W";
-        }
-        else if (latitudeInformation == false && locationvalue > 0) {
-            locationSign = "E";
-        }
-        if (locationvalue < 0) {
-            locationvalue = locationvalue * -1;
-        }
-        integer = Math.floor(locationvalue);
-        minutes = Math.floor((locationvalue - integer) * 60);
-        seconds = (((locationvalue - integer) * 60 - minutes) * 60).toFixed(4);
-        dmsInformation[0] = locationSign;
-        dmsInformation[1] = integer;
-        dmsInformation[2] = minutes;
-        dmsInformation[3] = seconds;
-        return dmsInformation;
+    static convertToDegreesDecimalMinutes(locationValue) {
+        let locationValueDegrees = Math.floor(locationValue);
+        let locationValueDecimal = parseFloat(((locationValue % 1) * 60).toFixed(4));
+        let result = parseFloat(locationValueDegrees.toString() + locationValueDecimal.toString());
+        return result;
     }
-    static dmsToDegreesDecimalMinutesCalculator(locationInfo) {
-        let locationSign = locationInfo[0];
-        let degrees = locationInfo[1];
-        let decimalMinutes = +locationInfo[2] + +(+locationInfo[3] / 60).toFixed(4);
-        let degreesDecimalMinutes = locationSign + degrees + decimalMinutes;
-        return degreesDecimalMinutes;
-    }
-    /**
-     * this function produces the input key for the key derivation Algorithm
-     * It takes the location information and turns it into an input for the key derivation algorithm
-     *
-     * @param locationValues represents the array consisting of latitude and longitude information
-     * @param toleranceDistance represents the desired encryption distance for the location information
-     */
-    static finalLocationOutput(locationValues, toleranceDistance) {
-        console.log(this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5));
-        return this.toleraceDistanceCalculator(locationValues[0], true, 5) + this.toleraceDistanceCalculator(locationValues[1], false, 5);
-    }
-    /**
-     * This method takes the location, multiplies it by 10.000 and then divides it by toleranceDistance*CorrespondingValue
-     *
-     * @param locationValue indicates the latitude or longitutde value to be calculated by desired tolerance distance
-     * @param latitudeValue there are two different values when tolerance value is processed, therefore this variable
-     *  is used to check if its latitude or longitude
-     * @param toleranceDistance represents the desired encryption distance for the location information
-     */
-    static toleraceDistanceCalculator(locationValue, latitudeValue, toleranceDistance) {
-        let locationSign = locationValue.charAt(0);
-        locationValue = locationValue.slice(1);
-        let location = parseFloat(locationValue);
-        location = (location * 10000);
-        if (latitudeValue == true) {
-            location = Math.floor(location / (toleranceDistance * 5.4));
-            return this.binaryLatitudeLongitudeSignCalculator(location, locationSign);
-        }
-        else if (latitudeValue == false) {
-            location = Math.floor(location / (toleranceDistance * 6));
-            return this.binaryLatitudeLongitudeSignCalculator(location, locationSign);
-        }
-    }
-    static binaryLatitudeLongitudeSignCalculator(locationValue, locationSign) {
-        if (locationSign == "E") {
-            return locationValue;
-        }
-        else if (locationSign == "W") {
-            return this.integerToBinaryCalculation(locationValue);
-        }
-        else if (locationSign == "N") {
-            return locationValue;
-        }
-        else if (locationSign == "S") {
-            return this.integerToBinaryCalculation(locationValue);
-        }
-    }
-    static integerToBinaryCalculation(locationValue) {
-        let lengthOfLocation = locationValue.toString(2).length;
-        let signAddition = Math.pow(2, lengthOfLocation);
-        return locationValue + signAddition;
+    static setBit(locationValue) {
+        let bitPosition = Math.floor(Math.log2(locationValue)) + 1;
+        let numberToAdd = Math.pow(2, bitPosition);
+        return numberToAdd;
     }
 }
 exports.LocationHelper = LocationHelper;
