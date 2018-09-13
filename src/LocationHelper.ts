@@ -1,6 +1,6 @@
 export class LocationHelper {
 
-     public static calculateLocationKeyMaterial(latitude: number, longitude: number, toleranceDistance: number) {
+    public static calculateLocationKeyMaterial(latitude: number, longitude: number, toleranceDistance: number) {
         
         if( latitude == null || longitude == null) {
             throw new Error('Location information has not been fetched.')
@@ -8,8 +8,7 @@ export class LocationHelper {
  
         let keypartLatitude = this.includeToleranceDistance(latitude, "latitude", toleranceDistance)
         let keypartLongitude = this.includeToleranceDistance(longitude, "longitude", toleranceDistance)
-       
-        console.log("Degerler:"+parseInt(keypartLatitude.toString() + keypartLongitude.toString()))
+        console.log("Key Input Material:"+keypartLatitude.toString() + keypartLongitude.toString())
 
         return parseInt(keypartLatitude.toString() + keypartLongitude.toString())
     }
@@ -17,29 +16,35 @@ export class LocationHelper {
     public static includeToleranceDistance(locationValue: number, locationType: string, toleranceDistance: number): number {
         let shouldSetBit = false 
 
-        if(locationValue < 0) {
+        //check if location value is positive and add LocationSignBit logic if required
+        if(locationValue > 0) {
             shouldSetBit = true
+        } 
+        else {
             locationValue *=-1
         }
 
+        //convert location type
         locationValue = this.convertToDegreesDecimalMinutes(locationValue)
 
         if(locationType == "latitude") {
             
             if(shouldSetBit) {
                 locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4))
-                locationValue = this.setBit(locationValue) + locationValue    
-            } else if(!shouldSetBit){ locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4)) }
-
+                return this.setBit(locationValue)    
+            } else { 
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4)) 
+                return locationValue
+            } 
         } else if(locationType == "longitude") {
-
             if(shouldSetBit) {
                 locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6))
-                locationValue = this.setBit(locationValue) + locationValue    
-            } else if(!shouldSetBit) { locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6)) }
-        }
-        
-        return locationValue
+                return this.setBit(locationValue)       
+            } else { 
+                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6))
+                return locationValue
+            }
+        }      
     }
 
     public static convertToDegreesDecimalMinutes(locationValue: number): number {
@@ -52,6 +57,6 @@ export class LocationHelper {
     public static setBit(locationValue: number): number {
         let bitPosition = Math.floor(Math.log2(locationValue))+1
         let numberToAdd = Math.pow(2, bitPosition)
-        return numberToAdd      
+        return locationValue+numberToAdd      
     }
 }

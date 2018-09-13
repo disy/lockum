@@ -10,7 +10,7 @@ import { Receiver } from "./Receiver";
   let toleranceDistanceField =  <HTMLTextAreaElement>document.getElementById("toleranceDistanceField");
   
   locationButton.onclick = (e: Event) => {     
-    getCurentLocation(); 
+    submitLocationInput(); 
   };
 
 
@@ -25,7 +25,7 @@ import { Receiver } from "./Receiver";
   };
 
 
-  function getCurentLocation(){
+  function submitLocationInput(){
 
       let output = document.getElementById("out");
   

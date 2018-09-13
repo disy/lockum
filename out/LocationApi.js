@@ -8,14 +8,14 @@ let decryptionButton = document.getElementById("decryptbutton");
 let plainTextField = document.getElementById("messageToEncrypt");
 let toleranceDistanceField = document.getElementById("toleranceDistanceField");
 locationButton.onclick = (e) => {
-    getCurentLocation();
+    submitLocationInput();
 };
 encryptionButton.onclick = (e) => {
 };
 decryptionButton.onclick = (e) => {
     getCurentLocation2();
 };
-function getCurentLocation() {
+function submitLocationInput() {
     let output = document.getElementById("out");
     if (!navigator.geolocation) {
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";

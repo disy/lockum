@@ -2,7 +2,7 @@ const path = require('path');
 const textDecoder = require
 
 module.exports = {
-  entry: './src/LocationEncryption.ts',
+  entry: './src/LocationApi.ts',
   mode: 'production',
   module: {
     rules:  [

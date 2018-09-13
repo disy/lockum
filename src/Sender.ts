@@ -10,7 +10,8 @@ export class Sender {
     public encryptMessage() {
         const ivBytes = window.crypto.getRandomValues(new Uint8Array(16));
         const salt = window.crypto.getRandomValues(new Uint8Array(32));
-        let locationKeyMaterial = new Location(this.latitude,this.longitude).createLocationKeyMaterial(this.toleranceDistance);
+        let rawLocation = new Location(this.latitude,this.longitude) 
+        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(this.toleranceDistance);
         let encryptionTool = new EncryptionHelper(salt,ivBytes);
         encryptionTool.encrypt(locationKeyMaterial,this.message);
     }

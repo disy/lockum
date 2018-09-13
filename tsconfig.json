@@ -25,7 +25,7 @@
   ],
 
 "files": [
-  "src/LocationEncryption.ts",
+  "src/LocationApi.ts",
   "src/Location.ts"
 ]    
 
