@@ -1,22 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Location_1 = require("./Location");
 const EncryptionHelper_1 = require("../src/EncryptionHelper");
 class Receiver {
-    constructor(latitude, longitude, cipherText) {
-        this.toleranceDistance = 5;
+    constructor(latitude, longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.cipherText = cipherText;
     }
-    decrypt() {
+    decryptMessage() {
+        let salt = JSON.parse(localStorage.getItem("salt"));
+        let iv = JSON.parse(localStorage.getItem("iv").toString());
+        console.log(iv.toString().split(",")[2]);
+        let ivBytes = new Uint8Array(16);
+        for (let i = 0; i <= 15; i++) {
+            ivBytes[i] = parseInt(iv.toString().split(",")[i]);
+        }
+        let locationMaterial = JSON.parse(localStorage.getItem("readyLocation"));
         let ciphertextField = document.getElementById("ciphertextArea");
-        this.cipherText = ciphertextField.value;
-        this.locationOfTheSender = new Location_1.Location(this.latitude, this.longitude).createLocationKeyMaterial(this.toleranceDistance);
-        var sharedPreferences = JSON.parse(localStorage.getItem('package'));
-        console.log("ikinci taraf: " + sharedPreferences);
-        this.EncryptionTool = new EncryptionHelper_1.EncryptionHelper(sharedPreferences[0], sharedPreferences[1]);
-        this.EncryptionTool.decrypt(this.cipherText);
+        let ciphertext = ciphertextField.value;
+        let encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
+        encryptionTool.decrypt(ciphertext, locationMaterial);
     }
 }
 exports.Receiver = Receiver;

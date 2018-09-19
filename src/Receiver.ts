@@ -2,33 +2,27 @@ import { Location } from "./Location";
 import {EncryptionHelper} from "../src/EncryptionHelper";
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
 
-
-
 export class Receiver {
 
-    private locationOfTheSender;
-    private toleranceDistance = 5;
-    private latitude;
-    private longitude; 
-    private cipherText;
+    constructor(readonly latitude: number, readonly longitude: number){
 
-    private  EncryptionTool;
-
-
-
-    constructor (latitude: number, longitude: number,cipherText: string) {
-        this.latitude = latitude
-        this.longitude = longitude
-        this.cipherText = cipherText;
     }
 
-    public decrypt() {
-        let ciphertextField =  <HTMLTextAreaElement>document.getElementById("ciphertextArea");
-        this.cipherText = ciphertextField.value
-        this.locationOfTheSender = new Location(this.latitude,this.longitude).createLocationKeyMaterial(this.toleranceDistance);
-        var sharedPreferences = JSON.parse(localStorage.getItem('package')) 
-        console.log("ikinci taraf: "+sharedPreferences);
-        this.EncryptionTool = new EncryptionHelper(sharedPreferences[0],sharedPreferences[1])
-        this.EncryptionTool.decrypt(this.cipherText)    
-    }n
+    public decryptMessage() {
+         let salt = JSON.parse(localStorage.getItem("salt"));
+         let iv: Uint8Array =  JSON.parse(localStorage.getItem("iv").toString());
+         console.log(iv.toString().split(",")[2])
+         let ivBytes: Uint8Array = new Uint8Array(16)
+         for(let i = 0 ; i <=15 ;i++) {
+              ivBytes[i] = parseInt(iv.toString().split(",")[i])
+         }
+         let locationMaterial = JSON.parse(localStorage.getItem("readyLocation"));
+         let ciphertextField = <HTMLTextAreaElement>document.getElementById("ciphertextArea");
+         let ciphertext = ciphertextField.value
+        
+         let encryptionTool = new EncryptionHelper(salt,ivBytes);
+         encryptionTool.decrypt(ciphertext,locationMaterial);
+
+    }
+
 }

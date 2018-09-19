@@ -16,6 +16,14 @@ class Sender {
         let locationKeyMaterial = rawLocation.createLocationKeyMaterial(this.toleranceDistance);
         let encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         encryptionTool.encrypt(locationKeyMaterial, this.message);
+        localStorage.setItem("salt", JSON.stringify(salt.toString()));
+        localStorage.setItem("iv", JSON.stringify(ivBytes.toString()));
+        console.log("uzunluk:" + JSON.stringify(ivBytes.length));
+        console.log("values:" + ivBytes);
+        localStorage.setItem("toleranceDistance", JSON.stringify(this.toleranceDistance));
+        localStorage.setItem("readyLocation", JSON.stringify(locationKeyMaterial));
+        //  localStorage.setItem("deneme",JSON.stringify(salt.toString()));
+        //  let ahmetahmet = JSON.parse(localStorage.getItem("deneme"));
     }
 }
 exports.Sender = Sender;

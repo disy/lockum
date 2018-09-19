@@ -4,7 +4,6 @@ import { Receiver } from "./Receiver";
 
 
   let locationButton = <HTMLButtonElement>document.getElementById("button"); 
-  let encryptionButton = <HTMLButtonElement>document.getElementById("encryptbutton"); 
   let decryptionButton = <HTMLButtonElement>document.getElementById("decryptbutton");
   let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
   let toleranceDistanceField =  <HTMLTextAreaElement>document.getElementById("toleranceDistanceField");
@@ -14,14 +13,8 @@ import { Receiver } from "./Receiver";
   };
 
 
-  encryptionButton.onclick = (e: Event) => { 
-    
-      
-  };
-
-
   decryptionButton.onclick = (e: Event) => { 
-        getCurentLocation2();   
+        decryptMessage();   
   };
 
 
@@ -37,11 +30,9 @@ import { Receiver } from "./Receiver";
       navigator.geolocation.getCurrentPosition(success, error);
     
       function success(position) {
-        let latitude  = position.coords.latitude;
-        let longitude = position.coords.longitude; 
+        let latitude: number  = position.coords.latitude;
+        let longitude: number = position.coords.longitude; 
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
-        console.log("Latitude:" + latitude);
-        console.log("Longitude:" + longitude);
         let sender = new Sender(latitude,longitude,plainTextField.value,toleranceDistance);
         sender.encryptMessage();
       }
@@ -57,7 +48,7 @@ import { Receiver } from "./Receiver";
       };
   }
 
-  function getCurentLocation2(){
+  function decryptMessage(){
 
     let output = document.getElementById("out");
 
@@ -70,9 +61,11 @@ import { Receiver } from "./Receiver";
   
     function success(position) {
       let latitude  = position.coords.latitude;
-      let longitude = position.coords.longitude; 
-      let receiverSide = new Receiver(latitude,longitude,plainTextField.value);
-      receiverSide.decrypt();
+      let longitude = position.coords.longitude;
+      
+      let receiver = new Receiver(10,20)
+      receiver.decryptMessage()
+      
     }
   
     function error() {

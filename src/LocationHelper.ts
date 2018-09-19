@@ -6,57 +6,68 @@ export class LocationHelper {
             throw new Error('Location information has not been fetched.')
         }
  
-        let keypartLatitude = this.includeToleranceDistance(latitude, "latitude", toleranceDistance)
-        let keypartLongitude = this.includeToleranceDistance(longitude, "longitude", toleranceDistance)
-        console.log("Key Input Material:"+keypartLatitude.toString() + keypartLongitude.toString())
-
-        return parseInt(keypartLatitude.toString() + keypartLongitude.toString())
+        let locationKeyMaterial = this.includeToleranceDistance(latitude,longitude,toleranceDistance)
+        
+        console.log("key derivation function input should be: " + locationKeyMaterial)
+        return locationKeyMaterial
     }
 
-    public static includeToleranceDistance(locationValue: number, locationType: string, toleranceDistance: number): number {
-        let shouldSetBit = false 
+    public static includeToleranceDistance(latitude: number, longitude: number, toleranceDistance: number): string {
+        let isNorth = false
+        let isWest = false 
 
-        //check if location value is positive and add LocationSignBit logic if required
-        if(locationValue > 0) {
-            shouldSetBit = true
-        } 
-        else {
-            locationValue *=-1
+        if(latitude < 0) {
+            latitude = latitude * -1 
+        } else if(latitude > 0 ) {
+            isNorth = true
         }
 
-        //convert location type
-        locationValue = this.convertToDegreesDecimalMinutes(locationValue)
+        if(longitude < 0) {
+            longitude = longitude * -1
+            isWest = true
+        }
 
-        if(locationType == "latitude") {
-            
-            if(shouldSetBit) {
-                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4))
-                return this.setBit(locationValue)    
-            } else { 
-                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 5.4)) 
-                return locationValue
-            } 
-        } else if(locationType == "longitude") {
-            if(shouldSetBit) {
-                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6))
-                return this.setBit(locationValue)       
-            } else { 
-                locationValue = Math.floor(locationValue * 10000 / (toleranceDistance * 6))
-                return locationValue
-            }
-        }      
+        latitude = this.convertToDegreesDecimalMinutes(latitude)
+        longitude = this.convertToDegreesDecimalMinutes(longitude)
+
+        latitude  = latitude * 10000
+        longitude = longitude * 10000
+
+        if(isNorth) {
+            latitude = Math.floor(latitude / (toleranceDistance * 5.4))
+            latitude  = this.includeLocationSignBit(latitude,true)
+        } else if( isNorth == false) {
+            latitude = Math.floor(latitude / (toleranceDistance * 5.4))
+            latitude =this.includeLocationSignBit(latitude,false)
+        }
+
+        if(isWest) {
+            longitude = Math.floor(longitude / (toleranceDistance * 6))
+            longitude = this.includeLocationSignBit(longitude,true)
+        } else if( isWest == false) {
+            longitude = Math.floor(longitude / (toleranceDistance * 6))
+            longitude = this.includeLocationSignBit(longitude,false)
+        }
+
+        return latitude.toString() + longitude.toString()
     }
 
     public static convertToDegreesDecimalMinutes(locationValue: number): number {
         let locationValueDegrees = Math.floor(locationValue)
-        let locationValueDecimal = parseFloat(((locationValue % 1)*60).toFixed(4)) 
+        let locationValueDecimal = parseFloat(((locationValue % 1)*60).toFixed(5).substring(0,7)) 
         let result = parseFloat(locationValueDegrees.toString()+ locationValueDecimal.toString())
         return result
     }
 
-    public static setBit(locationValue: number): number {
-        let bitPosition = Math.floor(Math.log2(locationValue))+1
-        let numberToAdd = Math.pow(2, bitPosition)
-        return locationValue+numberToAdd      
+    public static includeLocationSignBit(locationValue: number, isNorthOrWest: Boolean): number {
+        let firstBit = 1 << 27
+        let secondBit = 1 << 26
+
+        if(isNorthOrWest) {
+            return firstBit + secondBit + locationValue
+        } 
+        else if(isNorthOrWest == false) {
+            return firstBit + locationValue
+        }    
     }
 }

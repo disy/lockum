@@ -3,17 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Sender_1 = require("../src/Sender");
 const Receiver_1 = require("./Receiver");
 let locationButton = document.getElementById("button");
-let encryptionButton = document.getElementById("encryptbutton");
 let decryptionButton = document.getElementById("decryptbutton");
 let plainTextField = document.getElementById("messageToEncrypt");
 let toleranceDistanceField = document.getElementById("toleranceDistanceField");
 locationButton.onclick = (e) => {
     submitLocationInput();
 };
-encryptionButton.onclick = (e) => {
-};
 decryptionButton.onclick = (e) => {
-    getCurentLocation2();
+    decryptMessage();
 };
 function submitLocationInput() {
     let output = document.getElementById("out");
@@ -26,8 +23,6 @@ function submitLocationInput() {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString());
-        console.log("Latitude:" + latitude);
-        console.log("Longitude:" + longitude);
         let sender = new Sender_1.Sender(latitude, longitude, plainTextField.value, toleranceDistance);
         sender.encryptMessage();
     }
@@ -40,7 +35,7 @@ function submitLocationInput() {
         timeout: 27000
     };
 }
-function getCurentLocation2() {
+function decryptMessage() {
     let output = document.getElementById("out");
     if (!navigator.geolocation) {
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
@@ -50,8 +45,8 @@ function getCurentLocation2() {
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        let receiverSide = new Receiver_1.Receiver(latitude, longitude, plainTextField.value);
-        receiverSide.decrypt();
+        let receiver = new Receiver_1.Receiver(10, 20);
+        receiver.decryptMessage();
     }
     function error() {
         output.innerHTML = "Unable to retrieve your location";
