@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sender_1 = require("../src/Sender");
 const Receiver_1 = require("./Receiver");
-let locationButton = document.getElementById("button");
-let decryptionButton = document.getElementById("decryptbutton");
+let locationButton = document.getElementById("encryptButton");
+let decryptionButton = document.getElementById("decryptButton");
 let plainTextField = document.getElementById("messageToEncrypt");
 let toleranceDistanceField = document.getElementById("toleranceDistanceField");
 locationButton.onclick = (e) => {
@@ -14,6 +14,7 @@ decryptionButton.onclick = (e) => {
 };
 function submitLocationInput() {
     let output = document.getElementById("out");
+    console.log("see:" + output.id);
     if (!navigator.geolocation) {
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
         return;

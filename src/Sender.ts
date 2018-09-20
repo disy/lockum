@@ -17,34 +17,17 @@ export class Sender {
         let encryptionTool = new EncryptionHelper(salt,ivBytes);
         encryptionTool.encrypt(locationKeyMaterial,this.message);
 
-        const arr = Array.from
-              ? Array.from(ivBytes)
-              : ivBytes.map(v=>v)
+        //save salt,IV,tolerance Distance, readyLocation to browser
+        const saltArray = Array.from(salt)
+        const ivBytesArray = Array.from(ivBytes)
 
-        const str = JSON.stringify(arr)      
-        localStorage.setItem("alal",str)
+        const storedSalt = JSON.stringify(saltArray)
+        const storedivBytesArray = JSON.stringify(ivBytesArray)
 
-        const arr2 = Array.from
-              ? Array.from(salt)
-              : ivBytes.map(v=>v)
-
-        const str2 = JSON.stringify(arr2)      
-        localStorage.setItem("saltal",str2)
-
-        console.log("gonderirken saltimiz:" + str2)
-        console.log("gonderirken ivVector:"+ str)
-
+        localStorage.setItem("salt",storedSalt)
+        localStorage.setItem("iv",storedivBytesArray)
     
-
-    
-
-        localStorage.setItem("salt",JSON.stringify(salt.toString()))
-        localStorage.setItem("iv",JSON.stringify(ivBytes))
         localStorage.setItem("toleranceDistance",JSON.stringify(this.toleranceDistance))
         localStorage.setItem("readyLocation",JSON.stringify(locationKeyMaterial))
-
-      //  localStorage.setItem("deneme",JSON.stringify(salt.toString()));
-      //  let ahmetahmet = JSON.parse(localStorage.getItem("deneme"));
-    
     }
 }

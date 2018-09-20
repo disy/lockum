@@ -7,17 +7,20 @@ class Receiver {
         this.longitude = longitude;
     }
     decryptMessage() {
-        let salt = JSON.parse(localStorage.getItem("salt"));
-        const str = localStorage.getItem("alal");
-        const retrievedArr = str && JSON.parse(str);
-        const retrievedTypedArray = new Uint8Array(retrievedArr);
-        const str2 = localStorage.getItem("saltal");
-        const retrievedArr2 = str && JSON.parse(str2);
-        const retrievedTypedArray2 = new Uint8Array(retrievedArr2);
+        //get salt 
+        const salt = localStorage.getItem("salt");
+        const retrievedSaltArray = JSON.parse(salt);
+        const saltBytes = new Uint8Array(retrievedSaltArray);
+        //get iv
+        const iv = localStorage.getItem("iv");
+        const retrievedIvArray = JSON.parse(iv);
+        const ivBytes = new Uint8Array(retrievedIvArray);
+        //get ready location
         let locationMaterial = JSON.parse(localStorage.getItem("readyLocation"));
-        let ciphertextField = document.getElementById("ciphertextArea");
+        let ciphertextField = document.getElementById("messageToDecrypt");
         let ciphertext = ciphertextField.value;
-        let encryptionTool = new EncryptionHelper_1.EncryptionHelper(retrievedTypedArray2, retrievedTypedArray);
+        //decrypt the message
+        let encryptionTool = new EncryptionHelper_1.EncryptionHelper(saltBytes, ivBytes);
         encryptionTool.decrypt(ciphertext, locationMaterial);
     }
 }

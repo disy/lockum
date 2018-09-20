@@ -3,8 +3,8 @@ import {EncryptionHelper} from "../src/EncryptionHelper";
 import { Receiver } from "./Receiver";
 
 
-  let locationButton = <HTMLButtonElement>document.getElementById("button"); 
-  let decryptionButton = <HTMLButtonElement>document.getElementById("decryptbutton");
+  let locationButton = <HTMLButtonElement>document.getElementById("encryptButton"); 
+  let decryptionButton = <HTMLButtonElement>document.getElementById("decryptButton");
   let plainTextField =  <HTMLTextAreaElement>document.getElementById("messageToEncrypt");
   let toleranceDistanceField =  <HTMLTextAreaElement>document.getElementById("toleranceDistanceField");
   
@@ -19,8 +19,10 @@ import { Receiver } from "./Receiver";
 
 
   function submitLocationInput(){
-
       let output = document.getElementById("out");
+      console.log("see:"+output.id)
+
+      
   
       if (!navigator.geolocation){
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";

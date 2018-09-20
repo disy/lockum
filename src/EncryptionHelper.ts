@@ -10,7 +10,7 @@ export class EncryptionHelper {
     }
 
     public deriveKey(locationInfo: string) {
-        let numbefOfIterations = 1000000;
+        let numberOfIterations = 1000000;
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt);
         let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo);
 
@@ -22,7 +22,7 @@ export class EncryptionHelper {
             ["deriveKey"]
         ).then(function (baseKey) {
             return window.crypto.subtle.deriveKey(
-                { name: "PBKDF2", salt: saltBytes, iterations: numbefOfIterations, hash: "SHA-1" },
+                { name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-1" },
                 baseKey,
                 { name: "AES-CBC", length: 256 },
                 false,
@@ -45,7 +45,7 @@ export class EncryptionHelper {
             ).then(function (cipherTextBuffer) {
                 let ciphertextBytes = new Uint8Array(cipherTextBuffer);
                 let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes);
-                let ciphertextField = <HTMLTextAreaElement>document.getElementById("ciphertextArea");
+                let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt");
                 ciphertextField.value = base64Ciphertext;
             })
         })
@@ -54,7 +54,6 @@ export class EncryptionHelper {
     public decrypt(cipherText: String, locationInputMaterial: string) {
         var context = this;
        
-
         this.deriveKey(locationInputMaterial
         ).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText);
@@ -65,8 +64,8 @@ export class EncryptionHelper {
             ).then(function (plainTextBuffer) {
                 let plainTextBytes = new Uint8Array(plainTextBuffer);
                 let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
-                console.log("sonuccc:"+plaintextString)
-                
+                let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea");
+                plainTextField.value = plaintextString
             })
         })
     }

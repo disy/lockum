@@ -2,10 +2,14 @@
 <html>
 <head>
     <link rel="stylesheet" href="../LocationBasedChatApp/resources/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="../LocationBasedChatApp/out/bundle.js" defer></script>
 </head>
 <body>
-    <label id="messageLabel" type="label">Message to Encrypt:</label>
+    <!-- <label id="messageLabel" type="label">Message to Encrypt:</label>
     <br>
     <textarea  id = "messageToEncrypt" type="text" size="90"></textarea>
     <br> 
@@ -22,7 +26,37 @@
     
     <button id="button" type="button" onclick='getCurrentLocation()'>Encrypt!</button>
     <button id="decryptbutton" type="button" onclick='EncryptionHelper.decrypt()'>Decrypt!</button>
-    <p id="out"></p>
+    <p id="out"></p> -->
     
+    <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body" style="background-color:#AFC6C3 ; border-style: solid">
+              <h5 class="card-title">Sender</h5>
+              <p class="card-text">Message to Encrypt:</p>
+              <textarea  id ="messageToEncrypt" type="text" size="90"></textarea>
+              <p class="card-text">Tolerance Distance:</p>
+              <textarea  id = "toleranceDistanceField" type="text" size="90"></textarea>
+              <br>
+              <button type="button" id="encryptButton" class="btn-primary">Encrypt!</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body" style="background-color:#AFC6C3 ; border-style: solid">
+                <h5 class="card-title">Receiver</h5>
+                <p class="card-text">Ciphertext:</p>
+                <textarea  id = "messageToDecrypt" type="text" size="90"></textarea>
+                <p class="card-text">Plain Text:</p>
+                <textarea  id = "cipherTextArea" type="text" size="90"></textarea>
+                <br>
+                <button type="button" id="decryptButton" class="btn-primary">Decrypt!</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <p id="out"></p>
 </body>
 </html>
