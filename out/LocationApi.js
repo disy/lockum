@@ -7,19 +7,18 @@ let decryptionButton = document.getElementById("decryptButton");
 let plainTextField = document.getElementById("messageToEncrypt");
 let toleranceDistanceField = document.getElementById("toleranceDistanceField");
 locationButton.onclick = (e) => {
-    submitLocationInput();
+    submitLocationBySender();
 };
 decryptionButton.onclick = (e) => {
-    decryptMessage();
+    submitLocationByReceiver();
 };
-function submitLocationInput() {
+function submitLocationBySender() {
     let output = document.getElementById("out");
-    console.log("see:" + output.id);
     if (!navigator.geolocation) {
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
         return;
     }
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success, error, geo_options);
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
@@ -36,17 +35,17 @@ function submitLocationInput() {
         timeout: 27000
     };
 }
-function decryptMessage() {
+function submitLocationByReceiver() {
     let output = document.getElementById("out");
     if (!navigator.geolocation) {
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
         return;
     }
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success, error, geo_options);
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        let receiver = new Receiver_1.Receiver(10, 20);
+        let receiver = new Receiver_1.Receiver(47.689388, longitude);
         receiver.decryptMessage();
     }
     function error() {

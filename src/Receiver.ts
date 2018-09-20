@@ -13,18 +13,24 @@ export class Receiver {
         const salt = localStorage.getItem("salt")
         const retrievedSaltArray = JSON.parse(salt)
         const saltBytes = new Uint8Array(retrievedSaltArray)
+
         //get iv
         const iv = localStorage.getItem("iv")
         const retrievedIvArray = JSON.parse(iv)
         const ivBytes = new Uint8Array(retrievedIvArray)
+
         //get ready location
-        let locationMaterial = JSON.parse(localStorage.getItem("readyLocation"));
-        let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt");
+        let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance"))) 
+        console.log("tolerance distance will be:" + toleranceDistance)
+        let rawLocation = new Location(this.latitude,this.longitude)
+        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance)
+
+        //get ciphertext
+        let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
         let ciphertext = ciphertextField.value
+        
         //decrypt the message
-        let encryptionTool = new EncryptionHelper(saltBytes,ivBytes);
-        encryptionTool.decrypt(ciphertext,locationMaterial);
-
+        let encryptionTool = new EncryptionHelper(saltBytes,ivBytes)
+        encryptionTool.decrypt(locationKeyMaterial,ciphertext)
     }
-
 }

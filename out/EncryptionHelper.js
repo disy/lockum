@@ -28,7 +28,7 @@ class EncryptionHelper {
             });
         });
     }
-    decrypt(cipherText, locationInputMaterial) {
+    decrypt(locationInputMaterial, cipherText) {
         var context = this;
         this.deriveKey(locationInputMaterial).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(cipherText);

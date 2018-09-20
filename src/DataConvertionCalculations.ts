@@ -2,84 +2,84 @@ import {TextEncoder,TextDecoder} from 'text-encoding'
 export class DataConvertionCalculations {
 
     public static  byteArrayToHexString(byteArray) {
-        let hexString = '';
-        let nextHexByte;
+        let hexString = ''
+        let nextHexByte
 
         for (let i=0; i<byteArray.byteLength; i++) {
-            nextHexByte = byteArray[i].toString(16);    // Integer to base 16
+            nextHexByte = byteArray[i].toString(16)    // Integer to base 16
             if (nextHexByte.length < 2) {
-                nextHexByte = "0" + nextHexByte;        // Otherwise 10 becomes just a instead of 0a
+                nextHexByte = "0" + nextHexByte        // Otherwise 10 becomes just a instead of 0a
             }
-            hexString += nextHexByte;
+            hexString += nextHexByte
         }
 
-        return hexString;
+        return hexString
     }
     
     public static hexStringToByteArray(hexString) {
         if (hexString.length % 2 !== 0) {
-            throw "Must have an even number of hex digits to convert to bytes";
+            throw "Must have an even number of hex digits to convert to bytes"
         }
 
-        let numBytes = hexString.length / 2;
-        let byteArray = new Uint8Array(numBytes);
+        let numBytes = hexString.length / 2
+        let byteArray = new Uint8Array(numBytes)
 
         for (let i=0; i<numBytes; i++) {
-            byteArray[i] = parseInt(hexString.substr(i*2, 2), 16);
+            byteArray[i] = parseInt(hexString.substr(i*2, 2), 16)
         }
 
-        return byteArray;
+        return byteArray
     }
 
     
     public static byteArrayToBase64(byteArray) {
-        let binaryString = "";
+        let binaryString = ""
 
         for (let i=0; i<byteArray.byteLength; i++) {
-            binaryString += String.fromCharCode(byteArray[i]);
+            binaryString += String.fromCharCode(byteArray[i])
         }
 
-        let base64String = window.btoa(binaryString);
+        let base64String = window.btoa(binaryString)
 
-        return base64String;
+        return base64String
     }
     
     public static base64ToByteArray(base64String) {
-        let binaryString = window.atob(base64String);
-        let byteArray = new Uint8Array(binaryString.length);
+        let binaryString = window.atob(base64String)
+        let byteArray = new Uint8Array(binaryString.length)
         
         for (let i=0; i<binaryString.length; i++) {
-            byteArray[i] += binaryString.charCodeAt(i);
+            byteArray[i] += binaryString.charCodeAt(i)
         }
 
-        return byteArray;
+        return byteArray
     }
     
     public static byteArrayToString(byteArray) {
         if ("TextDecoder" in window) {
-            return new TextDecoder().decode(byteArray);
+            return new TextDecoder().decode(byteArray)
         }
     
         // Otherwise, fall back to 7-bit ASCII only
-        let result = "";
+        let result = ""
         for (let i=0; i<byteArray.byteLength; i++) {
             result += String.fromCharCode(byteArray[i])
         }
 
-        return result;
+        return result
     }
     
     public static stringToByteArray(s) {
         if ("TextEncoder" in window) {       
-           return new TextEncoder().encode(s);
+           return new TextEncoder().encode(s)
         }
     
         // Otherwise, fall back to 7-bit ASCII only
-        let result = new Uint8Array(s.length);
+        let result = new Uint8Array(s.length)
         for (let i=0; i<s.length; i++){
-            result[i] = s.charCodeAt(i);
+            result[i] = s.charCodeAt(i)
         }
 
-        return result;
+        return result
     }
 }
