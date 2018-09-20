@@ -17,7 +17,7 @@ class Sender {
         let locationKeyMaterial = rawLocation.createLocationKeyMaterial(this.toleranceDistance);
         let encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         encryptionTool.encrypt(locationKeyMaterial, this.message);
-        //save salt,IV,tolerance Distance, readyLocation to browser
+        //save salt,IV,tolerance Distance to browser
         const saltArray = Array.from(salt);
         const ivBytesArray = Array.from(ivBytes);
         const storedSalt = JSON.stringify(saltArray);
@@ -25,7 +25,6 @@ class Sender {
         localStorage.setItem("salt", storedSalt);
         localStorage.setItem("iv", storedivBytesArray);
         localStorage.setItem("toleranceDistance", JSON.stringify(this.toleranceDistance));
-        localStorage.setItem("readyLocation", JSON.stringify(locationKeyMaterial));
     }
 }
 exports.Sender = Sender;

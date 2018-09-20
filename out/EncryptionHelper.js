@@ -13,11 +13,18 @@ class EncryptionHelper {
         let saltBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(this.salt);
         let locationInfoBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(locationInfo);
         return window.crypto.subtle.importKey("raw", locationInfoBytes, { name: "PBKDF2", hash: "SHA-1", length: 256 }, false, ["deriveKey"]).then(function (baseKey) {
-            return window.crypto.subtle.deriveKey({ name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-1" }, baseKey, { name: "AES-CBC", length: 256 }, false, ["encrypt", "decrypt"]);
+            return window.crypto.subtle.deriveKey({ name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-1" }, baseKey, { name: "AES-CBC", length: 256 }, true, ["encrypt", "decrypt"]);
         });
     }
     encrypt(location, message) {
         var context = this;
+        this.deriveKey(location).then(function (aesKey) {
+            let a = window.crypto.subtle.exportKey("raw", aesKey).then(function (keyValue) {
+                let keyBytes = new Uint8Array(keyValue);
+                let base64Key = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToBase64(keyBytes);
+                console.log("gorek:" + base64Key);
+            });
+        });
         this.deriveKey(location).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
             window.crypto.subtle.encrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, plainTextBytes).then(function (cipherTextBuffer) {
@@ -30,6 +37,13 @@ class EncryptionHelper {
     }
     decrypt(locationInputMaterial, cipherText) {
         var context = this;
+        this.deriveKey(locationInputMaterial).then(function (aesKey) {
+            let a = window.crypto.subtle.exportKey("raw", aesKey).then(function (keyValue) {
+                let keyBytes = new Uint8Array(keyValue);
+                let base64Key = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToBase64(keyBytes);
+                console.log("gorek2:" + base64Key);
+            });
+        });
         this.deriveKey(locationInputMaterial).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(cipherText);
             window.crypto.subtle.decrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, ciphertextBytes).then(function (plainTextBuffer) {

@@ -18,17 +18,14 @@ export class Sender {
         let encryptionTool = new EncryptionHelper(salt,ivBytes)
         encryptionTool.encrypt(locationKeyMaterial,this.message)
 
-        //save salt,IV,tolerance Distance, readyLocation to browser
+        //save salt,IV,tolerance Distance to browser
         const saltArray = Array.from(salt)
         const ivBytesArray = Array.from(ivBytes)
-
         const storedSalt = JSON.stringify(saltArray)
         const storedivBytesArray = JSON.stringify(ivBytesArray)
-
+        
         localStorage.setItem("salt",storedSalt)
         localStorage.setItem("iv",storedivBytesArray)
-    
         localStorage.setItem("toleranceDistance",JSON.stringify(this.toleranceDistance))
-        localStorage.setItem("readyLocation",JSON.stringify(locationKeyMaterial))
     }
 }

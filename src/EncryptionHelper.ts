@@ -25,7 +25,7 @@ export class EncryptionHelper {
                 { name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-1" },
                 baseKey,
                 { name: "AES-CBC", length: 256 },
-                false,
+                true,
                 ["encrypt", "decrypt"]
             )
         })
@@ -33,7 +33,14 @@ export class EncryptionHelper {
 
     public encrypt(location: string, message: String) {
         var context = this
-            
+        this.deriveKey(location
+            ).then(function (aesKey) {
+                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
+                    let keyBytes = new Uint8Array(keyValue)
+                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
+                    console.log("gorek:"+base64Key)
+                })
+            })
         this.deriveKey(location
         ).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
@@ -53,6 +60,18 @@ export class EncryptionHelper {
 
     public decrypt( locationInputMaterial: string, cipherText: String) {
         var context = this
+
+        this.deriveKey(locationInputMaterial
+            ).then(function (aesKey) {
+                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
+                    let keyBytes = new Uint8Array(keyValue)
+                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
+                    console.log("gorek2:"+base64Key)
+                })
+            })
+
+
+
        
         this.deriveKey(locationInputMaterial
         ).then(function (aesKey) {
