@@ -30,16 +30,12 @@ class EncryptionHelper {
     }
     decrypt(cipherText, locationInputMaterial) {
         var context = this;
-        console.log("decrypt ederken" + this.ivBytes.toString());
-        console.log("cipherteximis:" + cipherText);
         this.deriveKey(locationInputMaterial).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(cipherText);
             window.crypto.subtle.decrypt({ name: "AES-CBC", iv: context.ivBytes }, aesKey, ciphertextBytes).then(function (plainTextBuffer) {
                 let plainTextBytes = new Uint8Array(plainTextBuffer);
                 let plaintextString = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToString(plainTextBytes);
                 console.log("sonuccc:" + plaintextString);
-                let keyField = document.getElementById("keyinputarea");
-                keyField.value = plaintextString;
             });
         });
     }

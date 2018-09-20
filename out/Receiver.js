@@ -8,16 +8,16 @@ class Receiver {
     }
     decryptMessage() {
         let salt = JSON.parse(localStorage.getItem("salt"));
-        let iv = JSON.parse(localStorage.getItem("iv").toString());
-        console.log(iv.toString().split(",")[2]);
-        let ivBytes = new Uint8Array(16);
-        for (let i = 0; i <= 15; i++) {
-            ivBytes[i] = parseInt(iv.toString().split(",")[i]);
-        }
+        const str = localStorage.getItem("alal");
+        const retrievedArr = str && JSON.parse(str);
+        const retrievedTypedArray = new Uint8Array(retrievedArr);
+        const str2 = localStorage.getItem("saltal");
+        const retrievedArr2 = str && JSON.parse(str2);
+        const retrievedTypedArray2 = new Uint8Array(retrievedArr2);
         let locationMaterial = JSON.parse(localStorage.getItem("readyLocation"));
         let ciphertextField = document.getElementById("ciphertextArea");
         let ciphertext = ciphertextField.value;
-        let encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
+        let encryptionTool = new EncryptionHelper_1.EncryptionHelper(retrievedTypedArray2, retrievedTypedArray);
         encryptionTool.decrypt(ciphertext, locationMaterial);
     }
 }

@@ -53,10 +53,8 @@ export class EncryptionHelper {
 
     public decrypt(cipherText: String, locationInputMaterial: string) {
         var context = this;
-        
+       
 
-        console.log("decrypt ederken" +this.ivBytes.toString())
-        console.log("cipherteximis:"+cipherText)
         this.deriveKey(locationInputMaterial
         ).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText);
@@ -68,8 +66,7 @@ export class EncryptionHelper {
                 let plainTextBytes = new Uint8Array(plainTextBuffer);
                 let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes);
                 console.log("sonuccc:"+plaintextString)
-                let keyField = <HTMLTextAreaElement>document.getElementById("keyinputarea");
-                keyField.value = plaintextString;
+                
             })
         })
     }

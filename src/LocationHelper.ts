@@ -7,8 +7,8 @@ export class LocationHelper {
         }
  
         let locationKeyMaterial = this.includeToleranceDistance(latitude,longitude,toleranceDistance)
-        
         console.log("key derivation function input should be: " + locationKeyMaterial)
+
         return locationKeyMaterial
     }
 
@@ -35,18 +35,20 @@ export class LocationHelper {
 
         if(isNorth) {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4))
-            latitude  = this.includeLocationSignBit(latitude,true)
+            latitude  = this.includeLocationSignBits(latitude,true)
+            console.log("latitude part:"+latitude)
         } else if( isNorth == false) {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4))
-            latitude =this.includeLocationSignBit(latitude,false)
+            latitude =this.includeLocationSignBits(latitude,false)
         }
 
         if(isWest) {
             longitude = Math.floor(longitude / (toleranceDistance * 6))
-            longitude = this.includeLocationSignBit(longitude,true)
+            longitude = this.includeLocationSignBits(longitude,true)
         } else if( isWest == false) {
             longitude = Math.floor(longitude / (toleranceDistance * 6))
-            longitude = this.includeLocationSignBit(longitude,false)
+            longitude = this.includeLocationSignBits(longitude,false)
+            console.log("longitude part:"+longitude)            
         }
 
         return latitude.toString() + longitude.toString()
@@ -59,7 +61,7 @@ export class LocationHelper {
         return result
     }
 
-    public static includeLocationSignBit(locationValue: number, isNorthOrWest: Boolean): number {
+    public static includeLocationSignBits(locationValue: number, isNorthOrWest: Boolean): number {
         let firstBit = 1 << 27
         let secondBit = 1 << 26
 
