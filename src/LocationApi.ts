@@ -9,27 +9,24 @@ import { Receiver } from "./Receiver";
   let toleranceDistanceField =  <HTMLTextAreaElement>document.getElementById("toleranceDistanceField");
   
   locationButton.onclick = (e: Event) => {     
-    submitLocationInput(); 
+    submitLocationBySender(); 
   };
 
 
   decryptionButton.onclick = (e: Event) => { 
-        decryptMessage();   
+        submitLocationByReceiver();   
   };
 
 
-  function submitLocationInput(){
+  function submitLocationBySender(){
       let output = document.getElementById("out");
-      console.log("see:"+output.id)
-
       
-  
       if (!navigator.geolocation){
         output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
         return;
       }
 
-      navigator.geolocation.getCurrentPosition(success, error);
+      navigator.geolocation.getCurrentPosition(success, error,geo_options);
     
       function success(position) {
         let latitude: number  = position.coords.latitude;
@@ -50,7 +47,7 @@ import { Receiver } from "./Receiver";
       };
   }
 
-  function decryptMessage(){
+  function submitLocationByReceiver(){
 
     let output = document.getElementById("out");
 
@@ -59,7 +56,7 @@ import { Receiver } from "./Receiver";
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success, error,geo_options);
   
     function success(position) {
       let latitude  = position.coords.latitude;
