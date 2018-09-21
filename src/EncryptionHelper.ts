@@ -33,14 +33,8 @@ export class EncryptionHelper {
 
     public encrypt(location: string, message: String) {
         var context = this
-        this.deriveKey(location
-            ).then(function (aesKey) {
-                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
-                    let keyBytes = new Uint8Array(keyValue)
-                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
-                    console.log("gorek:"+base64Key)
-                })
-            })
+        
+        //get the key and encrypt the message
         this.deriveKey(location
         ).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
@@ -56,6 +50,21 @@ export class EncryptionHelper {
                 ciphertextField.value = base64Ciphertext
             })
         })
+
+        //calculate the key hash and store it
+        this.deriveKey(location
+            ).then(function (aesKey) {
+                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
+                    let keyBytes = new Uint8Array(keyValue)
+                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
+                    console.log("key is:"+base64Key)
+                    window.crypto.subtle.digest("SHA-256",keyBytes).then(function (hash){
+                        let hashBytes = new Uint8Array(hash)
+                        let base64KeyHash = DataConvertionCalculations.byteArrayToBase64(hashBytes)
+                        console.log("key hash is:" + base64KeyHash)
+                    })
+                })
+            })
     }
 
     public decrypt( locationInputMaterial: string, cipherText: String) {
@@ -69,6 +78,22 @@ export class EncryptionHelper {
                     console.log("gorek2:"+base64Key)
                 })
             })
+
+         //calculate the key hash and store it
+         this.deriveKey(locationInputMaterial
+            ).then(function (aesKey) {
+                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
+                    let keyBytes = new Uint8Array(keyValue)
+                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
+                    console.log("key is:"+base64Key)
+                    window.crypto.subtle.digest("SHA-256",keyBytes).then(function (hash){
+                        let hashBytes = new Uint8Array(hash)
+                        let base64KeyHash = DataConvertionCalculations.byteArrayToBase64(hashBytes)
+                        console.log("key hash on the receiver side is:" + base64KeyHash)
+                    })
+                })
+            })    
+
 
 
 
