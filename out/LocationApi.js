@@ -45,7 +45,7 @@ function submitLocationByReceiver() {
     function success(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        let receiver = new Receiver_1.Receiver(60, longitude);
+        let receiver = new Receiver_1.Receiver(latitude, longitude);
         receiver.decryptMessage();
     }
     function error() {

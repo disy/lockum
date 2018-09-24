@@ -48,7 +48,6 @@ class EncryptionHelper {
     }
     decrypt(locationInputMaterial, cipherText) {
         let context = this;
-        let keyComparison = false;
         //calculate the key hash and store it
         this.deriveKey(locationInputMaterial).then(function (rawKey) {
             let secretKey = rawKey;
@@ -60,6 +59,7 @@ class EncryptionHelper {
                 let buffer = new text_encoding_1.TextEncoder("utf-8").encode(keyValue);
                 return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
                     let keyHash = DataConvertionCalculations_1.DataConvertionCalculations.convertToHex(hash);
+                    console.log("key hash of the receiver is:" + keyHash);
                     let originalHash = localStorage.getItem("keyhash");
                     if (keyHash == originalHash) {
                         let ciphertextBytes = DataConvertionCalculations_1.DataConvertionCalculations.base64ToByteArray(cipherText);
