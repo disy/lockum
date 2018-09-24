@@ -1,5 +1,5 @@
 import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
-import { TextEncoder } from "text-encoding";
+import { TextEncoder, TextDecoder } from "text-encoding";
 
 export class EncryptionHelper {
     ivBytes: Uint8Array = new Uint8Array(16)
@@ -18,14 +18,14 @@ export class EncryptionHelper {
         return window.crypto.subtle.importKey(
             "raw",
             locationInfoBytes,
-            { name: "PBKDF2", hash: "SHA-1", length: 256 },
+            { name: "PBKDF2", hash: "SHA-256", length: 256 },
             false,
             ["deriveKey"]
         ).then(function (baseKey) {
             return window.crypto.subtle.deriveKey(
-                { name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-1" },
+                { name: "PBKDF2", salt: saltBytes, iterations: numberOfIterations, hash: "SHA-256" },
                 baseKey,
-                { name: "AES-CBC", length: 256 },
+                { name: "AES-GCM", length: 256 },
                 true,
                 ["encrypt", "decrypt"]
             )
@@ -34,14 +34,14 @@ export class EncryptionHelper {
 
     public encrypt(location: string, message: String) {
         var context = this
-        
+
         //get the key and encrypt the message
         this.deriveKey(location
         ).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
 
             window.crypto.subtle.encrypt(
-                { name: "AES-CBC", iv: context.ivBytes },
+                { name: "AES-GCM", iv: context.ivBytes },
                 aesKey,
                 plainTextBytes,
             ).then(function (cipherTextBuffer) {
@@ -54,56 +54,61 @@ export class EncryptionHelper {
 
         //calculate the key hash and store it
         this.deriveKey(location
-            ).then(function (aesKey) {
-                let keyString = DataConvertionCalculations.byteArrayToString(aesKey)
-                let buffer  = new TextEncoder("utf-8").encode(keyString)
-                crypto.subtle.digest("SHA-256",buffer).then(function(hash){
+        ).then(function (rawKey) {
+            let secretKey = rawKey
+            return crypto.subtle.exportKey("jwk", secretKey).then(function (result) {
+                let exportedKey = result
+                let keyValue = btoa(exportedKey.k)
+                return keyValue
+            }).then(function (keyValue) {
+                let buffer = new TextEncoder("utf-8").encode(keyValue)
+                crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
                     let keyHash = DataConvertionCalculations.convertToHex(hash)
-                    console.log("key hash by the sender is:"+keyHash)
+                    localStorage.setItem("keyhash", keyHash)
+                    console.log("key hash by the sender is:" + keyHash)
                 })
-            })
-    }
 
-    public decrypt( locationInputMaterial: string, cipherText: String) {
-        var context = this
-
-        this.deriveKey(locationInputMaterial
-            ).then(function (aesKey) {
-                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
-                    let keyBytes = new Uint8Array(keyValue)
-                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
-                    console.log("gorek2:"+base64Key)
-                })
-            })
-
-         //calculate the key hash and store it
-         this.deriveKey(locationInputMaterial
-            ).then(function (aesKey) {
-                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
-                    let keyBytes = new Uint8Array(keyValue)
-                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
-                    console.log("key is:"+base64Key)
-                    window.crypto.subtle.digest("SHA-256",keyBytes).then(function (hash){
-                        let hashBytes = new Uint8Array(hash)
-                        let base64KeyHash = DataConvertionCalculations.byteArrayToBase64(hashBytes)
-                        console.log("key hash on the receiver side is:" + base64KeyHash)
-                    })
-                })
-            })    
-
-        this.deriveKey(locationInputMaterial
-        ).then(function (aesKey) {
-            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
-            window.crypto.subtle.decrypt(
-                { name: "AES-CBC", iv: context.ivBytes },
-                aesKey,
-                ciphertextBytes
-            ).then(function (plainTextBuffer) {
-                let plainTextBytes = new Uint8Array(plainTextBuffer)
-                let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
-                let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
-                plainTextField.value = plaintextString
             })
         })
+    }
+
+    public decrypt(locationInputMaterial: string, cipherText: String) {
+        let context = this
+
+        //calculate the key hash and store it
+        this.deriveKey(locationInputMaterial
+        ).then(function (rawKey) {
+            let secretKey = rawKey
+            return crypto.subtle.exportKey("jwk", secretKey).then(function (result) {
+                let exportedKey = result
+                let keyValue = btoa(exportedKey.k)
+                return keyValue
+            }).then(function (keyValue) {
+                let buffer = new TextEncoder("utf-8").encode(keyValue)
+                return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+                    let keyHash = DataConvertionCalculations.convertToHex(hash)
+                    let originalHash = localStorage.getItem("keyhash")
+
+                    if (keyHash == originalHash) {
+                        let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
+                        window.crypto.subtle.decrypt(
+                            { name: "AES-GCM", iv: context.ivBytes },
+                            rawKey,
+                            ciphertextBytes
+                        ).then(function (plainTextBuffer) {
+                            let plainTextBytes = new Uint8Array(plainTextBuffer)
+                            let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
+                            let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
+                            plainTextField.value = plaintextString
+                        })
+                    } else {
+                        throw ("keys are not matched! relocate the find the correct area!")
+                    }
+                })
+            })
+        })
+
+
+
     }
 }
