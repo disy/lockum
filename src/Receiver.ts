@@ -19,9 +19,8 @@ export class Receiver {
         const retrievedIvArray = JSON.parse(iv)
         const ivBytes = new Uint8Array(retrievedIvArray)
 
-        //get ready location
+        //get location
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance"))) 
-        console.log("tolerance distance will be:" + toleranceDistance)
         let rawLocation = new Location(this.latitude,this.longitude)
         let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance)
 
