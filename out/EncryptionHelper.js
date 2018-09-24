@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const DataConvertionCalculations_1 = require("../src/DataConvertionCalculations");
+const text_encoding_1 = require("text-encoding");
 class EncryptionHelper {
     constructor(salt, iv) {
         this.ivBytes = new Uint8Array(16);
@@ -30,15 +31,11 @@ class EncryptionHelper {
         });
         //calculate the key hash and store it
         this.deriveKey(location).then(function (aesKey) {
-            let a = window.crypto.subtle.exportKey("raw", aesKey).then(function (keyValue) {
-                let keyBytes = new Uint8Array(keyValue);
-                let base64Key = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToBase64(keyBytes);
-                console.log("key is:" + base64Key);
-                window.crypto.subtle.digest("SHA-256", keyBytes).then(function (hash) {
-                    let hashBytes = new Uint8Array(hash);
-                    let base64KeyHash = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToBase64(hashBytes);
-                    console.log("key hash is:" + base64KeyHash);
-                });
+            let keyString = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToString(aesKey);
+            let buffer = new text_encoding_1.TextEncoder("utf-8").encode(keyString);
+            crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+                let keyHash = DataConvertionCalculations_1.DataConvertionCalculations.convertToHex(hash);
+                console.log("key hash by the sender is:" + keyHash);
             });
         });
     }

@@ -1,4 +1,5 @@
 import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
+import { TextEncoder } from "text-encoding";
 
 export class EncryptionHelper {
     ivBytes: Uint8Array = new Uint8Array(16)
@@ -54,15 +55,11 @@ export class EncryptionHelper {
         //calculate the key hash and store it
         this.deriveKey(location
             ).then(function (aesKey) {
-                let a = window.crypto.subtle.exportKey("raw",aesKey).then( function(keyValue){
-                    let keyBytes = new Uint8Array(keyValue)
-                    let base64Key = DataConvertionCalculations.byteArrayToBase64(keyBytes)
-                    console.log("key is:"+base64Key)
-                    window.crypto.subtle.digest("SHA-256",keyBytes).then(function (hash){
-                        let hashBytes = new Uint8Array(hash)
-                        let base64KeyHash = DataConvertionCalculations.byteArrayToBase64(hashBytes)
-                        console.log("key hash is:" + base64KeyHash)
-                    })
+                let keyString = DataConvertionCalculations.byteArrayToString(aesKey)
+                let buffer  = new TextEncoder("utf-8").encode(keyString)
+                crypto.subtle.digest("SHA-256",buffer).then(function(hash){
+                    let keyHash = DataConvertionCalculations.convertToHex(hash)
+                    console.log("key hash by the sender is:"+keyHash)
                 })
             })
     }
@@ -94,10 +91,6 @@ export class EncryptionHelper {
                 })
             })    
 
-
-
-
-       
         this.deriveKey(locationInputMaterial
         ).then(function (aesKey) {
             let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)

@@ -1,21 +1,6 @@
 import {TextEncoder,TextDecoder} from 'text-encoding'
 export class DataConvertionCalculations {
 
-    public static  byteArrayToHexString(byteArray) {
-        let hexString = ''
-        let nextHexByte
-
-        for (let i=0; i<byteArray.byteLength; i++) {
-            nextHexByte = byteArray[i].toString(16)    // Integer to base 16
-            if (nextHexByte.length < 2) {
-                nextHexByte = "0" + nextHexByte        // Otherwise 10 becomes just a instead of 0a
-            }
-            hexString += nextHexByte
-        }
-
-        return hexString
-    }
-    
     public static hexStringToByteArray(hexString) {
         if (hexString.length % 2 !== 0) {
             throw "Must have an even number of hex digits to convert to bytes"
@@ -81,5 +66,23 @@ export class DataConvertionCalculations {
         }
 
         return result
+    }
+
+    public static convertToHex(buffer) {
+        let hexCodes = [];
+        let view = new DataView(buffer);
+        for (let i = 0; i < view.byteLength; i += 4) {
+          // Using getUint32 reduces the number of iterations needed (we process 4 bytes each time)
+          let value = view.getUint32(i)
+          // toString(16) will give the hex representation of the number without padding
+          let stringValue = value.toString(16)
+          // We use concatenation and slice for padding
+          let padding = '00000000'
+          let paddedValue = (padding + stringValue).slice(-padding.length)
+          hexCodes.push(paddedValue);
+        }
+      
+        // Join all the hex strings into one
+        return hexCodes.join("");
     }
 }
