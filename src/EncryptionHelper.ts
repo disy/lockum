@@ -33,7 +33,7 @@ export class EncryptionHelper {
     }
 
     public encrypt(location: string, message: String) {
-        var context = this
+        let context = this
 
         //get the key and encrypt the message
         this.deriveKey(location
@@ -72,45 +72,46 @@ export class EncryptionHelper {
         })
     }
 
-    public decrypt(locationInputMaterial: string, cipherText: String) {
+    public decrypt(locationInputMaterial: String[], cipherText: String) {
         let context = this
 
-        //calculate the key hash and store it
-        this.deriveKey(locationInputMaterial
-        ).then(function (rawKey) {
-            let secretKey = rawKey
-            return crypto.subtle.exportKey("jwk", secretKey).then(function (result) {
-                let exportedKey = result
-                let keyValue = btoa(exportedKey.k)
-                return keyValue
-            }).then(function (keyValue) {
-                let buffer = new TextEncoder("utf-8").encode(keyValue)
-                return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
-                    let keyHash = DataConvertionCalculations.convertToHex(hash)
-                    console.log("key hash of the receiver is:" + keyHash)
-                    let originalHash = localStorage.getItem("keyhash")
+        for (let i = 0; i <= locationInputMaterial.length - 1; i++) {
 
-                    //if keyhash and the original key hash is matched then decrypt
-                    if (keyHash == originalHash) {
-                        let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
-                        window.crypto.subtle.decrypt(
-                            { name: "AES-GCM", iv: context.ivBytes },
-                            rawKey,
-                            ciphertextBytes
-                        ).then(function (plainTextBuffer) {
-                            let plainTextBytes = new Uint8Array(plainTextBuffer)
-                            let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
-                            let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
-                            plainTextField.value = plaintextString
-                        })
-                    } else {
-                        throw ("keys are not matched! relocate the find the correct area!")
-                    }
+            let locationValue = locationInputMaterial[i].toString()
+            //calculate the key hash and store it
+            this.deriveKey(locationValue
+            ).then(function (rawKey) {
+                let secretKey = rawKey
+                return crypto.subtle.exportKey("jwk", secretKey).then(function (result) {
+                    let exportedKey = result
+                    let keyValue = btoa(exportedKey.k)
+                    return keyValue
+                }).then(function (keyValue) {
+                    let buffer = new TextEncoder("utf-8").encode(keyValue)
+                    return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+                        let keyHash = DataConvertionCalculations.convertToHex(hash)
+                        console.log("key hash of the receiver is:" + keyHash)
+                        let originalHash = localStorage.getItem("keyhash")
+
+                        //if keyhash and the original key hash is matched then decrypt
+                        if (keyHash == originalHash) {
+                            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
+                            window.crypto.subtle.decrypt(
+                                { name: "AES-GCM", iv: context.ivBytes },
+                                rawKey,
+                                ciphertextBytes
+                            ).then(function (plainTextBuffer) {
+                                let plainTextBytes = new Uint8Array(plainTextBuffer)
+                                let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
+                                let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
+                                plainTextField.value = plaintextString
+                            })
+                        } else {
+                            throw ("keys are not matched! relocate the find the correct area!")
+                        }
+                    })
                 })
             })
-        })
-
-
-
+        }
     }
 }

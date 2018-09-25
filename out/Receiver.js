@@ -16,17 +16,16 @@ class Receiver {
         const iv = localStorage.getItem("iv");
         const retrievedIvArray = JSON.parse(iv);
         const ivBytes = new Uint8Array(retrievedIvArray);
-        //get ready location
+        //get location
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")));
-        console.log("tolerance distance will be:" + toleranceDistance);
         let rawLocation = new Location_1.Location(this.latitude, this.longitude);
-        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance);
+        let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance);
         //get ciphertext
         let ciphertextField = document.getElementById("messageToDecrypt");
         let ciphertext = ciphertextField.value;
         //decrypt the message
         let encryptionTool = new EncryptionHelper_1.EncryptionHelper(saltBytes, ivBytes);
-        encryptionTool.decrypt(locationKeyMaterial, ciphertext);
+        encryptionTool.decrypt(locationKeyMaterials, ciphertext);
     }
 }
 exports.Receiver = Receiver;

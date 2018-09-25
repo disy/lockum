@@ -19,10 +19,12 @@ export class Receiver {
         const retrievedIvArray = JSON.parse(iv)
         const ivBytes = new Uint8Array(retrievedIvArray)
 
-        //get location
+        //get tolerance distance
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance"))) 
+        
+        //create location inputs(locations with adjacent quadrants)
         let rawLocation = new Location(this.latitude,this.longitude)
-        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance)
+        let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance)
 
         //get ciphertext
         let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
@@ -30,6 +32,6 @@ export class Receiver {
         
         //decrypt the message
         let encryptionTool = new EncryptionHelper(saltBytes,ivBytes)
-        encryptionTool.decrypt(locationKeyMaterial,ciphertext)
+        encryptionTool.decrypt(locationKeyMaterials,ciphertext)
     }
 }
