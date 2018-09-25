@@ -16,8 +16,9 @@ class Receiver {
         const iv = localStorage.getItem("iv");
         const retrievedIvArray = JSON.parse(iv);
         const ivBytes = new Uint8Array(retrievedIvArray);
-        //get location
+        //get tolerance distance
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")));
+        //create location inputs(locations with adjacent quadrants)
         let rawLocation = new Location_1.Location(this.latitude, this.longitude);
         let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance);
         //get ciphertext

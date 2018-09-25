@@ -18,7 +18,7 @@ class EncryptionHelper {
         });
     }
     encrypt(location, message) {
-        var context = this;
+        let context = this;
         //get the key and encrypt the message
         this.deriveKey(location).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
@@ -50,7 +50,7 @@ class EncryptionHelper {
         let context = this;
         for (let i = 0; i <= locationInputMaterial.length - 1; i++) {
             let locationValue = locationInputMaterial[i].toString();
-            //calculate the key hash and store it
+            //calculate the key hash and compare it
             this.deriveKey(locationValue).then(function (rawKey) {
                 let secretKey = rawKey;
                 return crypto.subtle.exportKey("jwk", secretKey).then(function (result) {

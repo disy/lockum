@@ -16,10 +16,10 @@ export class LocationHelper {
         let isNorth = false
         let isWest = false
 
-        // location sign is decided(N,W,E,S) and location value is made positive
+        // location sign is decided(N,W,E,S) and location value is made positive 
         if (latitude < 0) {
             latitude = latitude * -1
-        } else if (latitude > 0) {
+        } else {
             isNorth = true
         }
 

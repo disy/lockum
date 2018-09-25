@@ -78,7 +78,7 @@ export class EncryptionHelper {
         for (let i = 0; i <= locationInputMaterial.length - 1; i++) {
 
             let locationValue = locationInputMaterial[i].toString()
-            //calculate the key hash and store it
+            //calculate the key hash and compare it
             this.deriveKey(locationValue
             ).then(function (rawKey) {
                 let secretKey = rawKey
@@ -87,7 +87,9 @@ export class EncryptionHelper {
                     let keyValue = btoa(exportedKey.k)
                     return keyValue
                 }).then(function (keyValue) {
+
                     let buffer = new TextEncoder("utf-8").encode(keyValue)
+
                     return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
                         let keyHash = DataConvertionCalculations.convertToHex(hash)
                         console.log("key hash of the receiver is:" + keyHash)
