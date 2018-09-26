@@ -40,7 +40,6 @@ export class LocationHelper {
         if (isNorth) {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4))
             latitude = this.includeLocationSignBits(latitude, true)
-            console.log("latitude part:" + latitude)
         } else {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4))
             latitude = this.includeLocationSignBits(latitude, false)
@@ -53,7 +52,6 @@ export class LocationHelper {
         } else {
             longitude = Math.floor(longitude / (toleranceDistance * 6))
             longitude = this.includeLocationSignBits(longitude, false)
-            console.log("longitude part:" + longitude)
         }
 
         return latitude.toString() + longitude.toString()
