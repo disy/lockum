@@ -92,7 +92,6 @@ export class EncryptionHelper {
 
                     return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
                         let keyHash = DataConvertionCalculations.convertToHex(hash)
-                        console.log("key hash of the receiver is:" + keyHash)
                         let originalHash = localStorage.getItem("keyhash")
 
                         //if keyhash and the original key hash is matched then decrypt

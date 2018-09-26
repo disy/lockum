@@ -61,7 +61,6 @@ class EncryptionHelper {
                     let buffer = new text_encoding_1.TextEncoder("utf-8").encode(keyValue);
                     return crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
                         let keyHash = DataConvertionCalculations_1.DataConvertionCalculations.convertToHex(hash);
-                        console.log("key hash of the receiver is:" + keyHash);
                         let originalHash = localStorage.getItem("keyhash");
                         //if keyhash and the original key hash is matched then decrypt
                         if (keyHash == originalHash) {

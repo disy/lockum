@@ -12,6 +12,10 @@
   "dependencies": {
     "@types/text-encoding": "0.0.33",
     "awesome-typescript-loader": "^5.0.0",
+    "big-integer": "^1.6.36",
+    "bigint-typescript-definitions": "^5.5.3-0",
+    "bignumber.js": "^7.2.1",
+    "cleanup-dependencies": "0.0.6",
     "random-token": "0.0.8",
     "react-native-randombytes": "^3.4.0",
     "text-encoding": "^0.6.4",
@@ -19,6 +23,8 @@
     "webpack": "^4.8.3"
   },
   "devDependencies": {
+    "@types/big-integer": "0.0.31",
+    "@types/bignumber.js": "^5.0.0",
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.4",
     "chai": "^4.1.2",

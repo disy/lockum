@@ -1,3 +1,7 @@
+import * as bigInt from 'big-integer'
+import * as bignumber from 'bignumber.js'
+
+
 export class LocationHelper {
 
     public static calculateLocationKeyMaterial(latitude: number, longitude: number, toleranceDistance: number) {
@@ -8,7 +12,7 @@ export class LocationHelper {
 
         let locationKeyMaterial = this.includeToleranceDistance(latitude, longitude, toleranceDistance)
         console.log("key derivation function input should be: " + locationKeyMaterial)
-
+      
         return locationKeyMaterial
     }
 

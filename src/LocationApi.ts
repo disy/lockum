@@ -32,7 +32,8 @@ import { Receiver } from "./Receiver"
         let latitude: number  = position.coords.latitude
         let longitude: number = position.coords.longitude
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
-        let sender = new Sender(latitude,longitude,plainTextField.value,toleranceDistance)
+        let sender = new Sender(47.679078
+          ,9.172582,plainTextField.value,toleranceDistance)
         sender.encryptMessage()
       }
     
