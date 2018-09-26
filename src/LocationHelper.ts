@@ -1,6 +1,3 @@
-import * as bigInt from 'big-integer'
-import * as bignumber from 'bignumber.js'
-
 
 export class LocationHelper {
 
