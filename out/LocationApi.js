@@ -23,7 +23,7 @@ function submitLocationBySender() {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString());
-        let sender = new Sender_1.Sender(47.679078, 9.172582, plainTextField.value, toleranceDistance);
+        let sender = new Sender_1.Sender(latitude, longitude, plainTextField.value, toleranceDistance);
         sender.encryptMessage();
     }
     function error() {
