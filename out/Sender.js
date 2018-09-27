@@ -19,7 +19,7 @@ class Sender {
         //encrypt the message
         let encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         encryptionTool.encrypt(locationKeyMaterial, this.message);
-        //save salt,IV,tolerance Distance to browser
+        //save salt,IV,tolerance Distance to browser so that receiver can use them
         const saltArray = Array.from(salt);
         const ivBytesArray = Array.from(ivBytes);
         const storedSalt = JSON.stringify(saltArray);

@@ -9,7 +9,7 @@ export class LocationHelper {
 
         let locationKeyMaterial = this.includeToleranceDistance(latitude, longitude, toleranceDistance)
         console.log("key derivation function input should be: " + locationKeyMaterial)
-      
+
         return locationKeyMaterial
     }
 
@@ -69,9 +69,11 @@ export class LocationHelper {
         let firstBit = 1 << 27
         let secondBit = 1 << 26
 
+        //if nort or west put "11"
         if (isNorthOrWest) {
             return firstBit + secondBit + locationValue
         }
+        //else put "10"
         else {
             return firstBit + locationValue
         }
@@ -174,7 +176,7 @@ export class LocationHelper {
         quadrantsList[6] = rightLatitudeQuadrant.toString() + leftLongitudeQuadrant.toString()
         quadrantsList[7] = rightLatitudeQuadrant.toString() + longitude.toString()
         quadrantsList[8] = rightLatitudeQuadrant.toString() + rightLongitudeQuadrant.toString()
-
+        
         return quadrantsList
     }
 }

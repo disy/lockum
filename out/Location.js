@@ -8,12 +8,12 @@ class Location {
         console.log(this.latitude);
         console.log(this.longitude);
     }
-    //creates an input for key derivation function for the sender
+    //creates an input for key derivation function of the sender
     createLocationKeyMaterial(toleranceDistance) {
         let locationKeyMaterial = LocationHelper_1.LocationHelper.calculateLocationKeyMaterial(this.latitude, this.longitude, toleranceDistance);
         return locationKeyMaterial;
     }
-    //creates an array of inputs with neighbour quadrants for the receiver
+    //creates an array of inputs with neighbour quadrants of the receiver
     createLocationKeyMaterials(toleranceDistance) {
         let locationKeyMaterials = LocationHelper_1.LocationHelper.createLocationMaterials(this.latitude, this.longitude, toleranceDistance);
         return locationKeyMaterials;

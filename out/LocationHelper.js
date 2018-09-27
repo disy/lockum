@@ -32,7 +32,6 @@ class LocationHelper {
         if (isNorth) {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4));
             latitude = this.includeLocationSignBits(latitude, true);
-            console.log("latitude part:" + latitude);
         }
         else {
             latitude = Math.floor(latitude / (toleranceDistance * 5.4));
@@ -46,7 +45,6 @@ class LocationHelper {
         else {
             longitude = Math.floor(longitude / (toleranceDistance * 6));
             longitude = this.includeLocationSignBits(longitude, false);
-            console.log("longitude part:" + longitude);
         }
         return latitude.toString() + longitude.toString();
     }
@@ -60,9 +58,11 @@ class LocationHelper {
     static includeLocationSignBits(locationValue, isNorthOrWest) {
         let firstBit = 1 << 27;
         let secondBit = 1 << 26;
+        //if nort or west put "11"
         if (isNorthOrWest) {
             return firstBit + secondBit + locationValue;
         }
+        //else put "10"
         else {
             return firstBit + locationValue;
         }

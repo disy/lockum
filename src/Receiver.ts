@@ -1,10 +1,10 @@
 import { Location } from "./Location";
-import {EncryptionHelper} from "../src/EncryptionHelper";
-import {DataConvertionCalculations} from "../src/DataConvertionCalculations";
+import { EncryptionHelper } from "../src/EncryptionHelper";
+import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
 
 export class Receiver {
 
-    constructor(readonly latitude: number, readonly longitude: number){
+    constructor(readonly latitude: number, readonly longitude: number) {
 
     }
 
@@ -20,18 +20,18 @@ export class Receiver {
         const ivBytes = new Uint8Array(retrievedIvArray)
 
         //get tolerance distance
-        let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance"))) 
-        
+        let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
+
         //create location inputs(locations with adjacent quadrants)
-        let rawLocation = new Location(this.latitude,this.longitude)
+        let rawLocation = new Location(this.latitude, this.longitude)
         let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance)
 
         //get ciphertext
         let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
         let ciphertext = ciphertextField.value
-        
+
         //decrypt the message
-        let encryptionTool = new EncryptionHelper(saltBytes,ivBytes)
-        encryptionTool.decrypt(locationKeyMaterials,ciphertext)
+        let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
+        encryptionTool.decrypt(locationKeyMaterials, ciphertext)
     }
 }
