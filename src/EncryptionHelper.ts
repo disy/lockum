@@ -52,7 +52,7 @@ export class EncryptionHelper {
             })
         })
 
-        //calculate the key hash and store it
+        //calculate the key hash and store it in the browser for receiver
         this.deriveKey(location
         ).then(function (rawKey) {
             let secretKey = rawKey
@@ -75,6 +75,7 @@ export class EncryptionHelper {
     public decrypt(locationInputMaterial: String[], cipherText: String) {
         let context = this
 
+        //iterate through location input values with adjacent quadrants
         for (let i = 0; i <= locationInputMaterial.length - 1; i++) {
 
             let locationValue = locationInputMaterial[i].toString()
