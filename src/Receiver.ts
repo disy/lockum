@@ -24,7 +24,6 @@ export class Receiver {
 
         //get original keyHash
         let originalHash = localStorage.getItem("keyhash")
-        console.log("keyhash comes true:"+originalHash)
 
         //create location inputs(locations with adjacent quadrants)
         let rawLocation = new Location(latitude, longitude)
@@ -32,7 +31,6 @@ export class Receiver {
 
         //decrypt the message
         let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
-        console.log("ciperhext comes true:",ciphertext)
         return encryptionTool.decrypt("201335851134234394", ciphertext,originalHash)
     }
 }

@@ -15,7 +15,6 @@ export class EncryptionHelper {
 
     constructor(salt: Uint8Array, iv: Uint8Array) {
         this.salt = new Uint8Array(salt)
-        console.log("salts change:"+salt)
         this.ivBytes = new Uint8Array(iv)
     }
 
@@ -43,7 +42,10 @@ export class EncryptionHelper {
     public encrypt(location: string, message: String) {
         let context = this
         //get the key and encrypt the message
-        return this.deriveKey(location
+
+        let keyHash = this.calculateKeyHash(location)
+
+        let encryptedMEssage = this.deriveKey(location
         ).then(function (aesKey) {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
 
@@ -60,6 +62,8 @@ export class EncryptionHelper {
                 return base64Ciphertext
             })
         })
+
+        return Promise.all([keyHash,encryptedMEssage])
     }
 
     public calculateKeyHash(locationInfo: string) {
@@ -67,7 +71,6 @@ export class EncryptionHelper {
             return crypto.subtle.exportKey(keyFormat, aesKey).then(function (result) {
                 return crypto.subtle.digest(hashType, result).then(function (hash) {
                     let keyHash = DataConvertionCalculations.convertToHex(hash)
-                    console.log("sender sends the key hash as:" + keyHash)
                     return keyHash
                 })
             })

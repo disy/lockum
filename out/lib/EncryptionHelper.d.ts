@@ -3,7 +3,7 @@ export declare class EncryptionHelper {
     salt: Uint8Array;
     constructor(salt: Uint8Array, iv: Uint8Array);
     deriveKey(locationInfo: string): PromiseLike<CryptoKey>;
-    encrypt(location: string, message: String): PromiseLike<string>;
+    encrypt(location: string, message: String): Promise<[string, string]>;
     calculateKeyHash(locationInfo: string): PromiseLike<string>;
     decrypt(possibleLocation: string, cipherText: String, originalKeyHash: string): PromiseLike<string>;
 }

@@ -28,11 +28,8 @@ export function decrypt() {
   let latitude = 5
   let longitude = 10
   let message = "foo"
-  let toleranceDistance = 10
   let element = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
   let ciphertext = element.value
-
-  console.log("ciperhtext is:"+ ciphertext)
 
   let receiver = new Receiver()
   return receiver.decryptMessage(latitude,longitude,ciphertext)

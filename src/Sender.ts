@@ -20,25 +20,23 @@ export class Sender {
 
         //encrypt the message
         let encryptionTool = new EncryptionHelper(salt, ivBytes)
-        
-        let hash = encryptionTool.calculateKeyHash(locationKeyMaterial)
-        let hashString = hash.then(function(hash){
-            localStorage.setItem("keyhash",hash )
+
+        //save salt,IV,tolerance Distance to browser so that receiver can use them
+        const saltArray = Array.from(salt)
+        const ivBytesArray = Array.from(ivBytes)
+        const storedSalt = JSON.stringify(saltArray)
+        const storedivBytesArray = JSON.stringify(ivBytesArray)
+        localStorage.setItem("salt", storedSalt)
+        localStorage.setItem("iv", storedivBytesArray)
+        localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance))
+
+
+        let ciphertext = encryptionTool.encrypt(locationKeyMaterial, message)
+        ciphertext.then(function (ahmet) {
+            localStorage.setItem("keyhash", ahmet[0])
         })
-        let ciphertext  = encryptionTool.encrypt(locationKeyMaterial, message)
 
-         //save salt,IV,tolerance Distance to browser so that receiver can use them
-         const saltArray = Array.from(salt)
-         const ivBytesArray = Array.from(ivBytes)
-         const storedSalt = JSON.stringify(saltArray)
-         const storedivBytesArray = JSON.stringify(ivBytesArray)
-         localStorage.setItem("salt", storedSalt)
-         localStorage.setItem("iv", storedivBytesArray)
-         localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance))
+        return ciphertext
 
-
-        return Promise.all([hash,ciphertext]).then(function(bundle){
-            return  bundle
-        })
     }
 }

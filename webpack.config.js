@@ -19,6 +19,8 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'out')
+      path: __dirname,
+      libraryTarget: 'var',
+      library: 'lockum',
   }
 };
