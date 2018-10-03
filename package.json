@@ -2,9 +2,9 @@
   "name": "locationbasedchat",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/LocationApi.ts",
   "scripts": {
-    "start": "tsc && webpack",
+    "build": "tsc && webpack",
     "test": "mocha -r ts-node/register src/**/Location.spec.ts"
   },
   "author": "",

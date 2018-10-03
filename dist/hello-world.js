@@ -10,4 +10,3 @@ var Greeter = /** @class */ (function () {
     return Greeter;
 }());
 exports.Greeter = Greeter;
-//# sourceMappingURL=hello-world.js.map

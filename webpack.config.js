@@ -1,26 +1,22 @@
-const path = require('path');
-const textDecoder = require
+var path = require("path");
 
 module.exports = {
-  entry: './src/LocationApi.ts',
-  mode: 'production',
-  module: {
-    rules:  [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
-  },
-  performance: { hints: false },
-  resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
-  },
-  output: {
-    filename: 'bundle.js',
+   entry: './src/index.ts',
+   output: {
+      filename: 'bundle.js',
       path: __dirname,
       libraryTarget: 'var',
       library: 'lockum',
-  }
-};
+   },
+   module: {
+      rules: [{
+            test: /\.ts$/,
+            loader: 'ts-loader',
+            exclude: /node_modules/,
+         }
+      ]
+   },
+   resolve: {
+      extensions: [".ts", ".js"]
+   }
+}   

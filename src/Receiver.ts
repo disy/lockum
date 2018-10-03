@@ -31,6 +31,6 @@ export class Receiver {
 
         //decrypt the message
         let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
-        return encryptionTool.decrypt("201335851134234394", ciphertext,originalHash)
+        return encryptionTool.decrypt("202204507134369453", ciphertext,originalHash)
     }
 }

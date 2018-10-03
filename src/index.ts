@@ -1,9 +1,21 @@
-import * as ahmet from "./LocationApi"
+import { Sender } from "./Sender"
+import { Receiver } from "./Receiver"
+
+let sender = new Sender() 
+let receiver = new Receiver()
+
+export function encrypt(latitude,longitude,message,toleranceDistance) {
+  return sender.encryptMessage(latitude, longitude, message, toleranceDistance)
+}
+
+export function decrypt(latitude,longitude,ciphertext,) {
+  return receiver.decryptMessage(latitude,longitude,ciphertext)
+}
 
 
-ahmet.encrypt().then(function(acccept ){
-    let b = ahmet.decrypt()
-    b.then(function(a){
-        console.log("mesagimiz:"+a)
-    })
-})
+
+
+
+
+
+

@@ -72,4 +72,3 @@ var DataConvertionCalculations = /** @class */ (function () {
     return DataConvertionCalculations;
 }());
 exports.DataConvertionCalculations = DataConvertionCalculations;
-//# sourceMappingURL=DataConvertionCalculations.js.map

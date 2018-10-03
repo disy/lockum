@@ -23,9 +23,8 @@ var Receiver = /** @class */ (function () {
         var locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance);
         //decrypt the message
         var encryptionTool = new EncryptionHelper_1.EncryptionHelper(saltBytes, ivBytes);
-        return encryptionTool.decrypt("201335851134234394", ciphertext, originalHash);
+        return encryptionTool.decrypt("202204507134369453", ciphertext, originalHash);
     };
     return Receiver;
 }());
 exports.Receiver = Receiver;
-//# sourceMappingURL=Receiver.js.map
