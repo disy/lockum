@@ -70,11 +70,11 @@ export class LocationHelper {
         let firstBit = 1 << 27
         let secondBit = 1 << 26
 
-        //if nort or west put "11"
+        //if north or west put "11"
         if (isNorthOrWest) {
             return firstBit + secondBit + locationValue
         }
-        //else put "10"
+        //else(south or east) put "10"
         else {
             return firstBit + locationValue
         }
