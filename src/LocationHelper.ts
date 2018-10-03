@@ -8,7 +8,8 @@ export class LocationHelper {
         }
 
         let locationKeyMaterial = this.includeToleranceDistance(latitude, longitude, toleranceDistance)
-        console.log("key derivation function input should be: " + locationKeyMaterial)
+
+        console.log(locationKeyMaterial)
 
         return locationKeyMaterial
     }

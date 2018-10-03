@@ -6,29 +6,39 @@ import { TextEncoder } from "text-encoding";
 
 export class Sender {
 
-    constructor(readonly latitude: number, readonly longitude: number, readonly message: string, readonly toleranceDistance: number) {
+    constructor() {
     }
 
-    public encryptMessage() {
+    public encryptMessage(latitude: number, longitude: number, message: string, toleranceDistance: number) {
         //prepare salt,iv
         const ivBytes = window.crypto.getRandomValues(new Uint8Array(16))
         const salt = window.crypto.getRandomValues(new Uint8Array(32))
 
         //get the raw location and include tolerance distance
-        let rawLocation = new Location(this.latitude, this.longitude)
-        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(this.toleranceDistance)
+        let rawLocation = new Location(latitude, longitude)
+        let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance)
 
         //encrypt the message
         let encryptionTool = new EncryptionHelper(salt, ivBytes)
-        encryptionTool.encrypt(locationKeyMaterial, this.message)
+        
+        let hash = encryptionTool.calculateKeyHash(locationKeyMaterial)
+        let hashString = hash.then(function(hash){
+            localStorage.setItem("keyhash",hash )
+        })
+        let ciphertext  = encryptionTool.encrypt(locationKeyMaterial, message)
 
-        //save salt,IV,tolerance Distance to browser so that receiver can use them
-        const saltArray = Array.from(salt)
-        const ivBytesArray = Array.from(ivBytes)
-        const storedSalt = JSON.stringify(saltArray)
-        const storedivBytesArray = JSON.stringify(ivBytesArray)
-        localStorage.setItem("salt", storedSalt)
-        localStorage.setItem("iv", storedivBytesArray)
-        localStorage.setItem("toleranceDistance", JSON.stringify(this.toleranceDistance))
+         //save salt,IV,tolerance Distance to browser so that receiver can use them
+         const saltArray = Array.from(salt)
+         const ivBytesArray = Array.from(ivBytes)
+         const storedSalt = JSON.stringify(saltArray)
+         const storedivBytesArray = JSON.stringify(ivBytesArray)
+         localStorage.setItem("salt", storedSalt)
+         localStorage.setItem("iv", storedivBytesArray)
+         localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance))
+
+
+        return Promise.all([hash,ciphertext]).then(function(bundle){
+            return  bundle
+        })
     }
 }

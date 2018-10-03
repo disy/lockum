@@ -4,11 +4,11 @@ import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
 
 export class Receiver {
 
-    constructor(readonly latitude: number, readonly longitude: number) {
+    constructor() {
 
     }
 
-    public decryptMessage() {
+    public decryptMessage(latitude:number, longitude: number , ciphertext: string) {
         //get salt 
         const salt = localStorage.getItem("salt")
         const retrievedSaltArray = JSON.parse(salt)
@@ -22,16 +22,17 @@ export class Receiver {
         //get tolerance distance
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
 
-        //create location inputs(locations with adjacent quadrants)
-        let rawLocation = new Location(this.latitude, this.longitude)
-        let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance)
+        //get original keyHash
+        let originalHash = localStorage.getItem("keyhash")
+        console.log("keyhash comes true:"+originalHash)
 
-        //get ciphertext
-        let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
-        let ciphertext = ciphertextField.value
+        //create location inputs(locations with adjacent quadrants)
+        let rawLocation = new Location(latitude, longitude)
+        let locationKeyMaterials = rawLocation.createLocationKeyMaterials(toleranceDistance)
 
         //decrypt the message
         let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
-        encryptionTool.decrypt(locationKeyMaterials, ciphertext)
+        console.log("ciperhext comes true:",ciphertext)
+        return encryptionTool.decrypt("201335851134234394", ciphertext,originalHash)
     }
 }

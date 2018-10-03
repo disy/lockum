@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/text-encoding": "0.0.33",
+    "awesome-typescript-loader": "^5.2.1",
     "chalk": "^2.4.1",
     "cleanup-dependencies": "0.0.6",
     "text-encoding": "^0.6.4",
@@ -18,6 +19,7 @@
     "webpack": "^4.8.3"
   },
   "devDependencies": {
+    "serviceworker-webpack-plugin": "^1.0.0-alpha02",
     "typescript": "^3.0.3",
     "webpack-cli": "^2.1.5"
   }

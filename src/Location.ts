@@ -7,8 +7,6 @@ export class Location {
   constructor(latitude: number, longitude: number) {
     this.latitude = parseFloat(latitude.toFixed(6))
     this.longitude = parseFloat(longitude.toFixed(6))
-    console.log(this.latitude)
-    console.log(this.longitude)
   }
 
   //creates an input for key derivation function of the sender

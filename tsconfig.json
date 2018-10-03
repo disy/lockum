@@ -2,12 +2,13 @@
   "compilerOptions": {
     /* Basic Options */
     "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "target": "es6",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "declaration": true,
+    "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
     "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
-     "outDir": "out/",                       /* Redirect output structure to the directory. */
+     "outDir": "./lib",                       /* Redirect output structure to the directory. */
      "rootDir": "./src",  
-     "lib": ["dom", "es2015", "es5","es6"],
+     "lib": ["dom", "es2015"],
+     "sourceMap": true,
                   
   },
 
