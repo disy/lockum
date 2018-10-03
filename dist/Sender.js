@@ -12,8 +12,6 @@ var Sender = /** @class */ (function () {
         //get the raw location and include tolerance distance
         var rawLocation = new Location_1.Location(latitude, longitude);
         var locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance);
-        //encrypt the message
-        var encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         //save salt,IV,tolerance Distance to browser so that receiver can use them
         var saltArray = Array.from(salt);
         var ivBytesArray = Array.from(ivBytes);
@@ -22,6 +20,8 @@ var Sender = /** @class */ (function () {
         localStorage.setItem("salt", storedSalt);
         localStorage.setItem("iv", storedivBytesArray);
         localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance));
+        //encrypt the message
+        var encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
         var ciphertext = encryptionTool.encrypt(locationKeyMaterial, message);
         ciphertext.then(function (ahmet) {
             localStorage.setItem("keyhash", ahmet[0]);

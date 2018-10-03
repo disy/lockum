@@ -41,8 +41,6 @@ export class EncryptionHelper {
 
     public encrypt(location: string, message: String) {
         let context = this
-        //get the key and encrypt the message
-
         let keyHash = this.calculateKeyHash(location)
 
         let encryptedMEssage = this.deriveKey(location

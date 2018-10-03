@@ -1,5 +1,7 @@
 /** @type {typeof import('../../src/index')} */
-var lockum
+var myLibrary
+
+
 
 $("#encryptButton").click(function () {
 

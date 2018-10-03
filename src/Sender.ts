@@ -18,9 +18,6 @@ export class Sender {
         let rawLocation = new Location(latitude, longitude)
         let locationKeyMaterial = rawLocation.createLocationKeyMaterial(toleranceDistance)
 
-        //encrypt the message
-        let encryptionTool = new EncryptionHelper(salt, ivBytes)
-
         //save salt,IV,tolerance Distance to browser so that receiver can use them
         const saltArray = Array.from(salt)
         const ivBytesArray = Array.from(ivBytes)
@@ -30,13 +27,13 @@ export class Sender {
         localStorage.setItem("iv", storedivBytesArray)
         localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance))
 
-
+        //encrypt the message
+        let encryptionTool = new EncryptionHelper(salt, ivBytes)
         let ciphertext = encryptionTool.encrypt(locationKeyMaterial, message)
         ciphertext.then(function (ahmet) {
             localStorage.setItem("keyhash", ahmet[0])
         })
 
         return ciphertext
-
     }
 }

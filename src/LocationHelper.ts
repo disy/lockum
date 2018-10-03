@@ -55,6 +55,7 @@ export class LocationHelper {
             longitude = this.includeLocationSignBits(longitude, false)
         }
 
+        
         return latitude.toString() + longitude.toString()
     }
 

@@ -24,7 +24,6 @@ var EncryptionHelper = /** @class */ (function () {
     };
     EncryptionHelper.prototype.encrypt = function (location, message) {
         var context = this;
-        //get the key and encrypt the message
         var keyHash = this.calculateKeyHash(location);
         var encryptedMEssage = this.deriveKey(location).then(function (aesKey) {
             var plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
