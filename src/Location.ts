@@ -13,8 +13,27 @@ export class Location {
     this.longitude = parseFloat(longitude.toFixed(6))
   }
 
-  public createLocationKeyInput(latitude: [string, number], longitude: [string, number], toleranceDistance: number) {
-    
+  public prepareKeyDerivationInput(latitude: [string, number], longitude: [string, number], toleranceDistance: number) {
+    if (this.isSender) {
+      let latitudePart = this.calculateIntegralPart(latitude[0], latitude[1])
+      latitudePart = this.includeLocationSign(latitude[0], latitudePart)
+      let longitudePart = this.calculateIntegralPart(longitude[0], longitude[1])
+      longitudePart = this.includeLocationSign(longitude[0], longitudePart)
+
+      let input = new Int32Array([latitudePart, longitudePart])
+
+      return input
+
+    } else {
+
+      let latitudePart = this.calculateIntegralPart(latitude[0], latitude[1])
+      latitudePart = this.includeLocationSign(latitude[0], latitudePart)
+
+      let longitudePart = this.calculateIntegralPart(longitude[0], longitude[1])
+      longitudePart = this.includeLocationSign(longitude[0], longitudePart)
+
+      return this.createAdjacentLocations(latitudePart, longitudePart)
+    }
   }
 
 
@@ -30,7 +49,7 @@ export class Location {
     return locationKeyMaterials
   }
 
-  private createNeighbourLocations(latitude: number, longitude: number) {
+  private createAdjacentLocations(latitude: number, longitude: number) {
     let adjacentLocations = Array<Int32Array>()
     adjacentLocations[0] = new Int32Array([latitude - 1, longitude - 1])
     adjacentLocations[1] = new Int32Array([latitude - 1, longitude])
@@ -43,5 +62,23 @@ export class Location {
     adjacentLocations[8] = new Int32Array([latitude + 1, longitude + 1])
 
     return adjacentLocations
+  }
+
+  private calculateIntegralPart(hemisphere: string, locationValue: number) {
+    locationValue = locationValue * 10000
+
+    if (hemisphere == "N" || hemisphere == "S") {
+      return locationValue / latitudeCoefficient
+    } else {
+      return locationValue / longitudeCoefficent
+    }
+  }
+
+  private includeLocationSign(hemisphere: string, locationValue: number) {
+    if (hemisphere == "N" || hemisphere == "W") {
+      return locationValue
+    } else {
+      return locationValue * -1
+    }
   }
 }
