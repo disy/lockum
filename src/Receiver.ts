@@ -25,22 +25,24 @@ export class Receiver {
         let originalHash = localStorage.getItem("keyhash")
 
         //create location inputs(locations with adjacent quadrants)
-        let location = new Location(latitude, longitude,toleranceDistance)
+        let location = new Location(latitude, longitude, toleranceDistance)
         let locationInputs = location.prepareReceiverLocationInputs()
 
         let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
 
-        let possibleLocation1 = encryptionTool.decrypt(locationInputs[0],ciphertext,originalHash)
-        let possibleLocation2 = encryptionTool.decrypt(locationInputs[1],ciphertext,originalHash)
-        let possibleLocation3 = encryptionTool.decrypt(locationInputs[2],ciphertext,originalHash)
-        let possibleLocation4 = encryptionTool.decrypt(locationInputs[3],ciphertext,originalHash)
-        let possibleLocation5 = encryptionTool.decrypt(locationInputs[4],ciphertext,originalHash)
-        let possibleLocation6 = encryptionTool.decrypt(locationInputs[5],ciphertext,originalHash)
-        let possibleLocation7 = encryptionTool.decrypt(locationInputs[6],ciphertext,originalHash)
-        let possibleLocation8 = encryptionTool.decrypt(locationInputs[7],ciphertext,originalHash)
-        let possibleLocation9 = encryptionTool.decrypt(locationInputs[8],ciphertext,originalHash)
+        let promises = []
+        for (let i = 0; i <= locationInputs.length - 1; i++) {
 
-        return Promise.all([possibleLocation1,possibleLocation2,possibleLocation3,possibleLocation4,possibleLocation5,possibleLocation6
-            ,possibleLocation7,possibleLocation8,possibleLocation9])
+            promises.push(Promise.resolve(encryptionTool.decrypt(locationInputs[i], ciphertext, originalHash))
+                .catch((error) => null));
+        }
+
+        return Promise.all(promises).then((results) => {
+            for (let index = 0; index <= results.length - 1; index++) {
+                if (results[index] != undefined) {
+                    return results[index]
+                }
+            }
+        });
     }
 }
