@@ -28,7 +28,6 @@ var Location = /** @class */ (function () {
     };
     Location.prototype.calculateIntegralPart = function (hemisphere, locationValue) {
         locationValue = locationValue * 10000;
-        console.log("tolerance distance:" + this.toleranceDistance);
         if (hemisphere == "N" || hemisphere == "S") {
             return locationValue / (this.toleranceDistance * latitudeCoefficient);
         }
