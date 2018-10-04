@@ -20,6 +20,7 @@ $("#encryptButton").click(function () {
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
         let ciphertext = library.encrypt(latitude, longitude, plaintext, toleranceDistance)
         ciphertext.then(function (ciphertextResult) {
+            $("#keyhashField").text(localStorage.getItem("keyhash"))
             $("#messageToDecrypt").text(ciphertextResult)
         })
     }
@@ -53,6 +54,8 @@ $("#decryptButton").click(function () {
         let ciphertext = $("#messageToDecrypt").val()
         let plaintext = library.decrypt(latitude, longitude, ciphertext)
         plaintext.then(function (plaintextResult) {
+            let hash = localStorage.getItem("keyhashReceiver")
+            $("#keyhashFieldReceiver").text(hash)
             $("#cipherTextArea").text(plaintextResult)
         })
     }

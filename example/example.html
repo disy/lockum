@@ -19,6 +19,9 @@
           <p class="card-text">Tolerance Distance:</p>
           <textarea id="toleranceDistanceField" type="text" inputmode="numeric" size="90"></textarea>
           <br>
+          <p class="card-text">Calculated Key Hash By Sender:</p>
+          <textarea id="keyhashField" type="text" size="90"></textarea>
+          <br>
           <button type="button" id="encryptButton" value="a" class="btn-primary">Encrypt!</button>
         </div>
       </div>
@@ -29,8 +32,11 @@
           <h5 class="card-title">Receiver</h5>
           <p class="card-text">Ciphertext:</p>
           <textarea id="messageToDecrypt" type="text" size="90"></textarea>
+          <p class="card-text">Calculated Key Hash By Receiver:</p>
+          <textarea id="keyhashFieldReceiver" type="text" size="90"></textarea>
+          <br>
           <p class="card-text">Plain Text:</p>
-          <textarea id="cipherTextArea" type="text" inputmode="numeric size=" 90"></textarea>
+          <textarea id="cipherTextArea" type="text" size=" 90"></textarea>
           <br>
           <button type="button" id="decryptButton" class="btn-primary">Decrypt!</button>
         </div>

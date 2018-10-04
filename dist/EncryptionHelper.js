@@ -59,7 +59,7 @@ var EncryptionHelper = /** @class */ (function () {
                             var plaintextString = DataConvertionCalculations_1.DataConvertionCalculations.byteArrayToString(plainTextBytes);
                             var plainTextField = document.getElementById("cipherTextArea");
                             plainTextField.value = plaintextString;
-                            return plaintextString;
+                            return [plaintextString, keyHash];
                         });
                     }
                 });

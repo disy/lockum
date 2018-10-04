@@ -25,7 +25,6 @@ var Sender = /** @class */ (function () {
         var ciphertext = encryptionTool.encrypt(locationInput, message);
         ciphertext.then(function (ciphertextResult) {
             localStorage.setItem("keyhash", ciphertextResult[0]);
-            console.log("keyhash:" + ciphertextResult[0]);
         });
         return ciphertext;
     };

@@ -30,25 +30,13 @@ var Receiver = /** @class */ (function () {
         return Promise.all(promises).then(function (results) {
             for (var index = 0; index <= results.length - 1; index++) {
                 if (results[index] != undefined) {
-                    console.log("found:" + results[index]);
+                    //saves key hash of the sender into browser to show on html
+                    localStorage.setItem("keyhashReceiver", results[index][1]);
+                    //return plain text promise and key hash
                     return results[index];
                 }
             }
         });
-        /*
-
-        let possibleLocation1 = encryptionTool.decrypt(locationInputs[0],ciphertext,originalHash)
-        let possibleLocation2 = encryptionTool.decrypt(locationInputs[1],ciphertext,originalHash)
-        let possibleLocation3 = encryptionTool.decrypt(locationInputs[2],ciphertext,originalHash)
-        let possibleLocation4 = encryptionTool.decrypt(locationInputs[3],ciphertext,originalHash)
-        let possibleLocation5 = encryptionTool.decrypt(locationInputs[4],ciphertext,originalHash)
-        let possibleLocation6 = encryptionTool.decrypt(locationInputs[5],ciphertext,originalHash)
-        let possibleLocation7 = encryptionTool.decrypt(locationInputs[6],ciphertext,originalHash)
-        let possibleLocation8 = encryptionTool.decrypt(locationInputs[7],ciphertext,originalHash)
-        let possibleLocation9 = encryptionTool.decrypt(locationInputs[8],ciphertext,originalHash)
-
-        return Promise.all([possibleLocation1,possibleLocation2,possibleLocation3,possibleLocation4,possibleLocation5,possibleLocation6
-            ,possibleLocation7,possibleLocation8,possibleLocation9]) */
     };
     return Receiver;
 }());

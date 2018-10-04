@@ -59,7 +59,7 @@ export class EncryptionHelper {
             })
         })
 
-        return Promise.all([keyHash,encryptedMEssage])
+        return Promise.all([keyHash, encryptedMEssage])
     }
 
     public calculateKeyHash(locationInfo: Int32Array) {
@@ -95,7 +95,7 @@ export class EncryptionHelper {
                             let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
                             let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
                             plainTextField.value = plaintextString
-                            return plaintextString
+                            return [plaintextString, keyHash]
                         })
                     }
                 })

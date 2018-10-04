@@ -6,10 +6,8 @@ export class Location {
   private longitude: [string, number] = ["", 0]
 
   constructor(latitude: [string, number], longitude: [string, number], readonly toleranceDistance: number) {
-    this.latitude[0] = latitude[0]
-    this.latitude[1] = latitude[1]
-    this.longitude[0] = longitude[0]
-    this.longitude[1] = longitude[1]
+    this.latitude = latitude
+    this.longitude = longitude
   }
 
   public prepareSenderLocationInput() {

@@ -24,7 +24,7 @@ export class Sender {
         localStorage.setItem("toleranceDistance", JSON.stringify(toleranceDistance))
 
         //create keyderivation input with location
-        let location = new Location(latitude, longitude,toleranceDistance)
+        let location = new Location(latitude, longitude, toleranceDistance)
         let locationInput = location.prepareSenderLocationInput()
 
         //encrypt the message
@@ -32,7 +32,6 @@ export class Sender {
         let ciphertext = encryptionTool.encrypt(locationInput, message)
         ciphertext.then(function (ciphertextResult) {
             localStorage.setItem("keyhash", ciphertextResult[0])
-            console.log("keyhash:"+ ciphertextResult[0])
         })
 
         return ciphertext

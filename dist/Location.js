@@ -7,10 +7,8 @@ var Location = /** @class */ (function () {
         this.toleranceDistance = toleranceDistance;
         this.latitude = ["", 0];
         this.longitude = ["", 0];
-        this.latitude[0] = latitude[0];
-        this.latitude[1] = latitude[1];
-        this.longitude[0] = longitude[0];
-        this.longitude[1] = longitude[1];
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
     Location.prototype.prepareSenderLocationInput = function () {
         var latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1]);

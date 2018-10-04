@@ -40,6 +40,9 @@ export class Receiver {
         return Promise.all(promises).then((results) => {
             for (let index = 0; index <= results.length - 1; index++) {
                 if (results[index] != undefined) {
+                    //saves key hash of the sender into browser to show on html
+                    localStorage.setItem("keyhashReceiver", results[index][1])
+                    //return plain text promise and key hash
                     return results[index]
                 }
             }
