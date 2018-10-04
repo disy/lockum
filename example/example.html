@@ -17,7 +17,7 @@
           <p class="card-text">Message to Encrypt:</p>
           <textarea id="messageToEncrypt" type="text" size="90"></textarea>
           <p class="card-text">Tolerance Distance:</p>
-          <textarea id="toleranceDistanceField" type="text" inputmode="numeric" size="90"></textarea>
+          <textarea id="toleranceDistanceField" type="text" onkeypress="validate(event)" size="90"></textarea>
           <br>
           <p class="card-text">Calculated Key Hash By Sender:</p>
           <textarea id="keyhashField" type="text" size="90"></textarea>
@@ -56,6 +56,8 @@
   <script src="../bundle.js"></script>
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/example.js"></script>
+  <script src="js/validateForms.js"></script>
+
 </body>
 
 </html>
