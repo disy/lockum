@@ -6,7 +6,7 @@ module.exports = {
       filename: 'bundle.js',
       path: __dirname,
       libraryTarget: 'var',
-      library: 'lockum',
+      library: 'mylib',
    },
    module: {
       rules: [{

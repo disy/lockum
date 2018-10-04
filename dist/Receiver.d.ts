@@ -1,4 +1,4 @@
 export declare class Receiver {
     constructor();
-    decryptMessage(latitude: number, longitude: number, ciphertext: string): PromiseLike<string>;
+    decryptMessage(latitude: [string, number], longitude: [string, number], ciphertext: string): Promise<[string, string, string, string, string, string, string, string, string]>;
 }

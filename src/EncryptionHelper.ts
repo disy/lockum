@@ -1,5 +1,4 @@
 import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
-import { TextEncoder } from "text-encoding";
 
 const numberOfIterations = 1000000
 const hashType = "SHA-256"
@@ -18,13 +17,12 @@ export class EncryptionHelper {
         this.ivBytes = new Uint8Array(iv)
     }
 
-    public deriveKey(locationInfo: string) {
+    public deriveKey(locationInfo: Int32Array) {
         let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt)
-        let locationInfoBytes = DataConvertionCalculations.stringToByteArray(locationInfo)
 
         return window.crypto.subtle.importKey(
             keyFormat,
-            locationInfoBytes,
+            locationInfo,
             { name: keyderivationAlgorithm, hash: hashType, length: hashLength },
             false,
             ["deriveKey"]
@@ -39,7 +37,7 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt(location: string, message: String) {
+    public encrypt(location: Int32Array, message: String) {
         let context = this
         let keyHash = this.calculateKeyHash(location)
 
@@ -64,7 +62,7 @@ export class EncryptionHelper {
         return Promise.all([keyHash,encryptedMEssage])
     }
 
-    public calculateKeyHash(locationInfo: string) {
+    public calculateKeyHash(locationInfo: Int32Array) {
         return this.deriveKey(locationInfo).then(function (aesKey) {
             return crypto.subtle.exportKey(keyFormat, aesKey).then(function (result) {
                 return crypto.subtle.digest(hashType, result).then(function (hash) {
@@ -75,7 +73,7 @@ export class EncryptionHelper {
         })
     }
 
-    public decrypt(possibleLocation: string, cipherText: String, originalKeyHash: string) {
+    public decrypt(possibleLocation: Int32Array, cipherText: String, originalKeyHash: string) {
         let context = this
 
         return this.deriveKey(possibleLocation).then(function (key) {

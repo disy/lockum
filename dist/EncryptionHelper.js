@@ -17,8 +17,7 @@ var EncryptionHelper = /** @class */ (function () {
     }
     EncryptionHelper.prototype.deriveKey = function (locationInfo) {
         var saltBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(this.salt);
-        var locationInfoBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(locationInfo);
-        return window.crypto.subtle.importKey(keyFormat, locationInfoBytes, { name: keyderivationAlgorithm, hash: hashType, length: hashLength }, false, ["deriveKey"]).then(function (baseKey) {
+        return window.crypto.subtle.importKey(keyFormat, locationInfo, { name: keyderivationAlgorithm, hash: hashType, length: hashLength }, false, ["deriveKey"]).then(function (baseKey) {
             return window.crypto.subtle.deriveKey({ name: keyderivationAlgorithm, salt: saltBytes, iterations: numberOfIterations, hash: hashType }, baseKey, { name: encryptionAlgorithm, length: keyLength }, true, ["encrypt", "decrypt"]);
         });
     };
