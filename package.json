@@ -5,7 +5,7 @@
   "main": "./src/LocationApi.ts",
   "scripts": {
     "build": "tsc && webpack",
-    "test": "mocha -r ts-node/register src/**/Location.spec.ts"
+    "test": "mocha -r ts-node/register src/test.spec.ts"
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +19,14 @@
     "webpack": "^4.8.3"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "serviceworker-webpack-plugin": "^1.0.0-alpha02",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
+    "typings": "^2.1.1",
     "webpack-cli": "^2.1.5"
   }
 }
