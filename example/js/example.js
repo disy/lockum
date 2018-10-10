@@ -19,8 +19,10 @@ $("#encryptButton").click(function () {
         let plaintext = $("#messageToEncrypt").val()
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
 
+        let locationData = [latitude, longitude, toleranceDistance]
+
         //library call. It returns ciphertext,key hash, iv, salt and tolerance distance
-        let ciphertext = library.encrypt([latitude,longitude,toleranceDistance],plaintext)
+        let ciphertext = library.encrypt(locationData, plaintext)
         ciphertext.then(function (ciphertextResult) {
 
             //save values to the browser from library call result so that receiver can take them
@@ -82,8 +84,11 @@ $("#decryptButton").click(function () {
         let keyhash = localStorage.getItem("keyhash")
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
 
+        let locationData = [latitude, longitude, toleranceDistance]
+        let decryptionElements = [saltBytes, ivBytes, ciphertext, keyhash]
+
         //call library to decrypt, returns the plain text and calculated key hash
-        let plaintext = library.decrypt([latitude,longitude,toleranceDistance],[saltBytes,ivBytes,ciphertext,keyhash])
+        let plaintext = library.decrypt(locationData, decryptionElements)
         plaintext.then(function (plaintextResult) {
             $("#keyhashFieldReceiver").text(plaintextResult[1])
             $("#cipherTextArea").text(plaintextResult[0])
