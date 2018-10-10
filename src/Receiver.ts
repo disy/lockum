@@ -7,10 +7,9 @@ export class Receiver {
 
     }
 
-    public decryptMessage(latitude: [string, number], longitude: [string, number], ciphertext: string, saltBytes: Uint8Array,
+    public decryptMessage(latitude: number, longitude: number, ciphertext: string, saltBytes: Uint8Array,
          ivBytes: Uint8Array, toleranceDistance: number, originalHash: string ) {
-       
-     
+            
         //create location inputs(locations with adjacent quadrants)
         let location = new Location(latitude, longitude, toleranceDistance)
         let locationInputs = location.prepareReceiverLocationInputs()
@@ -27,8 +26,6 @@ export class Receiver {
         return Promise.all(promises).then((results) => {
             for (let index = 0; index <= results.length - 1; index++) {
                 if (results[index] != undefined) {
-                    //saves key hash of the sender into browser to show on html
-                    localStorage.setItem("keyhashReceiver", results[index][1])
                     //return plain text promise and key hash
                     return results[index]
                 }

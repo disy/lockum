@@ -18,8 +18,6 @@ var Receiver = /** @class */ (function () {
         return Promise.all(promises).then(function (results) {
             for (var index = 0; index <= results.length - 1; index++) {
                 if (results[index] != undefined) {
-                    //saves key hash of the sender into browser to show on html
-                    localStorage.setItem("keyhashReceiver", results[index][1]);
                     //return plain text promise and key hash
                     return results[index];
                 }

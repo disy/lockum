@@ -21,13 +21,13 @@ var EncryptionHelper = /** @class */ (function () {
             return window.crypto.subtle.deriveKey({ name: KEYDERIVATIONALGORITHM, salt: context.salt, iterations: NUMBEROFITERATIONS, hash: HASHTYPE }, baseKey, { name: ENCRYPTIONALGORITHM, length: KEYLENGTH }, true, ["encrypt", "decrypt"]);
         });
     };
-    EncryptionHelper.prototype.encrypt = function (location, message) {
+    EncryptionHelper.prototype.encrypt = function (location, message, toleranceDistance) {
         var context = this;
         return this.deriveKey(location).then(function (aesKey) {
             var keyhash = context.calculateKeyHash(aesKey);
             var plainTextBytes = DataConvertionCalculations_1.DataConvertionCalculations.stringToByteArray(message);
             var encryptedMessage = context.encryptMessage(aesKey, plainTextBytes);
-            return Promise.all([keyhash, encryptedMessage, context.salt, context.ivBytes]);
+            return Promise.all([keyhash, encryptedMessage, context.salt, context.ivBytes, toleranceDistance]);
         });
     };
     EncryptionHelper.prototype.encryptMessage = function (aesKey, plainTextBytes) {

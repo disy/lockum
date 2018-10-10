@@ -37,7 +37,7 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt(location: Int32Array, message: String) {
+    public encrypt(location: Int32Array, message: String,toleranceDistance: number) {
         let context = this
 
         return this.deriveKey(location
@@ -46,7 +46,7 @@ export class EncryptionHelper {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
             let encryptedMessage = context.encryptMessage(aesKey,plainTextBytes)    
             
-            return Promise.all([keyhash,encryptedMessage,context.salt,context.ivBytes])
+            return Promise.all([keyhash,encryptedMessage,context.salt,context.ivBytes,toleranceDistance])
         })
     }
 

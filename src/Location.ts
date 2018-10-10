@@ -5,9 +5,9 @@ export class Location {
   private latitude: [string, number] = ["", 0]
   private longitude: [string, number] = ["", 0]
 
-  constructor(latitude: [string, number], longitude: [string, number], readonly toleranceDistance: number) {
-    this.latitude = latitude
-    this.longitude = longitude
+  constructor(latitude: number, longitude: number, readonly toleranceDistance: number) {
+    this.latitude = this.convertToDegreesDecimalMinutes(latitude,true)
+    this.longitude = this.convertToDegreesDecimalMinutes(longitude,false)
   }
 
   public prepareSenderLocationInput() {
@@ -61,5 +61,29 @@ export class Location {
     adjacentLocations[8] = new Int32Array([latitude + 1, longitude + 1])
 
     return adjacentLocations
+  }
+
+  private convertToDegreesDecimalMinutes(locationValue: number, isLatitude: boolean) {
+    let locationSign = ""
+    if (locationValue < 0 && isLatitude) {
+      locationSign = "S"
+      locationValue = locationValue * -1
+    } else if (locationValue < 0 && !isLatitude) {
+      locationSign = "W"
+      locationValue = locationValue * -1
+    } else if (locationValue > 0 && isLatitude) {
+      locationSign = "N"
+    } else if (locationValue > 0 && !isLatitude) {
+      locationSign = "E"
+    }
+
+    let degreesPart = Math.floor(locationValue)
+    let floatingMinutes = +((locationValue % 1) * 60).toFixed(4)
+    let minutesIntegralPart = Math.floor(floatingMinutes)
+    let minutesIntegralDigitNumber = Math.floor(Math.log10(minutesIntegralPart)) + 1
+    let degreesDecimalMinutes = (degreesPart * (Math.pow(10, minutesIntegralDigitNumber))) + floatingMinutes
+
+    let location: [string,number] = [locationSign,degreesDecimalMinutes]
+    return location
   }
 }

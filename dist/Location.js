@@ -7,8 +7,8 @@ var Location = /** @class */ (function () {
         this.toleranceDistance = toleranceDistance;
         this.latitude = ["", 0];
         this.longitude = ["", 0];
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.latitude = this.convertToDegreesDecimalMinutes(latitude, true);
+        this.longitude = this.convertToDegreesDecimalMinutes(longitude, false);
     }
     Location.prototype.prepareSenderLocationInput = function () {
         var latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1]);
@@ -55,6 +55,30 @@ var Location = /** @class */ (function () {
         adjacentLocations[7] = new Int32Array([latitude + 1, longitude]);
         adjacentLocations[8] = new Int32Array([latitude + 1, longitude + 1]);
         return adjacentLocations;
+    };
+    Location.prototype.convertToDegreesDecimalMinutes = function (locationValue, isLatitude) {
+        var locationSign = "";
+        if (locationValue < 0 && isLatitude) {
+            locationSign = "S";
+            locationValue = locationValue * -1;
+        }
+        else if (locationValue < 0 && !isLatitude) {
+            locationSign = "W";
+            locationValue = locationValue * -1;
+        }
+        else if (locationValue > 0 && isLatitude) {
+            locationSign = "N";
+        }
+        else if (locationValue > 0 && !isLatitude) {
+            locationSign = "E";
+        }
+        var degreesPart = Math.floor(locationValue);
+        var floatingMinutes = +((locationValue % 1) * 60).toFixed(4);
+        var minutesIntegralPart = Math.floor(floatingMinutes);
+        var minutesIntegralDigitNumber = Math.floor(Math.log10(minutesIntegralPart)) + 1;
+        var degreesDecimalMinutes = (degreesPart * (Math.pow(10, minutesIntegralDigitNumber))) + floatingMinutes;
+        var location = [locationSign, degreesDecimalMinutes];
+        return location;
     };
     return Location;
 }());
