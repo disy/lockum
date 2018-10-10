@@ -1,12 +1,12 @@
 import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
 
-const numberOfIterations = 1000000
-const hashType = "SHA-256"
-const hashLength = 256
-const keyderivationAlgorithm = "PBKDF2"
-const encryptionAlgorithm = "AES-GCM"
-const keyLength = 256
-const keyFormat = "raw"
+const NUMBEROFITERATIONS = 1000000
+const HASHTYPE = "SHA-256"
+const HASHLENGTH = 256
+const KEYDERIVATIONALGORITHM = "PBKDF2"
+const ENCRYPTIONALGORITHM = "AES-GCM"
+const KEYLENGTH = 256
+const KEYFORMAT = "raw"
 
 export class EncryptionHelper {
     ivBytes: Uint8Array = new Uint8Array(16)
@@ -18,19 +18,19 @@ export class EncryptionHelper {
     }
 
     public deriveKey(locationInfo: Int32Array) {
-        let saltBytes = DataConvertionCalculations.stringToByteArray(this.salt)
+        let context = this
 
         return window.crypto.subtle.importKey(
-            keyFormat,
+            KEYFORMAT,
             locationInfo,
-            { name: keyderivationAlgorithm, hash: hashType, length: hashLength },
+            { name: KEYDERIVATIONALGORITHM, hash: HASHTYPE, length: HASHLENGTH },
             false,
             ["deriveKey"]
         ).then(function (baseKey) {
             return window.crypto.subtle.deriveKey(
-                { name: keyderivationAlgorithm, salt: saltBytes, iterations: numberOfIterations, hash: hashType },
+                { name: KEYDERIVATIONALGORITHM, salt: context.salt, iterations: NUMBEROFITERATIONS, hash: HASHTYPE },
                 baseKey,
-                { name: encryptionAlgorithm, length: keyLength },
+                { name: ENCRYPTIONALGORITHM, length: KEYLENGTH },
                 true,
                 ["encrypt", "decrypt"]
             )
@@ -39,67 +39,67 @@ export class EncryptionHelper {
 
     public encrypt(location: Int32Array, message: String) {
         let context = this
-        let keyHash = this.calculateKeyHash(location)
 
-        let encryptedMEssage = this.deriveKey(location
+        return this.deriveKey(location
         ).then(function (aesKey) {
+            let keyhash = context.calculateKeyHash(aesKey)
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
-
-            return window.crypto.subtle.encrypt(
-                { name: encryptionAlgorithm, iv: context.ivBytes },
-                aesKey,
-                plainTextBytes,
-            ).then(function (cipherTextBuffer) {
-                let ciphertextBytes = new Uint8Array(cipherTextBuffer)
-                let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes)
-                let ciphertextField = <HTMLTextAreaElement>document.getElementById("messageToDecrypt")
-                ciphertextField.value = base64Ciphertext
-
-                return base64Ciphertext
-            })
+            let encryptedMessage = context.encryptMessage(aesKey,plainTextBytes)    
+            
+            return Promise.all([keyhash,encryptedMessage,context.salt,context.ivBytes])
         })
-
-        return Promise.all([keyHash, encryptedMEssage])
     }
 
-    public calculateKeyHash(locationInfo: Int32Array) {
-        return this.deriveKey(locationInfo).then(function (aesKey) {
-            return crypto.subtle.exportKey(keyFormat, aesKey).then(function (result) {
-                return crypto.subtle.digest(hashType, result).then(function (hash) {
-                    let keyHash = DataConvertionCalculations.convertToHex(hash)
-                    return keyHash
-                })
+    private encryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
+        let context = this
+
+        return window.crypto.subtle.encrypt(
+            { name: ENCRYPTIONALGORITHM, iv: context.ivBytes },
+            aesKey,
+            plainTextBytes,
+        ).then(function (cipherTextBuffer) {
+            let ciphertextBytes = new Uint8Array(cipherTextBuffer)
+            let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes)
+            
+            return base64Ciphertext
+        })
+    }
+
+    private calculateKeyHash(aesKey: CryptoKey) {
+        return crypto.subtle.exportKey(KEYFORMAT, aesKey).then(function (result) {
+            return crypto.subtle.digest(HASHTYPE, result).then(function (hash) {
+                let keyHash = DataConvertionCalculations.convertToHex(hash)
+                return keyHash
             })
         })
     }
 
     public decrypt(possibleLocation: Int32Array, cipherText: String, originalKeyHash: string) {
         let context = this
-
         return this.deriveKey(possibleLocation).then(function (key) {
+            let plainText = context.calculateKeyHash(key)
+            return plainText.then(function(keyhash){
+                if (keyhash == originalKeyHash) {
+                    let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
+                    return context.decryptMessage(key,ciphertextBytes).then(function(sonuc){
+                        return [sonuc,keyhash]
+                    })
 
-            return crypto.subtle.exportKey(keyFormat, key).then(function (rawKey) {
-
-                return crypto.subtle.digest(hashType, rawKey).then(function (hash) {
-                    let keyHash = DataConvertionCalculations.convertToHex(hash)
-
-                    if (keyHash == originalKeyHash) {
-                        let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
-
-                        return crypto.subtle.decrypt(
-                            { name: encryptionAlgorithm, iv: context.ivBytes },
-                            key,
-                            ciphertextBytes
-                        ).then(function (plainTextBuffer) {
-                            let plainTextBytes = new Uint8Array(plainTextBuffer)
-                            let plaintextString = DataConvertionCalculations.byteArrayToString(plainTextBytes)
-                            let plainTextField = <HTMLTextAreaElement>document.getElementById("cipherTextArea")
-                            plainTextField.value = plaintextString
-                            return [plaintextString, keyHash]
-                        })
-                    }
-                })
+                }
             })
+        })
+    }
+
+    private decryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
+        let context = this
+        return window.crypto.subtle.decrypt(
+            { name: ENCRYPTIONALGORITHM, iv: context.ivBytes },
+            aesKey,
+            plainTextBytes,
+        ).then(function (cipherTextBuffer) {
+            let ciphertextBytes = new Uint8Array(cipherTextBuffer)
+            let cipherTextString = DataConvertionCalculations.byteArrayToString(ciphertextBytes)
+            return cipherTextString
         })
     }
 }

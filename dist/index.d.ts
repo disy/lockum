@@ -1,2 +1,2 @@
-export declare function encrypt(latitude: [string, number], longitude: [string, number], message: any, toleranceDistance: number): Promise<[string, string]>;
-export declare function decrypt(latitude: [string, number], longitude: [string, number], ciphertext: any): Promise<any>;
+export declare function encrypt(latitude: [string, number], longitude: [string, number], message: any, toleranceDistance: number): PromiseLike<Promise<[string, string, Uint8Array, Uint8Array]>>;
+export declare function decrypt(latitude: [string, number], longitude: [string, number], ciphertext: string, saltBytes: Uint8Array, ivBytes: Uint8Array, toleranceDistance: number, originalHash: string): Promise<any>;

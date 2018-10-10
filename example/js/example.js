@@ -12,16 +12,35 @@ $("#encryptButton").click(function () {
 
     navigator.geolocation.getCurrentPosition(success, error, geo_options)
     function success(position) {
+        //get latitude and longitude values from API
         let latitude = position.coords.latitude
-        latitude = convertToDegreesDecimalMinutes(latitude, true)
         let longitude = position.coords.longitude
-        longitude = convertToDegreesDecimalMinutes(longitude, false)
+        //get plaintext and tolerance distance from the html page
         let plaintext = $("#messageToEncrypt").val()
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
+
+        latitude = convertToDegreesDecimalMinutes(latitude, true)
+        longitude = convertToDegreesDecimalMinutes(longitude, false)
+
         let ciphertext = library.encrypt(latitude, longitude, plaintext, toleranceDistance)
+
         ciphertext.then(function (ciphertextResult) {
+
+        const saltArray = Array.from(ciphertextResult[2])
+        const storedSalt = JSON.stringify(saltArray)
+        const ivArray = Array.from(ciphertextResult[3])
+        const storedIV = JSON.stringify(ivArray)
+
+         localStorage.setItem("keyhash", ciphertextResult[0])
+         localStorage.setItem("salt", storedSalt)
+         localStorage.setItem("iv", storedIV)
+         console.log("ciphertext bakınız:"+ciphertextResult[1])
+         localStorage.setItem("ciphertext", ciphertextResult[1])
+
+            console.log("sonuc:")
+            console.log(ciphertextResult)
             $("#keyhashField").text(localStorage.getItem("keyhash"))
-            $("#messageToDecrypt").text(ciphertextResult)
+            $("#messageToDecrypt").text(ciphertextResult[1])
         })
     }
 
@@ -51,12 +70,28 @@ $("#decryptButton").click(function () {
         latitude = convertToDegreesDecimalMinutes(latitude, true)
         let longitude = position.coords.longitude
         longitude = convertToDegreesDecimalMinutes(longitude, false)
-        let ciphertext = $("#messageToDecrypt").val()
-        let plaintext = library.decrypt(latitude, longitude, ciphertext)
+
+        const salt = localStorage.getItem("salt")
+        const retrievedSaltArray = JSON.parse(salt)
+        const saltBytes = new Uint8Array(retrievedSaltArray)
+        console.log("salt bytes receiver:"+saltBytes)
+
+        const iv = localStorage.getItem("iv")
+        const retrievedIvArray = JSON.parse(iv)
+        const ivBytes = new Uint8Array(retrievedIvArray)
+        console.log("iv bytes receiver:"+ivBytes)
+
+        let ciphertext = localStorage.getItem("ciphertext")
+        console.log("ciphertext receiver:"+ciphertext)
+        let keyhash  =localStorage.getItem("keyhash")
+        console.log("keyhash receiver taken as:"+keyhash)
+        let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
+        console.log("tolerance distance taken as:"+toleranceDistance)
+
+        let plaintext = library.decrypt(latitude, longitude, ciphertext, saltBytes, ivBytes, toleranceDistance, keyhash)
         plaintext.then(function (plaintextResult) {
             let hash = localStorage.getItem("keyhashReceiver")
-            $("#keyhashFieldReceiver").text(hash)
-            $("#cipherTextArea").text(plaintextResult)
+            console.log(plaintextResult)
         })
     }
 

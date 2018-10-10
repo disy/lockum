@@ -8,8 +8,9 @@ export function encrypt(latitude: [string, number], longitude: [string, number],
   return sender.encryptMessage(latitude, longitude, message, toleranceDistance)
 }
 
-export function decrypt(latitude: [string, number], longitude: [string, number], ciphertext) {
-  return receiver.decryptMessage(latitude, longitude, ciphertext)
+export function decrypt(latitude: [string, number], longitude: [string, number], ciphertext: string, saltBytes: Uint8Array,
+  ivBytes: Uint8Array, toleranceDistance: number, originalHash: string ) {
+  return receiver.decryptMessage(latitude, longitude, ciphertext,saltBytes,ivBytes,toleranceDistance,originalHash)
 }
 
 

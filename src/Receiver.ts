@@ -7,23 +7,10 @@ export class Receiver {
 
     }
 
-    public decryptMessage(latitude: [string, number], longitude: [string, number], ciphertext: string) {
-        //get salt 
-        const salt = localStorage.getItem("salt")
-        const retrievedSaltArray = JSON.parse(salt)
-        const saltBytes = new Uint8Array(retrievedSaltArray)
-
-        //get iv
-        const iv = localStorage.getItem("iv")
-        const retrievedIvArray = JSON.parse(iv)
-        const ivBytes = new Uint8Array(retrievedIvArray)
-
-        //get tolerance distance
-        let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
-
-        //get original keyHash
-        let originalHash = localStorage.getItem("keyhash")
-
+    public decryptMessage(latitude: [string, number], longitude: [string, number], ciphertext: string, saltBytes: Uint8Array,
+         ivBytes: Uint8Array, toleranceDistance: number, originalHash: string ) {
+       
+     
         //create location inputs(locations with adjacent quadrants)
         let location = new Location(latitude, longitude, toleranceDistance)
         let locationInputs = location.prepareReceiverLocationInputs()

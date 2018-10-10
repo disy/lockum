@@ -5,19 +5,7 @@ var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var Receiver = /** @class */ (function () {
     function Receiver() {
     }
-    Receiver.prototype.decryptMessage = function (latitude, longitude, ciphertext) {
-        //get salt 
-        var salt = localStorage.getItem("salt");
-        var retrievedSaltArray = JSON.parse(salt);
-        var saltBytes = new Uint8Array(retrievedSaltArray);
-        //get iv
-        var iv = localStorage.getItem("iv");
-        var retrievedIvArray = JSON.parse(iv);
-        var ivBytes = new Uint8Array(retrievedIvArray);
-        //get tolerance distance
-        var toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")));
-        //get original keyHash
-        var originalHash = localStorage.getItem("keyhash");
+    Receiver.prototype.decryptMessage = function (latitude, longitude, ciphertext, saltBytes, ivBytes, toleranceDistance, originalHash) {
         //create location inputs(locations with adjacent quadrants)
         var location = new Location_1.Location(latitude, longitude, toleranceDistance);
         var locationInputs = location.prepareReceiverLocationInputs();
