@@ -5,7 +5,19 @@ var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var Receiver = /** @class */ (function () {
     function Receiver() {
     }
-    Receiver.prototype.decryptMessage = function (latitude, longitude, ciphertext, saltBytes, ivBytes, toleranceDistance, originalHash) {
+    /**
+     * @param locationInfo: refers to location related data.Consists of latitude, longitude and tolerance Distance, respectively.
+     * @param decryptionElements: refers to decryption Elements. Consists of salt, iv , ciphertext and original key hash, respectively.
+     * @returns a promise that returns plain text and calculated keyhash
+     */
+    Receiver.prototype.decryptMessage = function (locationInfo, decryptionElements) {
+        var latitude = locationInfo[0];
+        var longitude = locationInfo[1];
+        var toleranceDistance = locationInfo[2];
+        var saltBytes = decryptionElements[0];
+        var ivBytes = decryptionElements[1];
+        var ciphertext = decryptionElements[2];
+        var originalHash = decryptionElements[3];
         //create location inputs(locations with adjacent quadrants)
         var location = new Location_1.Location(latitude, longitude, toleranceDistance);
         var keyderivationInputs = location.getAdjacentQuadrants();

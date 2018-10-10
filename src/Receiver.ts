@@ -7,9 +7,22 @@ export class Receiver {
 
     }
 
-    public decryptMessage(latitude: number, longitude: number, ciphertext: string, saltBytes: Uint8Array,
-         ivBytes: Uint8Array, toleranceDistance: number, originalHash: string ) {
-            
+    /**
+     * @param locationInfo: refers to location related data.Consists of latitude, longitude and tolerance Distance, respectively.
+     * @param decryptionElements: refers to decryption Elements. Consists of salt, iv , ciphertext and original key hash, respectively.
+     * @returns a promise that returns plain text and calculated keyhash
+     */
+    public decryptMessage(locationInfo: [number, number, number], decryptionElements: [Uint8Array, Uint8Array, string, string]) {
+
+        let latitude =  locationInfo[0]
+        let longitude = locationInfo[1]
+        let toleranceDistance = locationInfo[2]
+
+        let saltBytes = decryptionElements[0]
+        let ivBytes = decryptionElements[1]
+        let ciphertext = decryptionElements[2]
+        let originalHash = decryptionElements[3]
+
         //create location inputs(locations with adjacent quadrants)
         let location = new Location(latitude, longitude, toleranceDistance)
         let keyderivationInputs = location.getAdjacentQuadrants()
@@ -33,3 +46,4 @@ export class Receiver {
         });
     }
 }
+

@@ -5,7 +5,15 @@ var EncryptionHelper_1 = require("../src/EncryptionHelper");
 var Sender = /** @class */ (function () {
     function Sender() {
     }
-    Sender.prototype.encryptMessage = function (latitude, longitude, message, toleranceDistance) {
+    /**
+     * @param locationInfo refers to location related elements. Consists of latitude, longitude and tolerance distance, respectively.
+     * @param message refers to plain text that will be encrypted
+     * @returns a promise that includes encrypted text, tolerance distance, key hash, salt and iv
+     */
+    Sender.prototype.encryptMessage = function (locationInfo, message) {
+        var latitude = locationInfo[0];
+        var longitude = locationInfo[1];
+        var toleranceDistance = locationInfo[2];
         //prepare salt,iv
         var ivBytes = window.crypto.getRandomValues(new Uint8Array(16));
         var salt = window.crypto.getRandomValues(new Uint8Array(32));
