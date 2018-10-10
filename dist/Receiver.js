@@ -8,11 +8,11 @@ var Receiver = /** @class */ (function () {
     Receiver.prototype.decryptMessage = function (latitude, longitude, ciphertext, saltBytes, ivBytes, toleranceDistance, originalHash) {
         //create location inputs(locations with adjacent quadrants)
         var location = new Location_1.Location(latitude, longitude, toleranceDistance);
-        var locationInputs = location.prepareReceiverLocationInputs();
+        var keyderivationInputs = location.getAdjacentQuadrants();
         var encryptionTool = new EncryptionHelper_1.EncryptionHelper(saltBytes, ivBytes);
         var promises = [];
-        for (var i = 0; i <= locationInputs.length - 1; i++) {
-            promises.push(Promise.resolve(encryptionTool.decrypt(locationInputs[i], ciphertext, originalHash))
+        for (var i = 0; i <= keyderivationInputs.length - 1; i++) {
+            promises.push(Promise.resolve(encryptionTool.decrypt(keyderivationInputs[i], ciphertext, originalHash))
                 .catch(function (error) { return null; }));
         }
         return Promise.all(promises).then(function (results) {

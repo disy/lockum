@@ -12,14 +12,14 @@ export class Receiver {
             
         //create location inputs(locations with adjacent quadrants)
         let location = new Location(latitude, longitude, toleranceDistance)
-        let locationInputs = location.prepareReceiverLocationInputs()
+        let keyderivationInputs = location.getAdjacentQuadrants()
 
         let encryptionTool = new EncryptionHelper(saltBytes, ivBytes)
 
         let promises = []
-        for (let i = 0; i <= locationInputs.length - 1; i++) {
+        for (let i = 0; i <= keyderivationInputs.length - 1; i++) {
 
-            promises.push(Promise.resolve(encryptionTool.decrypt(locationInputs[i], ciphertext, originalHash))
+            promises.push(Promise.resolve(encryptionTool.decrypt(keyderivationInputs[i], ciphertext, originalHash))
                 .catch((error) => null));
         }
 

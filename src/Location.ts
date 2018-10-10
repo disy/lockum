@@ -6,37 +6,35 @@ export class Location {
   private longitude: [string, number] = ["", 0]
 
   constructor(latitude: number, longitude: number, readonly toleranceDistance: number) {
-    this.latitude = this.convertToDegreesDecimalMinutes(latitude,true)
-    this.longitude = this.convertToDegreesDecimalMinutes(longitude,false)
+    this.latitude = this.convertToDegreesDecimalMinutes(latitude, true)
+    this.longitude = this.convertToDegreesDecimalMinutes(longitude, false)
   }
 
-  public prepareSenderLocationInput() {
-    let latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1])
-    let longitudePart = this.calculateIntegralPart(this.longitude[0], this.longitude[1])
-    latitudePart = this.includeLocationSign(this.latitude[0], latitudePart)
-    longitudePart = this.includeLocationSign(this.longitude[0], longitudePart)
-    let input = new Int32Array([latitudePart, longitudePart])
-
-    return input
+  //returns transformed latitude and longitue value as a key derivation function's input
+  public getTransformedLocation() {
+    let latitudePart = this.transformLocation(this.latitude[0], this.latitude[1])
+    let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
+   
+    let result = new Int32Array([latitudePart, longitudePart])
+    return result
   }
 
-  public prepareReceiverLocationInputs() {
-    let latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1])
-    let longitudePart = this.calculateIntegralPart(this.longitude[0], this.longitude[1])
-    latitudePart = this.includeLocationSign(this.latitude[0], latitudePart)
-    longitudePart = this.includeLocationSign(this.longitude[0], longitudePart)
-    let inputsArray = this.createAdjacentLocations(latitudePart, longitudePart)
+  //returns an array of adjacent quadrants with transformed locations (used by receiver)
+  public getAdjacentQuadrants() {
+    let latitudePart = this.transformLocation(this.latitude[0], this.latitude[1])
+    let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
 
-    return inputsArray
+    let resultArray = this.createAdjacentQuadrants(latitudePart, longitudePart)
+    return resultArray
   }
 
-  private calculateIntegralPart(hemisphere: string, locationValue: number) {
+  private transformLocation(hemisphere: string, locationValue: number) {
     locationValue = locationValue * 10000
 
     if (hemisphere == "N" || hemisphere == "S") {
-      return locationValue / (this.toleranceDistance * latitudeCoefficient)
+      return this.includeLocationSign(hemisphere, locationValue / (this.toleranceDistance * latitudeCoefficient))
     } else {
-      return locationValue / (this.toleranceDistance * longitudeCoefficent)
+      return this.includeLocationSign(hemisphere, locationValue / (this.toleranceDistance * longitudeCoefficent))
     }
   }
 
@@ -48,7 +46,8 @@ export class Location {
     }
   }
 
-  private createAdjacentLocations(latitude: number, longitude: number) {
+  //creates and array of adjacent quadrants using transformed locations
+  private createAdjacentQuadrants(latitude: number, longitude: number) {
     let adjacentLocations = Array<Int32Array>()
     adjacentLocations[0] = new Int32Array([latitude - 1, longitude - 1])
     adjacentLocations[1] = new Int32Array([latitude - 1, longitude])
@@ -83,7 +82,7 @@ export class Location {
     let minutesIntegralDigitNumber = Math.floor(Math.log10(minutesIntegralPart)) + 1
     let degreesDecimalMinutes = (degreesPart * (Math.pow(10, minutesIntegralDigitNumber))) + floatingMinutes
 
-    let location: [string,number] = [locationSign,degreesDecimalMinutes]
+    let location: [string, number] = [locationSign, degreesDecimalMinutes]
     return location
   }
 }

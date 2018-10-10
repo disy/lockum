@@ -2,7 +2,6 @@
 var library = mylib
 
 $("#encryptButton").click(function () {
-
     let output = document.getElementById("out")
 
     if (!navigator.geolocation) {
@@ -12,30 +11,31 @@ $("#encryptButton").click(function () {
 
     navigator.geolocation.getCurrentPosition(success, error, geo_options)
     function success(position) {
-        //get latitude and longitude values from API
+        //get latitude and longitude values from Location API
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
+
         //get plaintext and tolerance distance from the html page
         let plaintext = $("#messageToEncrypt").val()
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
 
+        //library call. It returns ciphertext,key hash, iv, salt and tolerance distance
         let ciphertext = library.encrypt(latitude, longitude, plaintext, toleranceDistance)
-
         ciphertext.then(function (ciphertextResult) {
 
-        const saltArray = Array.from(ciphertextResult[2])
-        const storedSalt = JSON.stringify(saltArray)
-        const ivArray = Array.from(ciphertextResult[3])
-        const storedIV = JSON.stringify(ivArray)
+            //save values to the browser from library call result so that receiver can take them
+            const saltArray = Array.from(ciphertextResult[2])
+            const storedSalt = JSON.stringify(saltArray)
+            const ivArray = Array.from(ciphertextResult[3])
+            const storedIV = JSON.stringify(ivArray)
+            localStorage.setItem("keyhash", ciphertextResult[0])
+            localStorage.setItem("salt", storedSalt)
+            localStorage.setItem("iv", storedIV)
+            localStorage.setItem("ciphertext", ciphertextResult[1])
+            localStorage.setItem("toleranceDistance", parseInt(ciphertextResult[4]))
 
-         localStorage.setItem("keyhash", ciphertextResult[0])
-         localStorage.setItem("salt", storedSalt)
-         localStorage.setItem("iv", storedIV)
-         localStorage.setItem("ciphertext", ciphertextResult[1])
-         localStorage.setItem("toleranceDistance",parseInt(ciphertextResult[4]))
-
-            console.log("sonuc:")
             console.log(ciphertextResult)
+            //set the ciphertext and keyhash values in browser
             $("#keyhashField").text(localStorage.getItem("keyhash"))
             $("#messageToDecrypt").text(ciphertextResult[1])
         })
@@ -63,21 +63,26 @@ $("#decryptButton").click(function () {
 
     navigator.geolocation.getCurrentPosition(success, error, geo_options)
     function success(position) {
+        //get latitude and longitude values from Location API
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
 
+        //get the salt value from return value of the library call
         const salt = localStorage.getItem("salt")
         const retrievedSaltArray = JSON.parse(salt)
         const saltBytes = new Uint8Array(retrievedSaltArray)
 
+        //get the iv from return value of the library call
         const iv = localStorage.getItem("iv")
         const retrievedIvArray = JSON.parse(iv)
         const ivBytes = new Uint8Array(retrievedIvArray)
 
+        //get the cipher text,key hash and tolerance distance from library call
         let ciphertext = localStorage.getItem("ciphertext")
-        let keyhash  =localStorage.getItem("keyhash")
+        let keyhash = localStorage.getItem("keyhash")
         let toleranceDistance = parseInt(JSON.parse(localStorage.getItem("toleranceDistance")))
 
+        //call library to decrypt, returns the plain text and calculated key hash
         let plaintext = library.decrypt(latitude, longitude, ciphertext, saltBytes, ivBytes, toleranceDistance, keyhash)
         plaintext.then(function (plaintextResult) {
             $("#keyhashFieldReceiver").text(plaintextResult[1])

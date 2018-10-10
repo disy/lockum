@@ -15,11 +15,11 @@ export class Sender {
       
         //create keyderivation input with location
         let location = new Location(latitude, longitude, toleranceDistance)
-        let locationInput = location.prepareSenderLocationInput()
+        let keyDerivationInput = location.getTransformedLocation()
 
         //encrypt the message
         let encryptionTool = new EncryptionHelper(salt, ivBytes)
-        let ciphertext = encryptionTool.encrypt(locationInput, message,toleranceDistance)
+        let ciphertext = encryptionTool.encrypt(keyDerivationInput, message,toleranceDistance)
 
         return ciphertext
     }

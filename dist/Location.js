@@ -10,29 +10,27 @@ var Location = /** @class */ (function () {
         this.latitude = this.convertToDegreesDecimalMinutes(latitude, true);
         this.longitude = this.convertToDegreesDecimalMinutes(longitude, false);
     }
-    Location.prototype.prepareSenderLocationInput = function () {
-        var latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1]);
-        var longitudePart = this.calculateIntegralPart(this.longitude[0], this.longitude[1]);
-        latitudePart = this.includeLocationSign(this.latitude[0], latitudePart);
-        longitudePart = this.includeLocationSign(this.longitude[0], longitudePart);
-        var input = new Int32Array([latitudePart, longitudePart]);
-        return input;
+    //returns transformed latitude and longitue value as a key derivation function's input
+    Location.prototype.getTransformedLocation = function () {
+        var latitudePart = this.transformLocation(this.latitude[0], this.latitude[1]);
+        var longitudePart = this.transformLocation(this.longitude[0], this.longitude[1]);
+        var result = new Int32Array([latitudePart, longitudePart]);
+        return result;
     };
-    Location.prototype.prepareReceiverLocationInputs = function () {
-        var latitudePart = this.calculateIntegralPart(this.latitude[0], this.latitude[1]);
-        var longitudePart = this.calculateIntegralPart(this.longitude[0], this.longitude[1]);
-        latitudePart = this.includeLocationSign(this.latitude[0], latitudePart);
-        longitudePart = this.includeLocationSign(this.longitude[0], longitudePart);
-        var inputsArray = this.createAdjacentLocations(latitudePart, longitudePart);
-        return inputsArray;
+    //returns an array of adjacent quadrants with transformed locations (used by receiver)
+    Location.prototype.getAdjacentQuadrants = function () {
+        var latitudePart = this.transformLocation(this.latitude[0], this.latitude[1]);
+        var longitudePart = this.transformLocation(this.longitude[0], this.longitude[1]);
+        var resultArray = this.createAdjacentQuadrants(latitudePart, longitudePart);
+        return resultArray;
     };
-    Location.prototype.calculateIntegralPart = function (hemisphere, locationValue) {
+    Location.prototype.transformLocation = function (hemisphere, locationValue) {
         locationValue = locationValue * 10000;
         if (hemisphere == "N" || hemisphere == "S") {
-            return locationValue / (this.toleranceDistance * latitudeCoefficient);
+            return this.includeLocationSign(hemisphere, locationValue / (this.toleranceDistance * latitudeCoefficient));
         }
         else {
-            return locationValue / (this.toleranceDistance * longitudeCoefficent);
+            return this.includeLocationSign(hemisphere, locationValue / (this.toleranceDistance * longitudeCoefficent));
         }
     };
     Location.prototype.includeLocationSign = function (hemisphere, locationValue) {
@@ -43,7 +41,8 @@ var Location = /** @class */ (function () {
             return locationValue * -1;
         }
     };
-    Location.prototype.createAdjacentLocations = function (latitude, longitude) {
+    //creates and array of adjacent quadrants using transformed locations
+    Location.prototype.createAdjacentQuadrants = function (latitude, longitude) {
         var adjacentLocations = Array();
         adjacentLocations[0] = new Int32Array([latitude - 1, longitude - 1]);
         adjacentLocations[1] = new Int32Array([latitude - 1, longitude]);

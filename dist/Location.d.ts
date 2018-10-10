@@ -3,10 +3,10 @@ export declare class Location {
     private latitude;
     private longitude;
     constructor(latitude: number, longitude: number, toleranceDistance: number);
-    prepareSenderLocationInput(): Int32Array;
-    prepareReceiverLocationInputs(): Int32Array[];
-    private calculateIntegralPart;
+    getTransformedLocation(): Int32Array;
+    getAdjacentQuadrants(): Int32Array[];
+    private transformLocation;
     private includeLocationSign;
-    private createAdjacentLocations;
+    private createAdjacentQuadrants;
     private convertToDegreesDecimalMinutes;
 }

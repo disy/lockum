@@ -12,10 +12,10 @@ var Sender = /** @class */ (function () {
         //save salt,IV,tolerance Distance to browser so that receiver can use them
         //create keyderivation input with location
         var location = new Location_1.Location(latitude, longitude, toleranceDistance);
-        var locationInput = location.prepareSenderLocationInput();
+        var keyDerivationInput = location.getTransformedLocation();
         //encrypt the message
         var encryptionTool = new EncryptionHelper_1.EncryptionHelper(salt, ivBytes);
-        var ciphertext = encryptionTool.encrypt(locationInput, message, toleranceDistance);
+        var ciphertext = encryptionTool.encrypt(keyDerivationInput, message, toleranceDistance);
         return ciphertext;
     };
     return Sender;
