@@ -2,7 +2,6 @@
 import { Location } from "./Location";
 import { expect } from "chai";
 
-
 describe('Location fetching function in Degrees Decimal Minutes', ()=>{
 
     it('given locations of  N 33.4456 and E 74.3454 , latitude part should be 6193 and longitude part should be -12390  ', ()=> {

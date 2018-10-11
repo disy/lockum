@@ -17,12 +17,12 @@ export class EncryptionHelper {
         this.ivBytes = new Uint8Array(iv)
     }
 
-    private deriveKey(locationInfo: Int32Array) {
+    private deriveKey(transformedLocation: Int32Array) {
         let context = this
 
         return window.crypto.subtle.importKey(
             KEYFORMAT,
-            locationInfo,
+            transformedLocation,
             { name: KEYDERIVATIONALGORITHM, hash: HASHTYPE, length: HASHLENGTH },
             false,
             ["deriveKey"]
@@ -37,10 +37,10 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt(location: Int32Array, message: String,toleranceDistance: number) {
+    public encrypt(transformedLocation: Int32Array, message: String,toleranceDistance: number) {
         let context = this
 
-        return this.deriveKey(location
+        return this.deriveKey(transformedLocation
         ).then(function (aesKey) {
             let keyhash = context.calculateKeyHash(aesKey)
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
@@ -74,9 +74,9 @@ export class EncryptionHelper {
         })
     }
 
-    public decrypt(possibleLocation: Int32Array, cipherText: String, originalKeyHash: string) {
+    public decrypt(transformedLocation: Int32Array, cipherText: String, originalKeyHash: string) {
         let context = this
-        return this.deriveKey(possibleLocation).then(function (key) {
+        return this.deriveKey(transformedLocation).then(function (key) {
             let plainText = context.calculateKeyHash(key)
             return plainText.then(function(keyhash){
                 if (keyhash == originalKeyHash) {
