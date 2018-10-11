@@ -37,68 +37,66 @@ export class EncryptionHelper {
         })
     }
 
-    public encrypt(transformedLocation: Int32Array, message: String,toleranceDistance: number) {
+    public async encrypt(transformedLocation: Int32Array, message: String, toleranceDistance: number) {
         let context = this
-
-        return this.deriveKey(transformedLocation
-        ).then(function (aesKey) {
-            let keyhash = context.calculateKeyHash(aesKey)
-            let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
-            let encryptedMessage = context.encryptMessage(aesKey,plainTextBytes)    
-            
-            return Promise.all([encryptedMessage,keyhash,toleranceDistance,context.salt,context.ivBytes])
-        })
+        try {
+            let key = await this.deriveKey(transformedLocation)
+            let keyhash = await this.calculateKeyHash(key)
+            let plaintTextBytes = DataConvertionCalculations.stringToByteArray(message)
+            let encryptedMessage = await this.encryptMessage(key, plaintTextBytes)
+            return [encryptedMessage, keyhash, toleranceDistance, context.salt, context.ivBytes]
+        } catch (err) {
+            return "encryption has not been successfull:" + err
+        }
     }
 
-    private encryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
+    private async encryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
         let context = this
-
-        return window.crypto.subtle.encrypt(
-            { name: ENCRYPTIONALGORITHM, iv: context.ivBytes },
-            aesKey,
-            plainTextBytes,
-        ).then(function (cipherTextBuffer) {
-            let ciphertextBytes = new Uint8Array(cipherTextBuffer)
+        try {
+            let encryptionPromise = await window.crypto.subtle.encrypt({ name: ENCRYPTIONALGORITHM, iv: context.ivBytes }, aesKey, plainTextBytes)
+            let ciphertextBytes = new Uint8Array(encryptionPromise)
             let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes)
-            
             return base64Ciphertext
-        })
+        } catch (err) {
+            console.log("message cannot be encrypted: " + err)
+        }
     }
 
-    private calculateKeyHash(aesKey: CryptoKey) {
-        return crypto.subtle.exportKey(KEYFORMAT, aesKey).then(function (result) {
-            return crypto.subtle.digest(HASHTYPE, result).then(function (hash) {
-                let keyHash = DataConvertionCalculations.convertToHex(hash)
-                return keyHash
-            })
-        })
+    private async calculateKeyHash(aesKey: CryptoKey) {
+        try {
+            let exportKeyPromise = await crypto.subtle.exportKey(KEYFORMAT, aesKey)
+            let hashPromise = await crypto.subtle.digest(HASHTYPE, exportKeyPromise)
+            let keyHash = DataConvertionCalculations.convertToHex(hashPromise)
+            return keyHash
+        } catch (err) {
+            return "key couldnt be hashed: " + err
+        }
     }
 
-    public decrypt(transformedLocation: Int32Array, cipherText: String, originalKeyHash: string) {
+    public async decrypt(transformedLocation: Int32Array, cipherText: String, originalKeyHash: string) {
+        try {
+            let key = await this.deriveKey(transformedLocation)
+            let keyHash = await this.calculateKeyHash(key)
+            let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
+
+            if (keyHash == originalKeyHash) {
+                let result = await this.decryptMessage(key, ciphertextBytes)
+                return [result, keyHash]
+            }
+        } catch (err) {
+            console.log("decryption was unsuccessfull: " + err)
+        }
+    }
+
+    private async decryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
         let context = this
-        return this.deriveKey(transformedLocation).then(function (key) {
-            let plainText = context.calculateKeyHash(key)
-            return plainText.then(function(keyhash){
-                if (keyhash == originalKeyHash) {
-                    let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
-                    return context.decryptMessage(key,ciphertextBytes).then(function(resultingPlaintText){
-                        return [resultingPlaintText,keyhash]
-                    })
-                }
-            })
-        })
-    }
-
-    private decryptMessage(aesKey: CryptoKey, plainTextBytes: Uint8Array) {
-        let context = this
-        return window.crypto.subtle.decrypt(
-            { name: ENCRYPTIONALGORITHM, iv: context.ivBytes },
-            aesKey,
-            plainTextBytes,
-        ).then(function (cipherTextBuffer) {
-            let ciphertextBytes = new Uint8Array(cipherTextBuffer)
-            let cipherTextString = DataConvertionCalculations.byteArrayToString(ciphertextBytes)
+        try {
+            let decryptPromise = await window.crypto.subtle.decrypt({ name: ENCRYPTIONALGORITHM, iv: context.ivBytes }, aesKey, plainTextBytes)
+            let cipherTextBytes = new Uint8Array(decryptPromise)
+            let cipherTextString = DataConvertionCalculations.byteArrayToString(cipherTextBytes)
             return cipherTextString
-        })
+        } catch (error) {
+            console.log("message cannot be decrypted: " + error)
+        }
     }
 }

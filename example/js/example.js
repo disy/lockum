@@ -38,8 +38,8 @@ $("#encryptButton").click(function () {
 
             console.log(ciphertextResult)
             //set the ciphertext and keyhash values in browser
-            $("#keyhashField").text(localStorage.getItem("keyhash"))
-            $("#messageToDecrypt").text(ciphertextResult[1])
+            $("#keyhashField").text(ciphertextResult[1])
+            $("#messageToDecrypt").text(ciphertextResult[0])
         })
     }
 
