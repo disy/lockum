@@ -46,7 +46,7 @@ export class EncryptionHelper {
             let plainTextBytes = DataConvertionCalculations.stringToByteArray(message)
             let encryptedMessage = context.encryptMessage(aesKey,plainTextBytes)    
             
-            return Promise.all([keyhash,encryptedMessage,context.salt,context.ivBytes,toleranceDistance])
+            return Promise.all([encryptedMessage,keyhash,toleranceDistance,context.salt,context.ivBytes])
         })
     }
 
@@ -81,8 +81,8 @@ export class EncryptionHelper {
             return plainText.then(function(keyhash){
                 if (keyhash == originalKeyHash) {
                     let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
-                    return context.decryptMessage(key,ciphertextBytes).then(function(sonuc){
-                        return [sonuc,keyhash]
+                    return context.decryptMessage(key,ciphertextBytes).then(function(resultingPlaintText){
+                        return [resultingPlaintText,keyhash]
                     })
                 }
             })

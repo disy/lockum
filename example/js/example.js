@@ -26,15 +26,15 @@ $("#encryptButton").click(function () {
         ciphertext.then(function (ciphertextResult) {
 
             //save values to the browser from library call result so that receiver can take them
-            const saltArray = Array.from(ciphertextResult[2])
+            const saltArray = Array.from(ciphertextResult[3])
             const storedSalt = JSON.stringify(saltArray)
-            const ivArray = Array.from(ciphertextResult[3])
+            const ivArray = Array.from(ciphertextResult[4])
             const storedIV = JSON.stringify(ivArray)
-            localStorage.setItem("keyhash", ciphertextResult[0])
+            localStorage.setItem("keyhash", ciphertextResult[1])
             localStorage.setItem("salt", storedSalt)
             localStorage.setItem("iv", storedIV)
-            localStorage.setItem("ciphertext", ciphertextResult[1])
-            localStorage.setItem("toleranceDistance", parseInt(ciphertextResult[4]))
+            localStorage.setItem("ciphertext", ciphertextResult[0])
+            localStorage.setItem("toleranceDistance", parseInt(ciphertextResult[2]))
 
             console.log(ciphertextResult)
             //set the ciphertext and keyhash values in browser
