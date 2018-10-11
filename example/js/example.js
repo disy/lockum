@@ -40,6 +40,8 @@ $("#encryptButton").click(function () {
             //set the ciphertext and keyhash values in browser
             $("#keyhashField").text(ciphertextResult[1])
             $("#messageToDecrypt").text(ciphertextResult[0])
+        }).catch(err => {
+            console.log("library couldnt encrypt the message: "+ err)
         })
     }
 
@@ -92,6 +94,8 @@ $("#decryptButton").click(function () {
         plaintext.then(function (plaintextResult) {
             $("#keyhashFieldReceiver").text(plaintextResult[1])
             $("#cipherTextArea").text(plaintextResult[0])
+        }).catch(err => {
+            console.log("library couldnt decrypt the ciphertext: " + err)
         })
     }
 
