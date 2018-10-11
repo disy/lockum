@@ -17,7 +17,7 @@ export class EncryptionHelper {
         this.ivBytes = new Uint8Array(iv)
     }
 
-    public deriveKey(locationInfo: Int32Array) {
+    private deriveKey(locationInfo: Int32Array) {
         let context = this
 
         return window.crypto.subtle.importKey(
@@ -84,7 +84,6 @@ export class EncryptionHelper {
                     return context.decryptMessage(key,ciphertextBytes).then(function(sonuc){
                         return [sonuc,keyhash]
                     })
-
                 }
             })
         })
