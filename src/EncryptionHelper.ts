@@ -46,7 +46,7 @@ export class EncryptionHelper {
             let encryptedMessage = await this.encryptMessage(key, plaintTextBytes)
             return [encryptedMessage, keyhash, toleranceDistance, context.salt, context.ivBytes]
         } catch (err) {
-            return "encryption has not been successfull:" + err
+            console.log("encryption has not been successfull:" + err)
         }
     }
 
@@ -69,7 +69,7 @@ export class EncryptionHelper {
             let keyHash = DataConvertionCalculations.convertToHex(hashPromise)
             return keyHash
         } catch (err) {
-            return "key couldnt be hashed: " + err
+            console.log("key couldnt be hashed: " + err)
         }
     }
 
