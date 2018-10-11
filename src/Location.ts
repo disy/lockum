@@ -14,7 +14,7 @@ export class Location {
   public getTransformedLocation() {
     let latitudePart = this.transformLocation(this.latitude[0], this.latitude[1])
     let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
-   
+
     let result = new Int32Array([latitudePart, longitudePart])
     return result
   }

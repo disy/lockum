@@ -27,7 +27,7 @@ export class Sender {
 
         //prepare the key derivation function's input
         let keyDerivationInput = location.getTransformedLocation()
-        
+
         //encrypt the message
         let encryptionTool = new EncryptionHelper(salt, ivBytes)
         let ciphertext = encryptionTool.encrypt(keyDerivationInput, message, toleranceDistance)
