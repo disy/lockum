@@ -1,0 +1,3 @@
+-r jsdom-global/register
+-r get-random-values
+-r subtle

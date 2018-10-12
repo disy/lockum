@@ -1,5 +1,5 @@
 /** @type {typeof import('..//..//src/index')} */
-var library = mylib
+var lockumLib = lockum
 
 $("#encryptButton").click(function () {
     let output = document.getElementById("out")
@@ -22,7 +22,7 @@ $("#encryptButton").click(function () {
         let locationData = [latitude, longitude, toleranceDistance]
 
         //library call. It returns ciphertext,key hash, iv, salt and tolerance distance
-        let ciphertext = library.encrypt(locationData, plaintext)
+        let ciphertext = lockumLib.encrypt(locationData, plaintext)
         ciphertext.then(function (ciphertextResult) {
 
             //save values to the browser from library call result so that receiver can take them
@@ -90,7 +90,7 @@ $("#decryptButton").click(function () {
         let decryptionElements = [saltBytes, ivBytes, ciphertext, keyhash]
 
         //call library to decrypt, returns the plain text and calculated key hash
-        let plaintext = library.decrypt(locationData, decryptionElements)
+        let plaintext = lockumLib.decrypt(locationData, decryptionElements)
         plaintext.then(function (plaintextResult) {
             $("#keyhashFieldReceiver").text(plaintextResult[1])
             $("#cipherTextArea").text(plaintextResult[0])

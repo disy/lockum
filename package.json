@@ -5,7 +5,7 @@
   "main": "./src/LocationApi.ts",
   "scripts": {
     "build": "tsc && webpack",
-    "test": "mocha -r ts-node/register src/test.spec.ts"
+    "test": "mocha -r ts-node/register  test/Location.spec.ts test/Sender.spec.ts test/EncryptionHelper.spec.ts test/DataConvertion.spec.ts"
   },
   "author": "",
   "license": "ISC",
@@ -22,8 +22,13 @@
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
+    "crypto": "^1.0.1",
+    "get-random-values": "^1.2.0",
+    "jsdom": "12.2.0",
+    "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
     "serviceworker-webpack-plugin": "^1.0.0-alpha02",
+    "subtle": "^0.1.8",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
     "typings": "^2.1.1",
