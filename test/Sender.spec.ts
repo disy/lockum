@@ -1,6 +1,5 @@
 import { Sender } from "../src/Sender"
 import { expect } from "chai";
-import "jsdom-global"
 
 describe('sender utils', () => {
 
