@@ -48,18 +48,18 @@ export class Location {
 
   //creates and array of adjacent quadrants using transformed locations
   private createAdjacentQuadrants(latitude: number, longitude: number) {
-    let adjacentLocations = Array<Int32Array>()
-    adjacentLocations[0] = new Int32Array([latitude - 1, longitude - 1])
-    adjacentLocations[1] = new Int32Array([latitude - 1, longitude])
-    adjacentLocations[2] = new Int32Array([latitude - 1, longitude + 1])
-    adjacentLocations[3] = new Int32Array([latitude, longitude - 1])
-    adjacentLocations[4] = new Int32Array([latitude, longitude])
-    adjacentLocations[5] = new Int32Array([latitude, longitude + 1])
-    adjacentLocations[6] = new Int32Array([latitude + 1, longitude - 1])
-    adjacentLocations[7] = new Int32Array([latitude + 1, longitude])
-    adjacentLocations[8] = new Int32Array([latitude + 1, longitude + 1])
+    let adjacentQuadrants = Array<Int32Array>()
+    adjacentQuadrants[0] = new Int32Array([latitude - 1, longitude - 1])
+    adjacentQuadrants[1] = new Int32Array([latitude - 1, longitude])
+    adjacentQuadrants[2] = new Int32Array([latitude - 1, longitude + 1])
+    adjacentQuadrants[3] = new Int32Array([latitude, longitude - 1])
+    adjacentQuadrants[4] = new Int32Array([latitude, longitude])
+    adjacentQuadrants[5] = new Int32Array([latitude, longitude + 1])
+    adjacentQuadrants[6] = new Int32Array([latitude + 1, longitude - 1])
+    adjacentQuadrants[7] = new Int32Array([latitude + 1, longitude])
+    adjacentQuadrants[8] = new Int32Array([latitude + 1, longitude + 1])
 
-    return adjacentLocations
+    return adjacentQuadrants
   }
 
   private convertToDegreesDecimalMinutes(locationValue: number, isLatitude: boolean) {
