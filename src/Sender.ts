@@ -18,8 +18,8 @@ export class Sender {
         let toleranceDistance = locationInfo[2]
 
         //prepare salt,iv
-        const ivBytes = window.crypto.getRandomValues(new Uint8Array(16))
-        const salt = window.crypto.getRandomValues(new Uint8Array(32))
+        const ivBytes = crypto.getRandomValues(new Uint8Array(16))
+        const salt = crypto.getRandomValues(new Uint8Array(32))
         //save salt,IV,tolerance Distance to browser so that receiver can use them
 
         //create keyderivation input with location
