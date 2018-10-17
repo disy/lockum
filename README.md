@@ -14,7 +14,7 @@ To encrypt a message, one can simply call the library as follows:
 
  Once function is called, the library creates a 256 bits AES encryption key using these arguments. Later, the data is encrypted using AES-GCM. 
 
- When encryption is completed, the library returns an object with the following information: ciphetext, key hash , tolerance distance , salt and IV. These information should then be passed to receiver in orde to succesfully decrypt a message.
+ When encryption is completed, the library returns an object with the following information: ciphertext, key hash , tolerance distance , salt and IV. These information should then be passed to receiver in order to successfully decrypt a message.
 
 Using secure channel between the sender and the receiver, receiver should send the aforementioned values to the receiver.
 
