@@ -11,15 +11,35 @@ $("#encryptButton").click(function () {
 
     navigator.geolocation.getCurrentPosition(success, error, geo_options)
     function success(position) {
-        //get latitude and longitude values from Location API
+
+        let selectedLocation = document.querySelector('input[name="location"]:checked').value
+
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
+
+        if (selectedLocation == "California") {
+            latitude = 36.473202
+            longitude = -119.748167
+        } else if (selectedLocation == "Istanbul") {
+            latitude = 41.006340
+            longitude = 28.978664
+        } else if (selectedLocation == "Konstanz") {
+            latitude = 47.689759
+            longitude = 9.185248
+        }
+        else {
+            latitude = 59.329145
+            longitude = 18.067918
+        }
+
 
         //get plaintext and tolerance distance from the html page
         let plaintext = $("#messageToEncrypt").val()
         let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
 
         let locationData = [latitude, longitude, toleranceDistance]
+
+        console.log("latitude and longitude are1:" + latitude + longitude)
 
         //library call. It returns ciphertext,key hash, iv, salt and tolerance distance
         let ciphertext = lockumLib.encrypt(locationData, plaintext)
@@ -40,8 +60,10 @@ $("#encryptButton").click(function () {
             //set the ciphertext and keyhash values in browser
             $("#keyhashField").text(ciphertextResult[1])
             $("#messageToDecrypt").text(ciphertextResult[0])
+            $("#saltField").text(ciphertextResult[3])
+            $("#ivField").text(ciphertextResult[4])
         }).catch(err => {
-            console.log("library couldnt encrypt the message: "+ err)
+            console.log("library couldnt encrypt the message: " + err)
         })
     }
 
@@ -67,9 +89,26 @@ $("#decryptButton").click(function () {
 
     navigator.geolocation.getCurrentPosition(success, error, geo_options)
     function success(position) {
-        //get latitude and longitude values from Location API
+
+        let receiverLocation = document.querySelector('input[name="receiverLocation"]:checked').value
+
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
+
+        if (receiverLocation == "California") {
+            latitude = 36.473202
+            longitude = -119.748167
+        } else if (receiverLocation == "Istanbul") {
+            latitude = 41.006340
+            longitude = 28.978664
+        } else if (receiverLocation == "Konstanz") {
+            latitude = 47.689759
+            longitude = 9.185248
+        }
+        else {
+            latitude = 59.329145
+            longitude = 18.067918
+        }
 
         //get the salt value from return value of the library call
         const salt = localStorage.getItem("salt")
@@ -88,6 +127,8 @@ $("#decryptButton").click(function () {
 
         let locationData = [latitude, longitude, toleranceDistance]
         let decryptionElements = [saltBytes, ivBytes, ciphertext, keyhash]
+
+        console.log("latitude and longitude are:" + latitude + longitude)
 
         //call library to decrypt, returns the plain text and calculated key hash
         let plaintext = lockumLib.decrypt(locationData, decryptionElements)

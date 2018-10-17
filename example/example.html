@@ -16,8 +16,24 @@
           <h5 class="card-title">Sender</h5>
           <p class="card-text">Message to Encrypt:</p>
           <textarea id="messageToEncrypt" type="text" size="90"></textarea>
-          <p class="card-text">Tolerance Distance:</p>
+          <br><br>
+          <p class="card-text">Select Your Location</p>
+          <form action="selectLocation">
+            <input type="radio" name="location" value="Current">Current <br>
+            <input type="radio" name="location" value="California"> California<br>
+            <input type="radio" name="location" value="Konstanz"> Konstanz<br>
+            <input type="radio" name="location" value="Istanbul"> Istanbul<br>
+            <input type="radio" name="location" value="Stockholm"> Stockholm<br>
+          </form>
+
+          <p class="card-text"><br>Tolerance Distance:</p>
           <textarea id="toleranceDistanceField" type="text" onkeypress="validate(event)" size="90"></textarea>
+          <br>
+          <p class="card-text">Salt Value:</p>
+          <textarea id="saltField" type="text" size="90"></textarea>
+          <br>
+          <p class="card-text">IV:</p>
+          <textarea id="ivField" type="text" size="90"></textarea>
           <br>
           <p class="card-text">Calculated Key Hash By Sender:</p>
           <textarea id="keyhashField" type="text" size="90"></textarea>
@@ -32,6 +48,16 @@
           <h5 class="card-title">Receiver</h5>
           <p class="card-text">Ciphertext:</p>
           <textarea id="messageToDecrypt" type="text" size="90"></textarea>
+          <br><br>
+          <p class="card-text">Select Your Location</p>
+          <form action="receiverLocation">
+            <input type="radio" name="receiverLocation" value="Current"> Current Location <br>
+            <input type="radio" name="receiverLocation" value="California"> California<br>
+            <input type="radio" name="receiverLocation" value="Konstanz"> Konstanz<br>
+            <input type="radio" name="receiverLocation" value="Istanbul"> Istanbul<br>
+            <input type="radio" name="receiverLocation" value="Stockholm"> Stockholm<br>
+          </form>
+          <br>
           <p class="card-text">Calculated Key Hash By Receiver:</p>
           <textarea id="keyhashFieldReceiver" type="text" size="90"></textarea>
           <br>

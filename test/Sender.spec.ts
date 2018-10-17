@@ -1,7 +1,11 @@
 import { Sender } from "../src/Sender"
 import { expect } from "chai";
-
+(<any>window).crypto = {}
 describe('sender utils', () => {
+
+    beforeEach(()=>{
+        
+    })
 
     it('a sender should get a array with the size of 4 upon encrypting the message ', () => {
         let sender = new Sender()
