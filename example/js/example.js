@@ -39,29 +39,25 @@ $("#encryptButton").click(function () {
 
         let locationData = [latitude, longitude, toleranceDistance]
 
-        console.log("latitude and longitude are1:" + latitude + longitude)
-
-        //library call. It returns ciphertext,key hash, iv, salt and tolerance distance
+        //library call. It returns an object of  ciphertext,key hash, iv, salt and tolerance distance
         let ciphertext = lockumLib.encrypt(locationData, plaintext)
         ciphertext.then(function (ciphertextResult) {
-
             //save values to the browser from library call result so that receiver can take them
-            const saltArray = Array.from(ciphertextResult[3])
+            const saltArray = Array.from(ciphertextResult.getSalt())
             const storedSalt = JSON.stringify(saltArray)
-            const ivArray = Array.from(ciphertextResult[4])
+            const ivArray = Array.from(ciphertextResult.getIV())
             const storedIV = JSON.stringify(ivArray)
-            localStorage.setItem("keyhash", ciphertextResult[1])
+            localStorage.setItem("keyhash", ciphertextResult.getKeyHash())
             localStorage.setItem("salt", storedSalt)
             localStorage.setItem("iv", storedIV)
-            localStorage.setItem("ciphertext", ciphertextResult[0])
-            localStorage.setItem("toleranceDistance", parseInt(ciphertextResult[2]))
+            localStorage.setItem("ciphertext", ciphertextResult.getEncryptedText())
+            localStorage.setItem("toleranceDistance", ciphertextResult.getToleranceDistance())
 
-            console.log(ciphertextResult)
             //set the ciphertext and keyhash values in browser
-            $("#keyhashField").text(ciphertextResult[1])
-            $("#messageToDecrypt").text(ciphertextResult[0])
-            $("#saltField").text(ciphertextResult[3])
-            $("#ivField").text(ciphertextResult[4])
+            $("#keyhashField").text(ciphertextResult.getKeyHash())
+            $("#messageToDecrypt").text(ciphertextResult.getEncryptedText())
+            $("#saltField").text(ciphertextResult.getSalt())
+            $("#ivField").text(ciphertextResult.getIV())
         }).catch(err => {
             console.log("library couldnt encrypt the message: " + err)
         })
@@ -128,15 +124,14 @@ $("#decryptButton").click(function () {
         let locationData = [latitude, longitude, toleranceDistance]
         let decryptionElements = [saltBytes, ivBytes, ciphertext, keyhash]
 
-        console.log("latitude and longitude are:" + latitude + longitude)
-
         //call library to decrypt, returns the plain text and calculated key hash
         let plaintext = lockumLib.decrypt(locationData, decryptionElements)
         plaintext.then(function (plaintextResult) {
-            $("#keyhashFieldReceiver").text(plaintextResult[1])
-            $("#cipherTextArea").text(plaintextResult[0])
+            $("#keyhashFieldReceiver").text(plaintextResult.getKeyHash())
+            $("#cipherTextArea").text(plaintextResult.getEncryptedText())
         }).catch(err => {
-            console.log("library couldnt decrypt the ciphertext: " + err)
+            $("#keyhashFieldReceiver").text("library couldnt decrypt the ciphertext: " + err)
+            $("#cipherTextArea").text("library couldnt decrypt the ciphertext: " + err)
         })
     }
 

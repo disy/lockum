@@ -1,4 +1,5 @@
 import { DataConvertionCalculations } from "../src/DataConvertionCalculations";
+import { ResultHolder } from "..//src//ResultHolder"
 
 const NUMBEROFITERATIONS = 1000000
 const HASHTYPE = "SHA-256"
@@ -44,9 +45,10 @@ export class EncryptionHelper {
             let keyhash = await this.calculateKeyHash(key)
             let plaintTextBytes = DataConvertionCalculations.stringToByteArray(message)
             let encryptedMessage = await this.encryptMessage(key, plaintTextBytes)
-            return [encryptedMessage, keyhash, toleranceDistance, context.salt, context.ivBytes]
+            let result = new ResultHolder(encryptedMessage, keyhash, toleranceDistance, context.salt, context.ivBytes)
+            return result
         } catch (err) {
-            console.log("encryption has not been successfull:" + err)
+            return err
         }
     }
 
@@ -58,7 +60,7 @@ export class EncryptionHelper {
             let base64Ciphertext = DataConvertionCalculations.byteArrayToBase64(ciphertextBytes)
             return base64Ciphertext
         } catch (err) {
-            console.log("message cannot be encrypted: " + err)
+            return err
         }
     }
 
@@ -69,7 +71,7 @@ export class EncryptionHelper {
             let keyHash = DataConvertionCalculations.convertToHex(hashPromise)
             return keyHash
         } catch (err) {
-            console.log("key couldnt be hashed: " + err)
+            return err
         }
     }
 
@@ -80,11 +82,12 @@ export class EncryptionHelper {
             let ciphertextBytes = DataConvertionCalculations.base64ToByteArray(cipherText)
 
             if (keyHash == originalKeyHash) {
-                let result = await this.decryptMessage(key, ciphertextBytes)
-                return [result, keyHash]
+                let plaintText = await this.decryptMessage(key, ciphertextBytes)
+                let result = new ResultHolder(plaintText, keyHash)
+                return result
             }
         } catch (err) {
-            console.log("decryption was unsuccessfull: " + err)
+            return err
         }
     }
 
@@ -96,7 +99,7 @@ export class EncryptionHelper {
             let cipherTextString = DataConvertionCalculations.byteArrayToString(cipherTextBytes)
             return cipherTextString
         } catch (error) {
-            console.log("message cannot be decrypted: " + error)
+            return error
         }
     }
 }
