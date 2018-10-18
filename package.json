@@ -5,7 +5,7 @@
   "main": "./src/LocationApi.ts",
   "scripts": {
     "build": "tsc && webpack",
-    "test": "mocha -r ts-node/register  test/Location.spec.ts test/Sender.spec.ts test/EncryptionHelper.spec.ts test/DataConvertion.spec.ts"
+    "test": "mocha -r ts-node/register  test/Location.spec.ts test/ResultHolder.spec.ts test/DataConvertion.spec.ts"
   },
   "author": "",
   "license": "ISC",
