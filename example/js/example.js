@@ -21,6 +21,8 @@ $("#encryptButton").click(function () {
             let latitude = position.coords.latitude
             let longitude = position.coords.longitude
 
+            $("#displayLocation").text(latitude+ " "+ longitude)
+
             //get plaintext and tolerance distance from the html page
             let plaintext = $("#messageToEncrypt").val()
             let toleranceDistance = parseInt(toleranceDistanceField.value.toString())
@@ -53,20 +55,22 @@ $("#encryptButton").click(function () {
 
     } else {
 
-        if (selectedLocation == "autopark") {
+        if (locationSelection == "autopark") {
             latitude = 47.689401
             longitude = 9.186046
-        } else if (selectedLocation == "zahringerplatz") {
+        } else if (locationSelection == "zahringerplatz") {
             latitude = 47.672352
             longitude = 9.183634
-        } else if (selectedLocation == "bahnhof") {
+        } else if (locationSelection == "bahnhof") {
             latitude = 47.658895
             longitude = 9.176983
         }
-        else if (selectedLocation == "meersburg") {
+        else if (locationSelection == "meersburg") {
             latitude = 47.698774
             longitude = 9.266201
         }
+
+        $("#displayLocation").text(latitude+ " "+ longitude)
 
         //get plaintext and tolerance distance from the html page
         let plaintext = $("#messageToEncrypt").val()
@@ -128,6 +132,8 @@ $("#decryptButton").click(function () {
             latitude = position.coords.latitude
             longitude = position.coords.longitude
 
+            $("#receiverLocationTextArea").text(latitude+ " "+ longitude)
+
             //get the salt value from return value of the library call
             const salt = localStorage.getItem("salt")
             const retrievedSaltArray = JSON.parse(salt)
@@ -172,6 +178,8 @@ $("#decryptButton").click(function () {
             latitude = 47.698774
             longitude = 9.266201
         }
+
+        $("#receiverLocationTextArea").text(latitude+ " "+ longitude)
 
         //get the salt value from return value of the library call
         const salt = localStorage.getItem("salt")
