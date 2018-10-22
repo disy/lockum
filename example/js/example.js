@@ -17,19 +17,19 @@ $("#encryptButton").click(function () {
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
 
-        if (selectedLocation == "California") {
-            latitude = 36.473202
-            longitude = -119.748167
-        } else if (selectedLocation == "Istanbul") {
-            latitude = 41.006340
-            longitude = 28.978664
-        } else if (selectedLocation == "Konstanz") {
-            latitude = 47.689759
-            longitude = 9.185248
+        if (selectedLocation == "autopark") {
+            latitude = 47.689401
+            longitude = 9.186046
+        } else if (selectedLocation == "zahringerplatz") {
+            latitude = 47.672352
+            longitude = 9.183634
+        } else if (selectedLocation == "bahnhof") {
+            latitude = 47.658895
+            longitude = 9.176983
         }
-        else {
-            latitude = 59.329145
-            longitude = 18.067918
+        else if (selectedLocation == "meersburg") {
+            latitude = 47.698774
+            longitude = 9.266201
         }
 
 
@@ -91,19 +91,19 @@ $("#decryptButton").click(function () {
         let latitude = position.coords.latitude
         let longitude = position.coords.longitude
 
-        if (receiverLocation == "California") {
-            latitude = 36.473202
-            longitude = -119.748167
-        } else if (receiverLocation == "Istanbul") {
-            latitude = 41.006340
-            longitude = 28.978664
-        } else if (receiverLocation == "Konstanz") {
-            latitude = 47.689759
-            longitude = 9.185248
+        if (receiverLocation == "autopark") {
+            latitude = 47.689401
+            longitude = 9.186046
+        } else if (receiverLocation == "zahringerplatz") {
+            latitude = 47.672352
+            longitude = 9.183634
+        } else if (receiverLocation == "bahnhof") {
+            latitude = 47.658895
+            longitude = 9.176983
         }
-        else {
-            latitude = 59.329145
-            longitude = 18.067918
+        else if (receiverLocation == "meersburg") {
+            latitude = 47.698774
+            longitude = 9.266201
         }
 
         //get the salt value from return value of the library call

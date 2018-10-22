@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
     crossorigin="anonymous">
+
+  <style>
+    .card-textTD {
+      float: left;
+    }
+
+     .textareaTD {
+      float: left;
+      margin-left: 0.5%;
+    }
+
+    .messageLabel {
+      float: left;
+    }
+    
+  </style>
 
 </head>
 
@@ -14,21 +32,23 @@
       <div class="card">
         <div class="card-body" style="background-color:#AFC6C3 ; border-style: solid">
           <h5 class="card-title">Sender</h5>
-          <p class="card-text">Message to Encrypt:</p>
-          <textarea id="messageToEncrypt" type="text" size="90"></textarea>
-          <br><br>
-          <p class="card-text">Select Your Location</p>
-          <form action="selectLocation">
-            <input type="radio" name="location" value="Current">Current <br>
-            <input type="radio" name="location" value="California"> California<br>
-            <input type="radio" name="location" value="Konstanz"> Konstanz<br>
-            <input type="radio" name="location" value="Istanbul"> Istanbul<br>
-            <input type="radio" name="location" value="Stockholm"> Stockholm<br>
-          </form>
-
-          <p class="card-text"><br>Tolerance Distance:</p>
-          <textarea id="toleranceDistanceField" type="text" onkeypress="validate(event)" size="90"></textarea>
+          <p>________________________INPUT VALUES_______________________________</p>
+          <p class="messageLabel">Message to Encrypt:</p>
+          <textarea class="messageToEncrypt" id="messageToEncrypt" type="text" size="90"></textarea>
           <br>
+          <p class="card-textTD"><br> Tolerance Distance:</p>
+          <textarea class="textareaTD" id="toleranceDistanceField" type="text" onkeypress="validate(event)" size="90"></textarea>
+          <br>
+          <br><br>
+          <p class="labelLocation">Select Your Location</p>
+          <form class="formLocation" action="selectLocation">
+            <label> <input type="radio" name="location" value="Current">Current</label><br>
+            <label><input type="radio" name="location" value="autopark"> Autopark-Uni Konstanz</label><br>
+            <label><input type="radio" name="location" value="zahringerplatz"> Zahringerplatz-Konstanz</label><br>
+            <label><input type="radio" name="location" value="bahnhof"> Bahnhof-Konstanz<br>
+              <label><input type="radio" name="location" value="meersburg">Meersburg<br>
+          </form>
+          <p>________________________OUTPUT VALUES_______________________________</p>
           <p class="card-text">Salt Value:</p>
           <textarea id="saltField" type="text" size="90"></textarea>
           <br>
@@ -38,6 +58,9 @@
           <p class="card-text">Calculated Key Hash By Sender:</p>
           <textarea id="keyhashField" type="text" size="90"></textarea>
           <br>
+          <p class="card-text">Ciphertext:</p>
+          <textarea id="messageToDecrypt" type="text" size="90"></textarea>
+          <br>
           <button type="button" id="encryptButton" value="a" class="btn-primary">Encrypt!</button>
         </div>
       </div>
@@ -46,17 +69,18 @@
       <div class="card">
         <div class="card-body" style="background-color:#AFC6C3 ; border-style: solid">
           <h5 class="card-title">Receiver</h5>
-          <p class="card-text">Ciphertext:</p>
-          <textarea id="messageToDecrypt" type="text" size="90"></textarea>
-          <br><br>
+          <p>________________________INPUT VALUES_______________________________</p>
+          <br>
           <p class="card-text">Select Your Location</p>
           <form action="receiverLocation">
-            <input type="radio" name="receiverLocation" value="Current"> Current Location <br>
-            <input type="radio" name="receiverLocation" value="California"> California<br>
-            <input type="radio" name="receiverLocation" value="Konstanz"> Konstanz<br>
-            <input type="radio" name="receiverLocation" value="Istanbul"> Istanbul<br>
-            <input type="radio" name="receiverLocation" value="Stockholm"> Stockholm<br>
+            <label><input type="radio" name="receiverLocation" value="Current"> Current Location </label> <br>
+            <label><input type="radio" name="receiverLocation" value="autopark"> Autopark-Uni Konstanz</label><br>
+            <label><input type="radio" name="receiverLocation" value="zahringerplatz"> Zahringerplatz-Konstanz</label><br>
+            <label><input type="radio" name="receiverLocation" value="bahnhof"> Bahnhof-Konstanz</label><br>
+            <label><input type="radio" name="receiverLocation" value="meersburg"> Meersburg</label><br>
           </form>
+          <p>________________________OUTPUT VALUES_______________________________</p>
+
           <br>
           <p class="card-text">Calculated Key Hash By Receiver:</p>
           <textarea id="keyhashFieldReceiver" type="text" size="90"></textarea>

@@ -6,6 +6,7 @@ export class Location {
   private longitude: [string, number] = ["", 0]
 
   constructor(latitude: number, longitude: number, readonly toleranceDistance: number) {
+    console.log("latitude raw:" + latitude + "longitude raw:" + longitude)
     this.latitude = this.convertToDegreesDecimalMinutes(latitude, true)
     this.longitude = this.convertToDegreesDecimalMinutes(longitude, false)
   }
@@ -16,6 +17,7 @@ export class Location {
     let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
 
     let result = new Int32Array([latitudePart, longitudePart])
+    console.log("latitude:" + this.latitude + " longitude:" + this.longitude + " result: " + result)
     return result
   }
 
@@ -25,6 +27,7 @@ export class Location {
     let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
 
     let resultArray = this.createAdjacentQuadrants(latitudePart, longitudePart)
+    console.log("latitude:" + this.latitude + " longitude:" + this.longitude + " result: " + resultArray)
     return resultArray
   }
 
@@ -77,10 +80,11 @@ export class Location {
     }
 
     let degreesPart = Math.floor(locationValue)
-    let floatingMinutes = +((locationValue % 1) * 60).toFixed(4)
-    let minutesIntegralPart = Math.floor(floatingMinutes)
-    let minutesIntegralDigitNumber = Math.floor(Math.log10(minutesIntegralPart)) + 1
-    let degreesDecimalMinutes = (degreesPart * (Math.pow(10, minutesIntegralDigitNumber))) + floatingMinutes
+    let floatingMinutes = ((locationValue % 1) * 60).toFixed(4)
+    if (+(floatingMinutes) < 10) {
+      floatingMinutes = ("0" + floatingMinutes)
+    }
+    let degreesDecimalMinutes = +(degreesPart + floatingMinutes)
 
     let location: [string, number] = [locationSign, degreesDecimalMinutes]
     return location
