@@ -6,7 +6,6 @@ export class Location {
   private longitude: [string, number] = ["", 0]
 
   constructor(latitude: number, longitude: number, readonly toleranceDistance: number) {
-    console.log("latitude raw:" + latitude + "longitude raw:" + longitude)
     this.latitude = this.convertToDegreesDecimalMinutes(latitude, true)
     this.longitude = this.convertToDegreesDecimalMinutes(longitude, false)
   }
@@ -17,7 +16,6 @@ export class Location {
     let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
 
     let result = new Int32Array([latitudePart, longitudePart])
-    console.log("latitude:" + this.latitude + " longitude:" + this.longitude + " result: " + result)
     return result
   }
 
@@ -27,7 +25,6 @@ export class Location {
     let longitudePart = this.transformLocation(this.longitude[0], this.longitude[1])
 
     let resultArray = this.createAdjacentQuadrants(latitudePart, longitudePart)
-    console.log("latitude:" + this.latitude + " longitude:" + this.longitude + " result: " + resultArray)
     return resultArray
   }
 
