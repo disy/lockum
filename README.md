@@ -1,10 +1,12 @@
 ## Lockum: A Location Based Encryption Library
 
+[![Build Status](https://travis-ci.org/disy/lockum.svg?branch=master)](https://travis-ci.org/disy/lockum)
+
 Lockum is a location based encryption library, along with which one can encrypt and decrypt messages using the location information.
 
 Essentially, the library lets a sender to encrypt messages using location information. To do that it uses latitude, longitude and tolerance distance values. Latitude and longitude values refer to geographical location of the sender. Tolerance distance is a value in meters specifying the decrypt-able message range from the center.
 
-To encrypt a message, one can simply call the library as follows: 
+To encrypt a message, one can simply call the library as follows:
 
 ```
  let encryptMessage = lockum.encrypt(locationInfo, message)
@@ -12,7 +14,7 @@ To encrypt a message, one can simply call the library as follows:
 
  Encrypt function expects two arguments,namely locationInfo and message. LocationInfo is a tuple which has three elements: latitude, longitude and tolerance distance, respectively. Message refers to plain text string that will be encrypted.
 
- Once function is called, the library creates a 256 bits AES encryption key using these arguments. Later, the data is encrypted using AES-GCM. 
+ Once function is called, the library creates a 256 bits AES encryption key using these arguments. Later, the data is encrypted using AES-GCM.
 
  When encryption is completed, the library returns an object with the following information: ciphertext, key hash , tolerance distance , salt and IV. These information should then be passed to receiver in order to successfully decrypt a message.
 
@@ -24,7 +26,7 @@ Once receiver gets the information, he could simply call the library in order to
  let decryptMessage = lockum.encrypt(locationInfo, decryptionElements)
  ```
 
- The decrypt function has two arguments: locationInfo and decryptionElements, both of which are tuples. 
+ The decrypt function has two arguments: locationInfo and decryptionElements, both of which are tuples.
 LocationInfo is a tuple consisting of three elements: latitude, longitude and tolerance distance. DecryptionElements is also a tuple consisting of 4 elements, salt, IV, ciphertext and keyhash.
 
 When decryption is completed, the library returns an object with plain text and calculated key hash by the receiver. This way if the decryption is successfull, a receiver will be able to read a message.
