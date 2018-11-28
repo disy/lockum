@@ -2,7 +2,7 @@
   "name": "lockum",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/LocationApi.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "build": "tsc && webpack",
     "test": "nyc mocha test/**/*.spec.ts",
@@ -15,8 +15,6 @@
     "awesome-typescript-loader": "^5.2.1",
     "chalk": "^2.4.1",
     "cleanup-dependencies": "0.0.6",
-    "codecov": "^3.1.0",
-    "nyc": "^13.1.0",
     "text-encoding": "^0.7.0",
     "ts-loader": "^5.2.2",
     "webpack": "^4.8.3"
@@ -25,6 +23,8 @@
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
+    "codecov": "^3.1.0",
+    "nyc": "^13.1.0",
     "crypto": "^1.0.1",
     "get-random-values": "^1.2.0",
     "jsdom": "12.2.0",
