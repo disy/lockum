@@ -1,6 +1,7 @@
 ## Lockum: A Location Based Encryption Library
 
 [![Build Status](https://travis-ci.org/disy/lockum.svg?branch=master)](https://travis-ci.org/disy/lockum)
+[![codecov](https://codecov.io/gh/disy/lockum/branch/master/graph/badge.svg)](https://codecov.io/gh/disy/lockum)
 
 Lockum is a location based encryption library, along with which one can encrypt and decrypt messages using the location information.
 
