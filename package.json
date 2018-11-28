@@ -1,5 +1,5 @@
 {
-  "name": "locationbasedchat",
+  "name": "lockum",
   "version": "1.0.0",
   "description": "",
   "main": "./src/LocationApi.ts",
