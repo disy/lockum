@@ -5,15 +5,17 @@
   "main": "./src/LocationApi.ts",
   "scripts": {
     "build": "tsc && webpack",
-    "test": "mocha -r ts-node/register  test/Location.spec.ts test/ResultHolder.spec.ts test/DataConvertion.spec.ts"
+    "test": "nyc mocha test/**/*.spec.ts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@types/text-encoding": "0.0.34",
     "awesome-typescript-loader": "^5.2.1",
     "chalk": "^2.4.1",
     "cleanup-dependencies": "0.0.6",
+    "nyc": "^13.1.0",
     "text-encoding": "^0.7.0",
     "ts-loader": "^5.2.2",
     "webpack": "^4.8.3"
@@ -22,17 +24,25 @@
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "crypto": "^1.0.1",
     "get-random-values": "^1.2.0",
     "jsdom": "12.2.0",
     "jsdom-global": "3.0.2",
     "mocha": "^5.2.0",
     "serviceworker-webpack-plugin": "^1.0.0-alpha02",
+    "source-map-support": "^0.5.9",
     "subtle": "^0.1.8",
     "ts-mockito": "^2.3.1",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
     "typings": "^2.1.1",
     "webpack-cli": "^3.1.2"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ]
   }
 }

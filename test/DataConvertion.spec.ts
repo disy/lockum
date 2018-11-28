@@ -1,7 +1,7 @@
 import {DataConvertionCalculations} from "../src/DataConvertionCalculations"
 import { expect } from "chai";
 
-describe('data converter', () => {
+describe('Data converter', () => {
     it('given a string should create an instance of  byteArray', () => {
         let result: Uint8Array = DataConvertionCalculations.stringToByteArray("ahmet")
         expect(result).instanceOf(Uint8Array)
