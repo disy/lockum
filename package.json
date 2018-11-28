@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "description": "",
   "main": "./src/index.ts",
+  "repository": "github:disy/lockum",
+  "homepage": "https://github.com/disy/lockum",
+  "bugs": "https://github.com/disy/lockum/issues",
   "scripts": {
     "build": "tsc && webpack",
     "test": "nyc mocha test/**/*.spec.ts",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
-  "author": "",
+  "author": "Ahmet Eroglu <ahmet.eroglu@uni-konstanz.de>",
   "license": "MIT",
   "dependencies": {
     "@types/text-encoding": "0.0.34",
